@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#2875FE</color>
+
+    <color name="app_bg">#F3F4F5</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="gray">#aaa</color>
+    <color name="gray_lite">#c5c5c5</color>
+
+    <color name="lesson_free">#1828B3</color>
+    <color name="lesson_recommend">#7820D0</color>
+    <color name="lesson_promote">#099113</color>
+
+    <color name="btn_selected">#2875FE</color>
+    <color name="btn_default">#4F4F4F</color>
+    <color name="title_bg">#DD565656</color>
+    <color name="price_bg">#F72F2F</color>
+</resources>

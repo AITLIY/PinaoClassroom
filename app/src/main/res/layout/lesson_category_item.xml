@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/category_img"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:src="@drawable/icon_tab" />
+
+    <TextView
+        android:id="@+id/category_tv"
+        android:layout_width="65dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:gravity="center_horizontal"
+        android:lines="2"
+        android:text="上海音乐学院上海音乐学院"
+        android:textSize="9sp"/>
+
+</LinearLayout>

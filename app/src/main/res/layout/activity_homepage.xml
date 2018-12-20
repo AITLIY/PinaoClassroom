@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.yiyin.aobosh.Activity.HomepageActivity">
+
+    <!--装载fragment的容器-->
+    <FrameLayout
+        android:id="@+id/content_fl"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <!--底部selectBar-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray_lite"/>
+
+    <LinearLayout
+        android:id="@+id/bootombar_ll"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:id="@+id/ll_homepage"
+            style="@style/bottom_bar_ll">
+
+            <ImageView
+                android:id="@+id/iv_homepage"
+                android:layout_width="26dp"
+                android:layout_height="23dp"
+                android:background="@drawable/home_page_selector"/>
+
+            <TextView
+                android:id="@+id/tv_homepage"
+                style="@style/bottom_bar_tv"
+                android:text="首页"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_all_class"
+            style="@style/bottom_bar_ll">
+
+            <ImageView
+                android:id="@+id/iv_all_class"
+                android:layout_width="37dp"
+                android:layout_height="22dp"
+                android:background="@drawable/all_class_selector"/>
+
+            <TextView
+                android:id="@+id/tv_all_class"
+                style="@style/bottom_bar_tv"
+                android:text="全部课程"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_my_class"
+            style="@style/bottom_bar_ll">
+
+            <ImageView
+                android:id="@+id/iv_my_class"
+                android:layout_width="22dp"
+                android:layout_height="25dp"
+                android:background="@drawable/my_class_selector"/>
+
+            <TextView
+                android:id="@+id/tv_my_class"
+                style="@style/bottom_bar_tv"
+                android:text="我的课程"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_mine"
+            style="@style/bottom_bar_ll">
+
+            <ImageView
+                android:id="@+id/iv_mine"
+                android:layout_width="23dp"
+                android:layout_height="26dp"
+                android:background="@drawable/mine_selector" />
+
+            <TextView
+                android:id="@+id/tv_mine"
+                style="@style/bottom_bar_tv"
+                android:text="个人中心"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>
