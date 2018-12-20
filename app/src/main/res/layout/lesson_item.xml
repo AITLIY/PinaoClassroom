@@ -22,10 +22,9 @@
             android:layout_alignParentBottom="true"
             android:background="@color/title_bg"
             android:ellipsize="end"
-            android:gravity="center"
             android:lines="1"
             android:textColor="@color/white"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:text="541123人" />
     </RelativeLayout>
 

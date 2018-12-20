@@ -34,9 +34,6 @@ public class LessonListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if (mList == null) {
-            return 0;
-        }
         return mList.size();
     }
 
@@ -54,7 +51,7 @@ public class LessonListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.lesson_category_item, parent,false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.lesson_item, parent,false);
 
             holder = new ViewHolder();
             holder.lessonImg = ((ImageView) convertView.findViewById(R.id.lesson_img));
@@ -71,8 +68,8 @@ public class LessonListAdapter extends BaseAdapter {
         Glide.with(mContext)
                 .load(mList.get(position).getImages())
                 .into(holder.lessonImg);
-        holder.lessonPerson.setText(mList.get(position).getCount() + "人在学");
-        holder.lessonPerson.setText(mList.get(position).getBookname());
+        holder.lessonPerson.setText(mList.get(position).getBuynum() + mList.get(position).getVirtual_buynum() + mList.get(position).getVisit_number() + "已学");
+        holder.lessonName.setText(mList.get(position).getBookname());
         holder.lessonPrice.setText(mList.get(position).getPrice()+"");
         holder.lessonCount.setText(mList.get(position).getCount()+"");
 
