@@ -5,6 +5,7 @@ import android.app.Application;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.yiyin.aobosh.bean.LessonCategory;
+import com.yiyin.aobosh.bean.UserInfo;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class GlobalParameterApplication extends Application {
 
     public static List<LessonCategory> lessonCategory;       //课程分类对象的集合
-
+    public static UserInfo userInfo;                         //登录的用户对象
 
     private static GlobalParameterApplication instance;  //Application实例
     public static GlobalParameterApplication getInstance() {
@@ -30,7 +31,6 @@ public class GlobalParameterApplication extends Application {
             mRequestQueue = Volley.newRequestQueue(this);
             mRequestQueue.getCache().clear();
         }
-
         return mRequestQueue;
     }
 

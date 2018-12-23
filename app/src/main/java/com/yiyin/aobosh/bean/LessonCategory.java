@@ -135,6 +135,15 @@ public class LessonCategory {
         private int displayorder;
         private int is_show;
         private int addtime;
+        private int type;
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
 
         public int getId() {
             return id;

@@ -9,4 +9,8 @@
     <string name="price_sort">价格优先</string>
     <string name="hot_sort">人气优先</string>
     <string name="score_sort">好评优先</string>
+
+
+    <string name="get_captcha">获取验证码</string>
+
 </resources>
