@@ -31,8 +31,9 @@ public class HttpURL {
     // 7.校对验证码
     public static final String SMS_CHECKSMSCAPTCHA_URL = BASE_URL + "sms/checkSmsCaptcha";
 
-    // 7.校对验证码
+    // 8.用户注册
     public static final String OAUTH_REGISTER_URL = BASE_URL + "oauth/register";
 
-
+    // 9.校对验证码
+    public static final String OAUTH_MODIFYPSW_URL = BASE_URL + "oauth/modifypsw";
 }

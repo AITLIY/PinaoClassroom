@@ -115,8 +115,6 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:text="下一步"/>
-
     </LinearLayout>
-
 
 </LinearLayout>

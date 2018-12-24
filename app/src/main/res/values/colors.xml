@@ -14,6 +14,7 @@
     <color name="lesson_recommend">#7820D0</color>
     <color name="lesson_promote">#099113</color>
 
+    <color name="btn_commit">#1067FB</color>
     <color name="btn_selected">#2875FE</color>
     <color name="btn_default">#4F4F4F</color>
     <color name="title_bg">#DD565656</color>

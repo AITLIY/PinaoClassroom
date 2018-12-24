@@ -1,5 +1,6 @@
 package com.yiyin.aobosh.activitys;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.yiyin.aobosh.activitys.login.LoginActivity;
+import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.fragments.AllClassFragment;
 import com.yiyin.aobosh.fragments.HomeFragment;
 import com.yiyin.aobosh.fragments.MineFragment;
@@ -88,9 +91,8 @@ public class HomepageActivity extends AppCompatActivity{
             if (mTabItemId == view.getId()) {
                 return;
             }
-            mTabItemId = view.getId();
 
-            switch (mTabItemId) {
+            switch (view.getId()) {
                 case R.id.ll_homepage:
                     replaceContentPage(mHomeFragment);
                     break;
@@ -101,7 +103,13 @@ public class HomepageActivity extends AppCompatActivity{
                     replaceContentPage(mMyClassFragment);
                     break;
                 case R.id.ll_mine:
-                    replaceContentPage(mMineFragment);
+
+                    if (GlobalParameterApplication.getInstance().getUserInfo()==null) {
+                        startActivity(new Intent(HomepageActivity.this, LoginActivity.class));
+                        return;
+                    } else {
+                        replaceContentPage(mMineFragment);
+                    }
                     break;
             }
 
@@ -109,7 +117,7 @@ public class HomepageActivity extends AppCompatActivity{
         }
     }
 
-    //改变Fragment
+    // 改变Fragment
     public void replaceContentPage(Fragment fragment) {
 
         FragmentManager manager = getSupportFragmentManager();
@@ -119,11 +127,20 @@ public class HomepageActivity extends AppCompatActivity{
                 .commit();
     }
 
-    //根据是否被选中改变展示风格
+    // 根据是否被选中改变展示风格
     private void changeTabItemStyle(View view) {
+        mTabItemId = view.getId();
         ll_homepage.setSelected(view.getId() == R.id.ll_homepage);
         ll_all_class.setSelected(view.getId() == R.id.ll_all_class);
         ll_my_class.setSelected(view.getId() == R.id.ll_my_class);
         ll_mine.setSelected(view.getId() == R.id.ll_mine);
     }
+
+    // 回到主页
+    public void BackToTheHomepage (){
+        mTabItemId = ll_homepage.getId();
+        replaceContentPage(mHomeFragment);
+        changeTabItemStyle(ll_homepage);
+    }
+
 }

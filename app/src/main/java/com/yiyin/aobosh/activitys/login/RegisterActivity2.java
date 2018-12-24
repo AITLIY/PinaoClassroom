@@ -135,7 +135,7 @@ public class RegisterActivity2 extends Activity  implements View.OnClickListener
                     return;
                 }
 
-                if (passWord1.equals(passWord2)) {
+                if (!passWord1.equals(passWord2)) {
 
                     ToastUtil.show(mContext,"两次密码输入不一致");
                     return;

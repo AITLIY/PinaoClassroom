@@ -18,11 +18,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
-import com.yiyin.aobosh.bean.LessonSearch;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
@@ -36,7 +34,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class LoginActivity extends Activity implements View.OnClickListener {
@@ -84,13 +81,13 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         mContext = this;
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
         init();
     }
 
     private void init() {
-
         initView();
         initListner();
     }
@@ -111,7 +108,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         weixin_login_ll =  (LinearLayout) findViewById(R.id.weixin_login_ll);
         forget_password =  (TextView) findViewById(R.id.forget_password);
         register_new_user =  (TextView) findViewById(R.id.register_new_user);
-
     }
 
     private void initListner() {
@@ -120,7 +116,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         weixin_login_ll.setOnClickListener(this);
         forget_password.setOnClickListener(this);
         register_new_user.setOnClickListener(this);
-
     }
 
     @Override
@@ -190,11 +185,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
                             String data = jsonObject.getString("data");
                             UserInfo userInfo = new Gson().fromJson(data, UserInfo.class);
-                            GlobalParameterApplication.userInfo = userInfo;
-                            Sputils.putObject(mContext, userInfo);
 
-//                            Sputils.getObject(mContext, UserInfo.class);
-//                            LogUtils.i("LoginActivity: name " + Sputils.getObject(mContext, UserInfo.class).getNickname());
+                            Sputils.putObject(mContext, userInfo);  // 使用sp存储用户信息
 
                             mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS);
 

@@ -10,8 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.yiyin.aobosh.activitys.login.LoginActivity;
 import com.yiyin.aobosh.R;
+import com.yiyin.aobosh.activitys.HomepageActivity;
+import com.yiyin.aobosh.activitys.login.LoginActivity;
+import com.yiyin.aobosh.activitys.mine.ChangePasswordActivity;
+import com.yiyin.aobosh.activitys.mine.ChangePhoneActivity;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.utils.Sputils;
@@ -36,7 +39,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         mView = inflater.inflate(R.layout.fragment_mine, container, false);
 
         mContext = getContext();
-        mUserInfo = GlobalParameterApplication.userInfo;
+        mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
         init();
         return mView;
     }
@@ -82,7 +85,12 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
             case R.id.user_icon:
 
-                startActivity(new Intent(getActivity(), LoginActivity.class));
+                if (mUserInfo != null) {
+                    //TODO
+
+                } else {
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
                 break;
 
             case R.id.vip_ll:
@@ -110,19 +118,18 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.phone_ll:
-
+                startActivity(new Intent(getActivity(), ChangePhoneActivity.class));
                 break;
-
 
             case R.id.password_ll:
 
+                startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
                 break;
-
 
             case R.id.exit_ll:
 
-                mUserInfo = null;
-                Sputils.clear(mContext);
+                Sputils.clear(mContext);    // 清空本地存储
+                ((HomepageActivity) getActivity()).BackToTheHomepage(); //回到主页
                 break;
 
         }

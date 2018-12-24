@@ -6,6 +6,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.yiyin.aobosh.bean.LessonCategory;
 import com.yiyin.aobosh.bean.UserInfo;
+import com.yiyin.aobosh.utils.Sputils;
 
 import java.util.List;
 
@@ -16,15 +17,12 @@ import java.util.List;
 
 public class GlobalParameterApplication extends Application {
 
-    public static List<LessonCategory> lessonCategory;       //课程分类对象的集合
-    public static UserInfo userInfo;                         //登录的用户对象
-
     private static GlobalParameterApplication instance;  //Application实例
     public static GlobalParameterApplication getInstance() {
         return instance;
     }
 
-    private RequestQueue mRequestQueue;  //Volley网络请求队列
+    private RequestQueue mRequestQueue;    // Volley网络请求队列
     public RequestQueue getRequestQueue() {
 
         if (mRequestQueue == null) {
@@ -33,6 +31,13 @@ public class GlobalParameterApplication extends Application {
         }
         return mRequestQueue;
     }
+
+    public UserInfo getUserInfo() {
+
+        return Sputils.getObject(getApplicationContext(), UserInfo.class);
+    }
+
+    public static List<LessonCategory> lessonCategory;       //课程分类对象的集合
 
     @Override
     public void onCreate() {
