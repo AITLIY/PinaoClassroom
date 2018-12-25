@@ -28,7 +28,7 @@ public class HttpURL {
     // 6.发送注册验证码
     public static final String SMS_SENDSMSCAPTCHA_URL = BASE_URL + "sms/sendSmsCaptcha";
 
-    // 7.校对注册验证码
+    // 7.校对注册验/忘记密码的验证码
     public static final String SMS_CHECKSMSCAPTCHA_URL = BASE_URL + "sms/checkSmsCaptcha";
 
     // 8.用户注册
@@ -37,11 +37,14 @@ public class HttpURL {
     // 9.修改密码
     public static final String OAUTH_MODIFYPSW_URL = BASE_URL + "oauth/modifypsw";
 
-    // 10.发送修改手机验证码
+    // 10.发送修改手机/忘记密码的验证码
     public static final String SMS_SENDSMSMOBILE_URL = BASE_URL + "sms/sendSmsMobile";
 
-    // 10.修改手机
+    // 11.修改手机
     public static final String OAUTH_MODIFYMBL_URL = BASE_URL + "oauth/modifymbl";
+
+    // 12.忘记密码
+    public static final String OAUTH_FORGET_URL = BASE_URL + "oauth/forget";
 
 
     // 1.会员等级列表和用户会员等级

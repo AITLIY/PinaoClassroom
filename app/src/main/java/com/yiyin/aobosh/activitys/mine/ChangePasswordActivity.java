@@ -145,7 +145,7 @@ public class ChangePasswordActivity extends Activity implements View.OnClickList
 
                 if (!newPwd.equals(comPwd)) {
 
-                    ToastUtil.show(mContext,"两次新密码输入不一致");
+                    ToastUtil.show(mContext,"两次输入的密码不一致");
                     return;
                 }
 

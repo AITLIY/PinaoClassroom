@@ -260,7 +260,7 @@ public class ChangeMobileActivity extends Activity implements View.OnClickListen
         requestQueue.add(stringRequest);
     }
 
-    // 请求修改
+    // 请求修改手机
     private void changeMpbile(final int uid,final String mobile, final String nmobile, final String code) {
 
         String url = HttpURL.OAUTH_MODIFYMBL_URL;

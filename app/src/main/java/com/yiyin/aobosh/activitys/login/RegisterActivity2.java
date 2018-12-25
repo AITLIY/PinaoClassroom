@@ -36,10 +36,10 @@ public class RegisterActivity2 extends Activity  implements View.OnClickListener
     
     private Context mContext;
     private RequestQueue requestQueue;
+    private String mMobile;
 
     private EditText register_user_ed,register_password1_ed,register_password2_ed;
     private LinearLayout register_user_commit;
-    private String mMobile;
 
     private static final int LOAD_DATA_SUCCESS = 101;
     private static final int LOAD_DATA_FAILE1 = 102;
@@ -143,7 +143,7 @@ public class RegisterActivity2 extends Activity  implements View.OnClickListener
 
                 if (!passWord1.equals(passWord2)) {
 
-                    ToastUtil.show(mContext,"两次密码输入不一致");
+                    ToastUtil.show(mContext,"两次输入的密码不一致");
                     return;
                 }
 

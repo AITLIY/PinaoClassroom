@@ -36,13 +36,14 @@ public class ForgetPasswordActivity2 extends Activity  implements View.OnClickLi
 
     private Context mContext;
     private RequestQueue requestQueue;
+    private String mMobile;
 
     private EditText new_password1_ed,new_password2_ed;
     private LinearLayout forget_password_commit;
 
     private static final int LOAD_DATA_SUCCESS = 101;
-    private static final int LOAD_DATA_FAILE1 = 102;
-    private static final int LOAD_DATA_FAILE2 = 103;
+    private static final int LOAD_DATA_FAILE = 102;
+
 
     @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
@@ -54,17 +55,11 @@ public class ForgetPasswordActivity2 extends Activity  implements View.OnClickLi
 
                 case LOAD_DATA_SUCCESS:
 
-                    startActivity(new Intent(mContext, RegisterSuccessActivity.class));
+                    startActivity(new Intent(mContext, PasswordSuccessActivity.class));
+
                     break;
 
-                case LOAD_DATA_FAILE1:
-
-                    String text = (String) msg.obj;
-                    LogUtils.i("RegisterActivity2: text " + text);
-                    ToastUtil.show(mContext, text);
-                    break;
-
-                case LOAD_DATA_FAILE2:
+                case LOAD_DATA_FAILE:
 
                     ToastUtil.show(mContext,"注册失败");
                     break;
@@ -80,6 +75,11 @@ public class ForgetPasswordActivity2 extends Activity  implements View.OnClickLi
 
         mContext = this;
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
+        Intent intent = getIntent();
+        if (intent != null){
+            mMobile = intent.getStringExtra("mobile");
+            LogUtils.i("RegisterActivity2: getStringExtra mobile " + mMobile);
+        }
         init();
     }
 
@@ -120,15 +120,32 @@ public class ForgetPasswordActivity2 extends Activity  implements View.OnClickLi
                     return;
                 }
 
-                startActivity(new Intent(mContext, PasswordSuccessActivity.class));
+                String password = new_password1_ed.getText().toString();
+                String pwd = new_password2_ed.getText().toString();
+
+                if ("".equals(password)||"".equals(pwd)) {
+
+                    ToastUtil.show(mContext,"密码不能为空");
+                    return;
+                }
+
+                if (!password.equals(pwd)) {
+                    ToastUtil.show(mContext,"两次输入的密码不一致");
+                    return;
+                }
+
+                changePwd(mMobile, password, pwd);
+
                 break;
         }
     }
 
-    // 用户注册
-    private void userRegister(final String mobile, final String name,final String password) {
+    //--------------------------------------请求服务器数据-------------------------------------------
 
-        String url = HttpURL.OAUTH_REGISTER_URL;
+    // 修改密码
+    private void changePwd(final String mobile, final String password,final String pwd) {
+
+        String url = HttpURL.OAUTH_FORGET_URL;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST,url,new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -144,20 +161,13 @@ public class ForgetPasswordActivity2 extends Activity  implements View.OnClickLi
                             String data = jsonObject.getString("data");
 
                             mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS);
-
-                        }else if ("4004".equals(code)) {
-
-                            String msg = jsonObject.getString("msg");
-                            LogUtils.i("RegisterActivity2: msg " + msg);
-                            mHandler.obtainMessage(LOAD_DATA_FAILE1,msg).sendToTarget();
-                        } else {
-
-                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE2);
+                            return;
                         }
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE2);
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
                     }
                 }
             }
@@ -166,7 +176,7 @@ public class ForgetPasswordActivity2 extends Activity  implements View.OnClickLi
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtils.e("RegisterActivity2: volleyError2 " + volleyError.toString());
-                mHandler.sendEmptyMessage(LOAD_DATA_FAILE2);
+                mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
             }
         }) {
             @Override
@@ -183,8 +193,8 @@ public class ForgetPasswordActivity2 extends Activity  implements View.OnClickLi
 
                     obj.put("access_token", sha_token);
                     obj.put("mobile", mobile);
-                    obj.put("name", name);
                     obj.put("password", password);
+                    obj.put("name", pwd);
                     obj.put("device", CommonParameters.ANDROID);
 
                 } catch (JSONException e) {
@@ -200,4 +210,5 @@ public class ForgetPasswordActivity2 extends Activity  implements View.OnClickLi
         };
         requestQueue.add(stringRequest);
     }
+
 }
