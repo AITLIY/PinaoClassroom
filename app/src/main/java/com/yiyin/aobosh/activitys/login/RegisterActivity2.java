@@ -21,6 +21,7 @@ import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
+import com.yiyin.aobosh.utils.NetworkUtils;
 import com.yiyin.aobosh.utils.SHA;
 import com.yiyin.aobosh.utils.TimeUtils;
 import com.yiyin.aobosh.utils.ToastUtil;
@@ -124,6 +125,11 @@ public class RegisterActivity2 extends Activity  implements View.OnClickListener
         switch (v.getId()) {
 
             case R.id.register_user_commit:
+
+                if (!NetworkUtils.isConnected(mContext)){
+                    ToastUtil.show(mContext,"当前无网络");
+                    return;
+                }
 
                 String userName = register_user_ed.getText().toString();
                 String passWord1 = register_password1_ed.getText().toString();

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,15 +17,13 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
-import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
+import com.yiyin.aobosh.utils.NetworkUtils;
 import com.yiyin.aobosh.utils.SHA;
-import com.yiyin.aobosh.utils.Sputils;
 import com.yiyin.aobosh.utils.TimeUtils;
 import com.yiyin.aobosh.utils.ToastUtil;
 
@@ -100,15 +97,14 @@ public class RegisterActivity1 extends Activity  implements View.OnClickListener
         @Override
         public void run() {
             register_get_captcha.setText("重新发送("+num1+")");        // 提示剩余时间
-
-            register_get_captcha.setEnabled(false);      //在剩余时间不为0的时候禁止再次点击发送验证码
+            register_get_captcha.setEnabled(false);                    //禁止再次点击发送验证码
          
-            num1--;                                      //默认最大为60     每隔一秒发送一个
+            num1--;                                                    //默认最大为60每隔一秒发送一个
             if (num1 >= 0) {
                 mHandler.postDelayed(this, 1000);
             } else {
-                register_get_captcha.setEnabled(true);
                 register_get_captcha.setText(R.string.get_captcha);
+                register_get_captcha.setEnabled(true);
                 mHandler.removeCallbacksAndMessages(null);
             }
         }
@@ -160,7 +156,11 @@ public class RegisterActivity1 extends Activity  implements View.OnClickListener
         switch (v.getId()) {
 
             case R.id.register_get_captcha:
-                
+
+                if (!NetworkUtils.isConnected(mContext)){
+                    ToastUtil.show(mContext,"当前无网络");
+                    return;
+                }
 
                 if ("".equals(phone)) {
 
@@ -172,6 +172,11 @@ public class RegisterActivity1 extends Activity  implements View.OnClickListener
                 break;
 
             case R.id.register_user_next:
+
+                if (!NetworkUtils.isConnected(mContext)){
+                    ToastUtil.show(mContext,"当前无网络");
+                    return;
+                }
 
                 String captcha = register_captcha_ed.getText().toString();
 
@@ -187,6 +192,7 @@ public class RegisterActivity1 extends Activity  implements View.OnClickListener
         }
     }
 
+    //--------------------------------------请求服务器数据-------------------------------------------
 
     // 获取验证码
     private void getSmsCaptcha(final String mobile) {
@@ -261,7 +267,7 @@ public class RegisterActivity1 extends Activity  implements View.OnClickListener
     // 检查验证码
     private void checkSmsCaptcha(final String mobile, final String code) {
 
-        String url = HttpURL.SMS_CHECKSMSCAPTCHA_URL;
+        String url = HttpURL.OAUTH_MODIFYMBL_URL;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST,url,new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {

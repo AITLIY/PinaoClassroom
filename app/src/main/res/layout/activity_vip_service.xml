@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@color/app_bg"
+    tools:context="com.yiyin.aobosh.activitys.mine.VipServiceActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/icon_bg_vip"/>
+
+    <!--是否是VIP-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_horizontal"
+        android:background="@color/white">
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/is_vip"
+            android:layout_width="130dp"
+            android:layout_height="28dp"
+            android:gravity="center"
+            android:background="@drawable/shape_green_storke"
+            android:textSize="16dp"
+            android:textColor="@color/lesson_promote"
+            android:text="我的VIP:已开通"/>
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/not_vip"
+            android:layout_width="130dp"
+            android:layout_height="28dp"
+            android:gravity="center"
+            android:background="@drawable/shape_red_storke"
+            android:textSize="16dp"
+            android:textColor="@color/price_bg"
+            android:text="我的VIP:未开通"/>
+    </LinearLayout>
+
+    <!--VIP分类-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="等级名称"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="购买课程折扣"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="有效期"/>
+    </LinearLayout>
+
+    <!--我的会员-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/Member_item_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+    </android.support.v7.widget.RecyclerView>
+
+    <!--会员类别-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/level_item_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:background="@color/white">
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

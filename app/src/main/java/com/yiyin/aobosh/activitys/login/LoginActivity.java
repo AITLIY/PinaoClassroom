@@ -126,8 +126,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             case R.id.login_ll:
 
                 if (!NetworkUtils.isConnected(mContext)){
-
                     ToastUtil.show(mContext,"当前无网络");
+                    return;
                 }
 
                 String userName = username_ed.getText().toString();

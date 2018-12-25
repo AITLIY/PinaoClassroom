@@ -38,6 +38,7 @@ public class ChangePasswordActivity extends Activity implements View.OnClickList
 
     private Context mContext;
     private RequestQueue requestQueue;
+    private UserInfo mUserInfo;
     private EditText old_pwd_et,new_pwd_et,comfirm_pwd_et;
     private TextView change_pwd_commit;
 
@@ -82,6 +83,7 @@ public class ChangePasswordActivity extends Activity implements View.OnClickList
 
         mContext = this;
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
+        mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
         init();
     }
 
@@ -121,8 +123,8 @@ public class ChangePasswordActivity extends Activity implements View.OnClickList
             case R.id.change_pwd_commit:
 
                 if (!NetworkUtils.isConnected(mContext)){
-
                     ToastUtil.show(mContext,"当前无网络");
+                    return;
                 }
 
                 String oldPwd = old_pwd_et.getText().toString();
@@ -147,9 +149,7 @@ public class ChangePasswordActivity extends Activity implements View.OnClickList
                     return;
                 }
 
-                UserInfo userInfo = GlobalParameterApplication.getInstance().getUserInfo();
-
-                userLogin(userInfo.getUid(),userInfo.getMobile(),comPwd,oldPwd);
+                userLogin(mUserInfo.getUid(),mUserInfo.getMobile(),comPwd,oldPwd);
 
                 break;
         }

@@ -25,15 +25,25 @@ public class HttpURL {
     // 5.APP手机登录
     public static final String OAUTH_LOGIN_URL = BASE_URL + "oauth/login";
 
-    // 6.发送验证码
+    // 6.发送注册验证码
     public static final String SMS_SENDSMSCAPTCHA_URL = BASE_URL + "sms/sendSmsCaptcha";
 
-    // 7.校对验证码
+    // 7.校对注册验证码
     public static final String SMS_CHECKSMSCAPTCHA_URL = BASE_URL + "sms/checkSmsCaptcha";
 
     // 8.用户注册
     public static final String OAUTH_REGISTER_URL = BASE_URL + "oauth/register";
 
-    // 9.校对验证码
+    // 9.修改密码
     public static final String OAUTH_MODIFYPSW_URL = BASE_URL + "oauth/modifypsw";
+
+    // 10.发送修改手机验证码
+    public static final String SMS_SENDSMSMOBILE_URL = BASE_URL + "sms/sendSmsMobile";
+
+    // 10.修改手机
+    public static final String OAUTH_MODIFYMBL_URL = BASE_URL + "oauth/modifymbl";
+
+
+    // 1.会员等级列表和用户会员等级
+    public static final String VIP_SHOW_URL = BASE_URL + "vip/show";
 }

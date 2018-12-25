@@ -10,11 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.activitys.HomepageActivity;
 import com.yiyin.aobosh.activitys.login.LoginActivity;
+import com.yiyin.aobosh.activitys.mine.ChangeMobileActivity;
 import com.yiyin.aobosh.activitys.mine.ChangePasswordActivity;
-import com.yiyin.aobosh.activitys.mine.ChangePhoneActivity;
+import com.yiyin.aobosh.activitys.mine.VipServiceActivity;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.utils.Sputils;
@@ -40,6 +42,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
         mContext = getContext();
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
+
+        LogUtils.i("ChangeMobileActivity: mobile " + mUserInfo.getMobile() + "uid" + mUserInfo.getUid());
         init();
         return mView;
     }
@@ -95,6 +99,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
             case R.id.vip_ll:
 
+                startActivity(new Intent(getActivity(), VipServiceActivity.class));
                 break;
 
             case R.id.cardpw_ll:
@@ -118,7 +123,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.phone_ll:
-                startActivity(new Intent(getActivity(), ChangePhoneActivity.class));
+
+                startActivity(new Intent(getActivity(), ChangeMobileActivity.class));
                 break;
 
             case R.id.password_ll:

@@ -51,7 +51,11 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activitys.mine.ChangePasswordActivity">
         </activity>
-        <activity android:name=".activitys.mine.ChangePhoneActivity">
+        <activity android:name=".activitys.mine.ChangeMobileActivity">
+        </activity>
+        <activity android:name=".activitys.mine.VIPActivity">
+        </activity>
+        <activity android:name=".activitys.mine.VipServiceActivity">
         </activity>
     </application>
 

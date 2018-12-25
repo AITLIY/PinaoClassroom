@@ -42,18 +42,15 @@
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:text="原密码"/>
+                android:text="原手机号码"/>
 
-            <EditText
-                android:id="@+id/old_pwd_et"
+            <TextView
+                android:id="@+id/old_mobile_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
-                android:maxLength="12"
-                android:inputType="textPassword"
-                android:background="@null"
-                android:textSize="16sp"
-                android:hint="请输入原密码"/>
+                android:textColor="@color/black"
+                android:textSize="16sp"/>
         </LinearLayout>
 
         <View
@@ -73,10 +70,10 @@
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:text="新密码"/>
+                android:text="新手机号码"/>
 
             <EditText
-                android:id="@+id/new_pwd_et"
+                android:id="@+id/new_mobile_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
@@ -84,7 +81,7 @@
                 android:inputType="textPassword"
                 android:background="@null"
                 android:textSize="16sp"
-                android:hint="请输入新密码"/>
+                android:hint="请输入手机号"/>
         </LinearLayout>
 
         <View
@@ -104,18 +101,29 @@
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:text="确认密码"/>
+                android:text="验证码"/>
 
             <EditText
-                android:id="@+id/comfirm_pwd_et"
-                android:layout_width="match_parent"
+                android:id="@+id/captcha_et"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_marginLeft="15dp"
                 android:maxLength="12"
                 android:inputType="textPassword"
                 android:background="@null"
                 android:textSize="16sp"
-                android:hint="请确认新密码"/>
+                android:hint="请输入验证码"/>
+
+            <TextView
+                android:id="@+id/get_captcha"
+                android:layout_width="96dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/btn_commit"
+                android:text="@string/get_captcha"/>
         </LinearLayout>
 
         <View
@@ -126,8 +134,8 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/change_pwd_commit"
-        android:layout_width="300dp"
+        android:id="@+id/change_mobile_commit"
+        android:layout_width="320dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
