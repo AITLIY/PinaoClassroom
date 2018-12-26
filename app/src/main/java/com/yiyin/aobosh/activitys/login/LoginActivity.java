@@ -47,6 +47,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private static final int LOAD_DATA_SUCCESS = 101;
     private static final int LOAD_DATA_FAILE1 = 102;
     private static final int LOAD_DATA_FAILE2 = 103;
+    private static final int NET_ERROR = 404;
 
     @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
@@ -73,6 +74,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
                     ToastUtil.show(mContext, "登录失败");
                     break;
+
+                case NET_ERROR:
+
+                    ToastUtil.show(mContext, "网络异常,请稍后重试");
+                    break;
+
             }
         }
     };
@@ -102,12 +109,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             }
         });
 
-        username_ed =  (EditText) findViewById(R.id.username_ed);
-        password_ed =  (EditText) findViewById(R.id.password_ed);
-        login_ll =  (LinearLayout) findViewById(R.id.login_ll);
-        weixin_login_ll =  (LinearLayout) findViewById(R.id.weixin_login_ll);
-        forget_password =  (TextView) findViewById(R.id.forget_password);
-        register_new_user =  (TextView) findViewById(R.id.register_new_user);
+        username_ed = findViewById(R.id.username_ed);
+        password_ed = findViewById(R.id.password_ed);
+        login_ll = findViewById(R.id.login_ll);
+        weixin_login_ll = findViewById(R.id.weixin_login_ll);
+        forget_password = findViewById(R.id.forget_password);
+        register_new_user = findViewById(R.id.register_new_user);
     }
 
     private void initListner() {
@@ -211,7 +218,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtils.e("LoginActivity: volleyError1 " + volleyError.toString());
-                mHandler.sendEmptyMessage(LOAD_DATA_FAILE2);
+                mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
             @Override

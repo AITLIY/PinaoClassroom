@@ -16,6 +16,7 @@ import com.yiyin.aobosh.activitys.HomepageActivity;
 import com.yiyin.aobosh.activitys.login.LoginActivity;
 import com.yiyin.aobosh.activitys.mine.ChangeMobileActivity;
 import com.yiyin.aobosh.activitys.mine.ChangePasswordActivity;
+import com.yiyin.aobosh.activitys.mine.VipCardActivity;
 import com.yiyin.aobosh.activitys.mine.VipServiceActivity;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.UserInfo;
@@ -56,16 +57,16 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
     private void initView() {
 
-        userIcon =  (CircleImageView) mView.findViewById(R.id.user_icon);
-        vip_ll =  (LinearLayout) mView.findViewById(R.id.vip_ll);
-        cardpw_ll =  (LinearLayout) mView.findViewById(R.id.cardpw_ll);
-        footprint_ll =  (LinearLayout) mView.findViewById(R.id.footprint_ll);
-        star_lesson_ll =  (LinearLayout) mView.findViewById(R.id.star_lesson_ll);
-        star_teacher_ll =  (LinearLayout) mView.findViewById(R.id.star_teacher_ll);
-        discounts_ll =  (LinearLayout) mView.findViewById(R.id.discounts_ll);
-        phone_ll =  (LinearLayout) mView.findViewById(R.id.phone_ll);
-        password_ll =  (LinearLayout) mView.findViewById(R.id.password_ll);
-        exit_ll =  (LinearLayout) mView.findViewById(R.id.exit_ll);
+        userIcon = mView.findViewById(R.id.user_icon);
+        vip_ll = mView.findViewById(R.id.vip_ll);
+        cardpw_ll = mView.findViewById(R.id.cardpw_ll);
+        footprint_ll = mView.findViewById(R.id.footprint_ll);
+        star_lesson_ll = mView.findViewById(R.id.star_lesson_ll);
+        star_teacher_ll = mView.findViewById(R.id.star_teacher_ll);
+        discounts_ll = mView.findViewById(R.id.discounts_ll);
+        phone_ll = mView.findViewById(R.id.phone_ll);
+        password_ll = mView.findViewById(R.id.password_ll);
+        exit_ll = mView.findViewById(R.id.exit_ll);
     }
 
     private void initListner() {
@@ -104,6 +105,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
             case R.id.cardpw_ll:
 
+                startActivity(new Intent(getActivity(), VipCardActivity.class));
                 break;
 
             case R.id.footprint_ll:

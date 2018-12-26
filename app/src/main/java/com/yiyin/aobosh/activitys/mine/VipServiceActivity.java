@@ -28,6 +28,7 @@ import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
 import com.yiyin.aobosh.utils.SHA;
 import com.yiyin.aobosh.utils.TimeUtils;
+import com.yiyin.aobosh.utils.ToastUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,6 +55,7 @@ public class VipServiceActivity extends Activity {
 
     private static final int LOAD_DATA_SUCCESS = 101;
     private static final int LOAD_DATA_FAILE = 102;
+    private static final int NET_ERROR = 404;
 
     @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
@@ -70,8 +72,13 @@ public class VipServiceActivity extends Activity {
 
                 case LOAD_DATA_FAILE:
 
-
                     break;
+
+                case NET_ERROR:
+
+                    ToastUtil.show(mContext, "网络异常,请稍后重试");
+                    break;
+
 
             }
         }
@@ -100,10 +107,10 @@ public class VipServiceActivity extends Activity {
 //            }
 //        });
 
-        Member_item_rv = (RecyclerView) findViewById(R.id.Member_item_rv);
-        level_item_rv = (RecyclerView) findViewById(R.id.level_item_rv);
-        is_vip = (TextView) findViewById(R.id.is_vip);
-        not_vip = (TextView) findViewById(R.id.not_vip);
+        Member_item_rv = findViewById(R.id.Member_item_rv);
+        level_item_rv = findViewById(R.id.level_item_rv);
+        is_vip = findViewById(R.id.is_vip);
+        not_vip = findViewById(R.id.not_vip);
     }
 
     private void initData() {
@@ -183,7 +190,7 @@ public class VipServiceActivity extends Activity {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtils.e("VipServiceActivity: volleyError1 " + volleyError.toString());
-                mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+                mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
             @Override

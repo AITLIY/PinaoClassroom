@@ -35,8 +35,8 @@ public class HomepageActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
-        init();
 
+        init();
     }
 
     private void init() {
@@ -46,23 +46,23 @@ public class HomepageActivity extends AppCompatActivity{
 
     private void initView() {
 
-        content_fl = (FrameLayout) findViewById(R.id.content_fl);
+        content_fl = findViewById(R.id.content_fl);
 
-        tv_homepage = (TextView) findViewById(R.id.tv_homepage);
-        iv_homepage = (ImageView) findViewById(R.id.iv_homepage);
-        ll_homepage = (LinearLayout) findViewById(R.id.ll_homepage);
+        tv_homepage = findViewById(R.id.tv_homepage);
+        iv_homepage = findViewById(R.id.iv_homepage);
+        ll_homepage = findViewById(R.id.ll_homepage);
 
-        tv_all_class = (TextView) findViewById(R.id.tv_all_class);
-        iv_all_class = (ImageView) findViewById(R.id.iv_all_class);
-        ll_all_class = (LinearLayout) findViewById(R.id.ll_all_class);
+        tv_all_class = findViewById(R.id.tv_all_class);
+        iv_all_class = findViewById(R.id.iv_all_class);
+        ll_all_class = findViewById(R.id.ll_all_class);
 
-        tv_my_class = (TextView) findViewById(R.id.tv_my_class);
-        iv_my_class = (ImageView) findViewById(R.id.iv_my_class);
-        ll_my_class = (LinearLayout) findViewById(R.id.ll_my_class);
+        tv_my_class = findViewById(R.id.tv_my_class);
+        iv_my_class = findViewById(R.id.iv_my_class);
+        ll_my_class = findViewById(R.id.ll_my_class);
 
-        tv_mine = (TextView) findViewById(R.id.tv_mine);
-        iv_mine = (ImageView) findViewById(R.id.iv_mine);
-        ll_mine = (LinearLayout) findViewById(R.id.ll_mine);
+        tv_mine = findViewById(R.id.tv_mine);
+        iv_mine = findViewById(R.id.iv_mine);
+        ll_mine = findViewById(R.id.ll_mine);
 
         BootombarListener listener = new BootombarListener();
         ll_homepage.setOnClickListener(listener);

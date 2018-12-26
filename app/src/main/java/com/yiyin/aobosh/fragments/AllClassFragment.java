@@ -94,6 +94,7 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
 
     private static final int LOAD_DATA1_SUCCESS = 101;
     private static final int LOAD_DATA1_FAILE = 102;
+    private static final int NET_ERROR = 404;
 
     @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
@@ -117,6 +118,11 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
                         }
                     }, 1000);
                     ToastUtil.show(mContext,"查询数据失败");
+                    break;
+
+                case NET_ERROR:
+
+                    ToastUtil.show(mContext, "网络异常,请稍后重试");
                     break;
             }
         }
@@ -146,26 +152,26 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
     }
 
     private void initView() {
-        search_lesson_et = (EditText) mView.findViewById(R.id.search_lesson_et);
-        lesson_sort_tv = (TextView) mView.findViewById(R.id.lesson_sort_tv);
-        lesson_filtrate_tv = (TextView) mView.findViewById(R.id.lesson_filtrate_tv);
+        search_lesson_et = mView.findViewById(R.id.search_lesson_et);
+        lesson_sort_tv = mView.findViewById(R.id.lesson_sort_tv);
+        lesson_filtrate_tv = mView.findViewById(R.id.lesson_filtrate_tv);
 
-        lesson_sort_ll = (LinearLayout) mView.findViewById(R.id.lesson_sort_ll);
-        lesson_filtrate_ll = (LinearLayout) mView.findViewById(R.id.lesson_filtrate_ll);
-        lesson_sort_iv = (ImageView) mView.findViewById(R.id.lesson_sort_iv);
-        lesson_filtrate_iv = (ImageView) mView.findViewById(R.id.lesson_filtrate_iv);
-        sort_bg = (LinearLayout) mView.findViewById(R.id.sort_bg);
-        sort_container = (LinearLayout) mView.findViewById(R.id.sort_container);
+        lesson_sort_ll = mView.findViewById(R.id.lesson_sort_ll);
+        lesson_filtrate_ll = mView.findViewById(R.id.lesson_filtrate_ll);
+        lesson_sort_iv = mView.findViewById(R.id.lesson_sort_iv);
+        lesson_filtrate_iv = mView.findViewById(R.id.lesson_filtrate_iv);
+        sort_bg = mView.findViewById(R.id.sort_bg);
+        sort_container = mView.findViewById(R.id.sort_container);
 
-        synthesize_sort = (LinearLayout) mView.findViewById(R.id.synthesize_sort);
-        free_sort = (LinearLayout) mView.findViewById(R.id.free_sort);
-        price_sort = (LinearLayout) mView.findViewById(R.id.price_sort);
-        hot_sort = (LinearLayout) mView.findViewById(R.id.hot_sort);
-        score_sort = (LinearLayout) mView.findViewById(R.id.score_sort);
+        synthesize_sort = mView.findViewById(R.id.synthesize_sort);
+        free_sort = mView.findViewById(R.id.free_sort);
+        price_sort = mView.findViewById(R.id.price_sort);
+        hot_sort = mView.findViewById(R.id.hot_sort);
+        score_sort = mView.findViewById(R.id.score_sort);
 
-        filtrate_bg = (LinearLayout) mView.findViewById(R.id.filtrate_bg);
-        lesson_category_rv = (RecyclerView) mView.findViewById(R.id.lesson_category_rv);
-        lesson_item_list = (PullToRefreshListView) mView.findViewById(R.id.lesson_item_list);
+        filtrate_bg = mView.findViewById(R.id.filtrate_bg);
+        lesson_category_rv = mView.findViewById(R.id.lesson_category_rv);
+        lesson_item_list = mView.findViewById(R.id.lesson_item_list);
 
         initPullListView();
     }
@@ -525,7 +531,7 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtils.e("AllClassFragment: volleyError1 " + volleyError.toString());
-                mHandler.sendEmptyMessage(LOAD_DATA1_FAILE);
+                mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
             @Override

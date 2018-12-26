@@ -46,6 +46,7 @@ public class ForgetPasswordActivity1 extends Activity implements View.OnClickLis
     private static final int LOAD_DATA_SUCCESS2 = 201;
     private static final int LOAD_DATA_FAILE2 = 202;
     private static final int LOAD_DATA_FAILE21 = 203;
+    private static final int NET_ERROR = 404;
 
     @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
@@ -68,7 +69,7 @@ public class ForgetPasswordActivity1 extends Activity implements View.OnClickLis
 
                 case LOAD_DATA_SUCCESS2:
 
-                    Intent intent = new Intent(mContext, RegisterActivity2.class);
+                    Intent intent = new Intent(mContext, ForgetPasswordActivity2.class);
                     String mobile = (String) msg.obj;
                     LogUtils.i("ForgetPasswordActivity1: mobile " + mobile);
                     intent.putExtra("mobile", mobile);
@@ -85,6 +86,11 @@ public class ForgetPasswordActivity1 extends Activity implements View.OnClickLis
                 case LOAD_DATA_FAILE21:
 
                     ToastUtil.show(mContext, "验证失败");
+                    break;
+
+                case NET_ERROR:
+
+                    ToastUtil.show(mContext, "网络异常,请稍后重试");
                     break;
             }
         }
@@ -136,10 +142,10 @@ public class ForgetPasswordActivity1 extends Activity implements View.OnClickLis
             }
         });
 
-        moible_ed =  (EditText) findViewById(R.id.moible_ed);
-        captcha_ed =  (EditText) findViewById(R.id.captcha_ed);
-        forget_get_captcha =  (Button) findViewById(R.id.forget_get_captcha);
-        forget_password_next =  (LinearLayout) findViewById(R.id.forget_password_next);
+        moible_ed = findViewById(R.id.moible_ed);
+        captcha_ed = findViewById(R.id.captcha_ed);
+        forget_get_captcha = findViewById(R.id.forget_get_captcha);
+        forget_password_next = findViewById(R.id.forget_password_next);
 
     }
 
@@ -156,7 +162,7 @@ public class ForgetPasswordActivity1 extends Activity implements View.OnClickLis
 
         switch (v.getId()) {
 
-            case R.id.register_get_captcha:
+            case R.id.forget_get_captcha:
 
                 if (!NetworkUtils.isConnected(mContext)){
                     ToastUtil.show(mContext,"当前无网络");
@@ -166,7 +172,7 @@ public class ForgetPasswordActivity1 extends Activity implements View.OnClickLis
                 getSmsCaptcha(mobile);
                 break;
 
-            case R.id.register_user_next:
+            case R.id.forget_password_next:
 
                 String captcha = captcha_ed.getText().toString();
 
@@ -221,7 +227,7 @@ public class ForgetPasswordActivity1 extends Activity implements View.OnClickLis
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtils.e("ForgetPasswordActivity1: volleyError1 " + volleyError.toString());
-                mHandler.sendEmptyMessage(LOAD_DATA_FAILE1);
+                mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
             @Override
@@ -232,12 +238,12 @@ public class ForgetPasswordActivity1 extends Activity implements View.OnClickLis
 
                 try {
 
-                    String token = "Smssendsmscaptcha" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
+                    String token = "Smssendsmsmobile" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
                     LogUtils.i("ForgetPasswordActivity1: token " + token);
                     String sha_token = SHA.encryptToSHA(token);
 
                     obj.put("access_token", sha_token);
-                    obj.put("mobile", mobile);
+                    obj.put("nmobile", mobile);
                     obj.put("device", CommonParameters.ANDROID);
 
                 } catch (JSONException e) {
@@ -254,10 +260,10 @@ public class ForgetPasswordActivity1 extends Activity implements View.OnClickLis
         requestQueue.add(stringRequest);
     }
 
-    // 检查验证码
+    // 校对验证码
     private void checkSmsCaptcha(final String mobile, final String code) {
 
-        String url = HttpURL.OAUTH_MODIFYMBL_URL;
+        String url = HttpURL.SMS_CHECKSMSCAPTCHA_URL;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST,url,new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -303,7 +309,7 @@ public class ForgetPasswordActivity1 extends Activity implements View.OnClickLis
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtils.e("ForgetPasswordActivity1: volleyError2 " + volleyError.toString());
-                mHandler.sendEmptyMessage(LOAD_DATA_FAILE21);
+                mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
             @Override

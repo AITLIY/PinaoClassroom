@@ -44,6 +44,7 @@ public class RegisterActivity2 extends Activity  implements View.OnClickListener
     private static final int LOAD_DATA_SUCCESS = 101;
     private static final int LOAD_DATA_FAILE1 = 102;
     private static final int LOAD_DATA_FAILE2 = 103;
+    private static final int NET_ERROR = 404;
 
     @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
@@ -68,6 +69,11 @@ public class RegisterActivity2 extends Activity  implements View.OnClickListener
                 case LOAD_DATA_FAILE2:
 
                     ToastUtil.show(mContext,"注册失败");
+                    break;
+
+                case NET_ERROR:
+
+                    ToastUtil.show(mContext, "网络异常,请稍后重试");
                     break;
 
             }
@@ -99,10 +105,10 @@ public class RegisterActivity2 extends Activity  implements View.OnClickListener
             }
         });
 
-        register_user_ed =  (EditText) findViewById(R.id.register_user_ed);
-        register_password1_ed =  (EditText) findViewById(R.id.register_password1_ed);
-        register_password2_ed =  (EditText) findViewById(R.id.register_password2_ed);
-        register_user_commit =  (LinearLayout) findViewById(R.id.register_user_commit);
+        register_user_ed = findViewById(R.id.register_user_ed);
+        register_password1_ed = findViewById(R.id.register_password1_ed);
+        register_password2_ed = findViewById(R.id.register_password2_ed);
+        register_user_commit = findViewById(R.id.register_user_commit);
     }
 
     private void initListner() {
@@ -193,7 +199,7 @@ public class RegisterActivity2 extends Activity  implements View.OnClickListener
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtils.e("RegisterActivity2: volleyError2 " + volleyError.toString());
-                mHandler.sendEmptyMessage(LOAD_DATA_FAILE2);
+                mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
             @Override

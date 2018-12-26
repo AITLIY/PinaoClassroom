@@ -29,18 +29,19 @@ import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.util.LogUtils;
+import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.adapter.LessonCategoryAdapter;
 import com.yiyin.aobosh.adapter.ViewPagerAdapter;
-import com.yiyin.aobosh.R;
-import com.yiyin.aobosh.utils.PxUtils;
-import com.yiyin.aobosh.utils.SHA;
-import com.yiyin.aobosh.utils.TimeUtils;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.Banner;
 import com.yiyin.aobosh.bean.LessonCategory;
 import com.yiyin.aobosh.bean.RecommendLesson;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
+import com.yiyin.aobosh.utils.PxUtils;
+import com.yiyin.aobosh.utils.SHA;
+import com.yiyin.aobosh.utils.TimeUtils;
+import com.yiyin.aobosh.utils.ToastUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -87,6 +88,7 @@ public class HomeFragment extends Fragment {
     private static final int LOAD_DATA2_FAILE = 202;
     private static final int LOAD_DATA3_SUCCESS = 301;
     private static final int LOAD_DATA3_FAILE = 302;
+    private static final int NET_ERROR = 404;
 
     @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
@@ -105,7 +107,6 @@ public class HomeFragment extends Fragment {
 
                 case LOAD_DATA1_FAILE:
 
-                    
                     break;
 
                 case LOAD_DATA2_SUCCESS:
@@ -114,7 +115,6 @@ public class HomeFragment extends Fragment {
                     break;
 
                 case LOAD_DATA2_FAILE:
-
 
                     break;
 
@@ -125,7 +125,11 @@ public class HomeFragment extends Fragment {
 
                 case LOAD_DATA3_FAILE:
 
+                    break;
 
+                case NET_ERROR:
+
+                    ToastUtil.show(mContext, "网络异常,请稍后重试");
                     break;
 
             }
@@ -161,19 +165,19 @@ public class HomeFragment extends Fragment {
     }
 
     private void initView() {
-        mViewPager = (ViewPager) mView.findViewById(R.id.banner_vp);
-        mTvPagerTitle = (TextView) mView.findViewById(R.id.tv_pager_title);
+        mViewPager = mView.findViewById(R.id.banner_vp);
+        mTvPagerTitle = mView.findViewById(R.id.tv_pager_title);
 
-        mGridView = (GridView) mView.findViewById(R.id.class_category_gv);
+        mGridView = mView.findViewById(R.id.class_category_gv);
 
-        mContainer1 = (LinearLayout) mView.findViewById(R.id.container1);
-        mContainer2 = (LinearLayout) mView.findViewById(R.id.container2);
-        mContainer3 = (LinearLayout) mView.findViewById(R.id.container3);
-        container1_title = (TextView) mView.findViewById(R.id.container1_title);
-        container2_title = (TextView) mView.findViewById(R.id.container2_title);
-        container3_title = (TextView) mView.findViewById(R.id.container3_title);
-        container2_more = (TextView) mView.findViewById(R.id.container2_more);
-        container3_more = (TextView) mView.findViewById(R.id.container3_more);
+        mContainer1 = mView.findViewById(R.id.container1);
+        mContainer2 = mView.findViewById(R.id.container2);
+        mContainer3 = mView.findViewById(R.id.container3);
+        container1_title = mView.findViewById(R.id.container1_title);
+        container2_title = mView.findViewById(R.id.container2_title);
+        container3_title = mView.findViewById(R.id.container3_title);
+        container2_more = mView.findViewById(R.id.container2_more);
+        container3_more = mView.findViewById(R.id.container3_more);
     }
 
     private void initData() {
@@ -206,7 +210,7 @@ public class HomeFragment extends Fragment {
         }
 
         //添加轮播点
-        LinearLayout container = (LinearLayout) mView.findViewById(R.id.ll_point_container);
+        LinearLayout container = mView.findViewById(R.id.ll_point_container);
         Drawable drawable = mContext.getResources().getDrawable(R.drawable.white_poi);
         mDots = addDots(mImageList.size(), container, drawable);
 
@@ -350,7 +354,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                return MotionEvent.ACTION_MOVE == event.getAction() ? true : false;// 设置mGridView不能滑动
+                return MotionEvent.ACTION_MOVE == event.getAction();// 设置mGridView不能滑动
             }
         });
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() { // 添加列表项被单击的监听器
@@ -389,8 +393,8 @@ public class HomeFragment extends Fragment {
                         container1_title.setText(lesson.getRec_name());
 
                         //item1
-                        ImageView type1_img1 = (ImageView) layout1.findViewById(R.id.type1_img1);
-                        TextView type1_title1 = (TextView) layout1.findViewById(R.id.type1_title1);
+                        ImageView type1_img1 = layout1.findViewById(R.id.type1_img1);
+                        TextView type1_title1 = layout1.findViewById(R.id.type1_title1);
                         Glide.with(mContext)
                                 .load(beans.get(0).getImages())
                                 .into(type1_img1);
@@ -405,8 +409,8 @@ public class HomeFragment extends Fragment {
                         });
 
                         //item2
-                        ImageView type1_img2 = (ImageView) layout1.findViewById(R.id.type1_img2);
-                        TextView type1_title2 = (TextView) layout1.findViewById(R.id.type1_title2);
+                        ImageView type1_img2 = layout1.findViewById(R.id.type1_img2);
+                        TextView type1_title2 = layout1.findViewById(R.id.type1_title2);
                         Glide.with(mContext)
                                 .load(beans.get(1).getImages())
                                 .into(type1_img2);
@@ -433,7 +437,7 @@ public class HomeFragment extends Fragment {
                             });
 
 
-                            ImageView item = (ImageView) layout2.findViewById(R.id.type2_item1);
+                            ImageView item = layout2.findViewById(R.id.type2_item1);
                             Glide.with(mContext)
                                     .load(beans.get(0).getImages())
                                     .into(item);
@@ -454,10 +458,10 @@ public class HomeFragment extends Fragment {
                             });
 
                             //item2
-                            ImageView type2_img2 = (ImageView) layout2.findViewById(R.id.type2_img2);
-                            TextView type2_title_tv2 =  (TextView) layout2.findViewById(R.id.type2_title_tv2);
-                            TextView type2_people_tv2 =  (TextView) layout2.findViewById(R.id.type2_people_tv2);
-                            TextView type2_price_tv2 =  (TextView) layout2.findViewById(R.id.type2_price_tv2);
+                            ImageView type2_img2 = layout2.findViewById(R.id.type2_img2);
+                            TextView type2_title_tv2 = layout2.findViewById(R.id.type2_title_tv2);
+                            TextView type2_people_tv2 = layout2.findViewById(R.id.type2_people_tv2);
+                            TextView type2_price_tv2 = layout2.findViewById(R.id.type2_price_tv2);
                             Glide.with(mContext)
                                     .load(beans.get(1).getImages())
                                     .into(type2_img2);
@@ -472,10 +476,10 @@ public class HomeFragment extends Fragment {
                             });
 
                             //item3
-                            ImageView type2_img3 = (ImageView) layout2.findViewById(R.id.type2_img3);
-                            TextView type2_title_tv3 =  (TextView) layout2.findViewById(R.id.type2_title_tv3);
-                            TextView type2_people_tv3 =  (TextView) layout2.findViewById(R.id.type2_people_tv3);
-                            TextView type2_price_tv3 =  (TextView) layout2.findViewById(R.id.type2_price_tv3);
+                            ImageView type2_img3 = layout2.findViewById(R.id.type2_img3);
+                            TextView type2_title_tv3 = layout2.findViewById(R.id.type2_title_tv3);
+                            TextView type2_people_tv3 = layout2.findViewById(R.id.type2_people_tv3);
+                            TextView type2_price_tv3 = layout2.findViewById(R.id.type2_price_tv3);
                             Glide.with(mContext)
                                     .load(beans.get(2).getImages())
                                     .into(type2_img3);
@@ -490,10 +494,10 @@ public class HomeFragment extends Fragment {
                             });
 
                             //item4
-                            ImageView type2_img4 = (ImageView) layout2.findViewById(R.id.type2_img4);
-                            TextView type2_title_tv4 =  (TextView) layout2.findViewById(R.id.type2_title_tv4);
-                            TextView type2_people_tv4 =  (TextView) layout2.findViewById(R.id.type2_people_tv4);
-                            TextView type2_price_tv4 =  (TextView) layout2.findViewById(R.id.type2_price_tv4);
+                            ImageView type2_img4 = layout2.findViewById(R.id.type2_img4);
+                            TextView type2_title_tv4 = layout2.findViewById(R.id.type2_title_tv4);
+                            TextView type2_people_tv4 = layout2.findViewById(R.id.type2_people_tv4);
+                            TextView type2_price_tv4 = layout2.findViewById(R.id.type2_price_tv4);
                             Glide.with(mContext)
                                     .load(beans.get(3).getImages())
                                     .into(type2_img4);
@@ -520,11 +524,11 @@ public class HomeFragment extends Fragment {
                         });
 
                         //item1
-                        ImageView type3_img1 = (ImageView) layout3.findViewById(R.id.type3_img1);
-                        TextView type3_title1 = (TextView) layout3.findViewById(R.id.type3_title1);
-                        TextView type3_class_price1 = (TextView) layout3.findViewById(R.id.type3_class_price1);
-                        TextView type3_class_quntity1 = (TextView) layout3.findViewById(R.id.type3_class_quntity1);
-                        TextView type3_people1 = (TextView) layout3.findViewById(R.id.type3_people1);
+                        ImageView type3_img1 = layout3.findViewById(R.id.type3_img1);
+                        TextView type3_title1 = layout3.findViewById(R.id.type3_title1);
+                        TextView type3_class_price1 = layout3.findViewById(R.id.type3_class_price1);
+                        TextView type3_class_quntity1 = layout3.findViewById(R.id.type3_class_quntity1);
+                        TextView type3_people1 = layout3.findViewById(R.id.type3_people1);
                         Glide.with(mContext)
                                 .load(beans.get(0).getImages())
                                 .into(type3_img1);
@@ -542,11 +546,11 @@ public class HomeFragment extends Fragment {
                         });
 
                         //item2
-                        ImageView type3_img2 = (ImageView) layout3.findViewById(R.id.type3_img2);
-                        TextView type3_title2 = (TextView) layout3.findViewById(R.id.type3_title2);
-                        TextView type3_class_price2 = (TextView) layout3.findViewById(R.id.type3_class_price2);
-                        TextView type3_class_quntity2 = (TextView) layout3.findViewById(R.id.type3_class_quntity2);
-                        TextView type3_people2 = (TextView) layout3.findViewById(R.id.type3_people2);
+                        ImageView type3_img2 = layout3.findViewById(R.id.type3_img2);
+                        TextView type3_title2 = layout3.findViewById(R.id.type3_title2);
+                        TextView type3_class_price2 = layout3.findViewById(R.id.type3_class_price2);
+                        TextView type3_class_quntity2 = layout3.findViewById(R.id.type3_class_quntity2);
+                        TextView type3_people2 = layout3.findViewById(R.id.type3_people2);
                         Glide.with(mContext)
                                 .load(beans.get(1).getImages())
                                 .into(type3_img2);
@@ -611,7 +615,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtils.e("HomeFragment: volleyError1 " + volleyError.toString());
-                mHandler.sendEmptyMessage(LOAD_DATA1_FAILE);
+                mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
             @Override
@@ -682,7 +686,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtils.e("HomeFragment: volleyError2 " + volleyError.toString());
-                mHandler.sendEmptyMessage(LOAD_DATA2_FAILE);
+                mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
             @Override
@@ -752,7 +756,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtils.e("HomeFragment: volleyError3 " + volleyError.toString());
-                mHandler.sendEmptyMessage(LOAD_DATA3_FAILE);
+                mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
             @Override

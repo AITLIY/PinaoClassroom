@@ -45,6 +45,7 @@ public class ChangePasswordActivity extends Activity implements View.OnClickList
     private static final int LOAD_DATA_SUCCESS = 101;
     private static final int LOAD_DATA_FAILE1 = 102;
     private static final int LOAD_DATA_FAILE2 = 103;
+    private static final int NET_ERROR = 404;
 
     @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
@@ -72,6 +73,12 @@ public class ChangePasswordActivity extends Activity implements View.OnClickList
 
                     ToastUtil.show(mContext, "登录失败");
                     break;
+
+                case NET_ERROR:
+
+                    ToastUtil.show(mContext, "网络异常,请稍后重试");
+                    break;
+
             }
         }
     };
@@ -103,11 +110,11 @@ public class ChangePasswordActivity extends Activity implements View.OnClickList
             }
         });
 
-        old_pwd_et =  (EditText) findViewById(R.id.old_pwd_et);
-        new_pwd_et =  (EditText) findViewById(R.id.new_pwd_et);
-        comfirm_pwd_et =  (EditText) findViewById(R.id.comfirm_pwd_et);
+        old_pwd_et = findViewById(R.id.old_pwd_et);
+        new_pwd_et = findViewById(R.id.new_pwd_et);
+        comfirm_pwd_et = findViewById(R.id.comfirm_pwd_et);
 
-        change_pwd_commit =  (TextView) findViewById(R.id.change_pwd_commit);
+        change_pwd_commit = findViewById(R.id.change_pwd_commit);
     }
 
     private void initListner() {
@@ -193,7 +200,7 @@ public class ChangePasswordActivity extends Activity implements View.OnClickList
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtils.e("ChangePasswordActivity: volleyError1 " + volleyError.toString());
-                mHandler.sendEmptyMessage(LOAD_DATA_FAILE2);
+                mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
             @Override

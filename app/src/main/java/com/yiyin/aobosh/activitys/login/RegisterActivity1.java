@@ -47,6 +47,7 @@ public class RegisterActivity1 extends Activity  implements View.OnClickListener
     private static final int LOAD_DATA_SUCCESS2 = 201;
     private static final int LOAD_DATA_FAILE2 = 202;
     private static final int LOAD_DATA_FAILE21 = 203;
+    private static final int NET_ERROR = 404;
 
     @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
@@ -87,6 +88,12 @@ public class RegisterActivity1 extends Activity  implements View.OnClickListener
 
                     ToastUtil.show(mContext, "验证失败");
                     break;
+
+                case NET_ERROR:
+
+                    ToastUtil.show(mContext, "网络异常,请稍后重试");
+                    break;
+
             }
         }
     };
@@ -136,10 +143,10 @@ public class RegisterActivity1 extends Activity  implements View.OnClickListener
             }
         });
 
-        register_phone_ed =  (EditText) findViewById(R.id.register_phone_ed);
-        register_captcha_ed =  (EditText) findViewById(R.id.register_captcha_ed);
-        register_get_captcha =  (Button) findViewById(R.id.register_get_captcha);
-        register_user_next =  (LinearLayout) findViewById(R.id.register_user_next);
+        register_phone_ed = findViewById(R.id.register_phone_ed);
+        register_captcha_ed = findViewById(R.id.register_captcha_ed);
+        register_get_captcha = findViewById(R.id.register_get_captcha);
+        register_user_next = findViewById(R.id.register_user_next);
     }
 
     private void initListner() {
@@ -231,7 +238,7 @@ public class RegisterActivity1 extends Activity  implements View.OnClickListener
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtils.e("RegisterActivity1: volleyError1 " + volleyError.toString());
-                mHandler.sendEmptyMessage(LOAD_DATA_FAILE1);
+                mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
             @Override
@@ -264,10 +271,10 @@ public class RegisterActivity1 extends Activity  implements View.OnClickListener
         requestQueue.add(stringRequest);
     }
 
-    // 检查验证码
+    // 校对验证码
     private void checkSmsCaptcha(final String mobile, final String code) {
 
-        String url = HttpURL.OAUTH_MODIFYMBL_URL;
+        String url = HttpURL.SMS_CHECKSMSCAPTCHA_URL;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST,url,new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -313,7 +320,7 @@ public class RegisterActivity1 extends Activity  implements View.OnClickListener
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 LogUtils.e("RegisterActivity1: volleyError2 " + volleyError.toString());
-                mHandler.sendEmptyMessage(LOAD_DATA_FAILE21);
+                mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
             @Override

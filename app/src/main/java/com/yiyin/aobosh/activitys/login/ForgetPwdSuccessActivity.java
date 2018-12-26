@@ -8,7 +8,7 @@ import android.view.View;
 
 import com.yiyin.aobosh.R;
 
-public class PasswordSuccessActivity extends Activity {
+public class ForgetPwdSuccessActivity extends Activity {
 
     private Context mContext;
 

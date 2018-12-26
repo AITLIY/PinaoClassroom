@@ -44,9 +44,16 @@ public class HttpURL {
     public static final String OAUTH_MODIFYMBL_URL = BASE_URL + "oauth/modifymbl";
 
     // 12.忘记密码
-    public static final String OAUTH_FORGET_URL = BASE_URL + "oauth/forget";
+    public static final String OAUTH_FORGETPWD_URL = BASE_URL + "oauth/forgetpwd";
 
+    // 13.自动登录
+    public static final String INDEX_OAUTH_URL = BASE_URL + "index/oauth";
 
     // 1.会员等级列表和用户会员等级
     public static final String VIP_SHOW_URL = BASE_URL + "vip/show";
+
+    // 2.卡密激活
+    public static final String VIP_CARD_URL = BASE_URL + "vip/card";
+
+
 }
