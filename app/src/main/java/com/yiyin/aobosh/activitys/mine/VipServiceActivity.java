@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -53,8 +54,10 @@ public class VipServiceActivity extends Activity {
     private MemberVipAdapter mAdapter1;
     private LevelVipAdapter mAdapter2;
 
-    private static final int LOAD_DATA_SUCCESS = 101;
-    private static final int LOAD_DATA_FAILE = 102;
+    private static final int LOAD_DATA_SUCCESS1 = 101;
+    private static final int LOAD_DATA_FAILE1 = 102;
+    private static final int LOAD_DATA_SUCCESS2 = 201;
+    private static final int LOAD_DATA_FAILE2 = 202;
     private static final int NET_ERROR = 404;
 
     @SuppressLint("HandlerLeak")
@@ -65,12 +68,22 @@ public class VipServiceActivity extends Activity {
 
             switch (msg.what) {
 
-                case LOAD_DATA_SUCCESS:
+                case LOAD_DATA_SUCCESS1:
+
+                    showVipUI(true);
+                    break;
+
+                case LOAD_DATA_FAILE1:
+
+                    showVipUI(false);
+                    break;
+
+                case LOAD_DATA_SUCCESS2:
 
                     initVipDataView();
                     break;
 
-                case LOAD_DATA_FAILE:
+                case LOAD_DATA_FAILE2:
 
                     break;
 
@@ -122,6 +135,7 @@ public class VipServiceActivity extends Activity {
         mMemberVipListBeans = new ArrayList<>();
         mLevelListBeans = new ArrayList<>();
 
+        getVipBuy(mUserInfo.getUid());
         getVipShow(mUserInfo.getUid());
     }
 
@@ -151,15 +165,87 @@ public class VipServiceActivity extends Activity {
 
     //--------------------------------------请求服务器数据-------------------------------------------
 
-    // 请求登录
-    private void getVipShow(final int uid) {
+    // 购买会员订单支付状态
+    private void getVipBuy(final int uid) {
 
-        String url = HttpURL.VIP_SHOW_URL;
-        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST,url,new Response.Listener<String>() {
+        String url = HttpURL.VIP_BUY_URL;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,url,new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 if (!"".equals(s)) {
                     LogUtils.i("VipServiceActivity: result1 " + s);
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(s);
+                        String code = jsonObject.getString("code");
+
+                        if ("200".equals(code)) {
+
+                            String data = jsonObject.getString("data");
+
+                            mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS1);
+
+                        } else if ("4100".equals(code)){
+
+                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE1);
+                        } else {
+
+                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE1);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE1);
+                    }
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtils.e("VipServiceActivity: volleyError1 " + volleyError.getMessage());
+                mHandler.sendEmptyMessage(LOAD_DATA_FAILE1);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject obj = new JSONObject();
+
+                try {
+
+                    String token = "Vipbuy" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
+                    LogUtils.i("VipServiceActivity: token " + token);
+                    String sha_token = SHA.encryptToSHA(token);
+
+                    obj.put("access_token", sha_token);
+                    obj.put("uid", uid);
+                    obj.put("device", CommonParameters.ANDROID);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                LogUtils.i("VipServiceActivity json1 " + obj.toString());
+
+                map.put("dt", obj.toString());
+                return map;
+            }
+
+        };
+        requestQueue.add(stringRequest);
+    }
+    
+    // 获取会员等级列表和用户会员等级
+    private void getVipShow(final int uid) {
+
+        String url = HttpURL.VIP_SHOW_URL;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,url,new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                if (!"".equals(s)) {
+                    LogUtils.i("VipServiceActivity: result2 " + s);
 
                     try {
                         JSONObject jsonObject = new JSONObject(s);
@@ -173,15 +259,15 @@ public class VipServiceActivity extends Activity {
                             mLevelListBeans = vipShow.getLevel_list();
                             mMemberVipListBeans = vipShow.getMemberVip_list();
 
-                            mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS);
+                            mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS2);
                             return;
                         }
 
-                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE2);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE2);
                     }
                 }
             }
@@ -189,7 +275,7 @@ public class VipServiceActivity extends Activity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtils.e("VipServiceActivity: volleyError1 " + volleyError.toString());
+                LogUtils.e("VipServiceActivity: volleyError2 " + volleyError.toString());
                 mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
@@ -212,7 +298,7 @@ public class VipServiceActivity extends Activity {
                     e.printStackTrace();
                 }
 
-                LogUtils.i("VipServiceActivity json1 " + obj.toString());
+                LogUtils.i("VipServiceActivity json2 " + obj.toString());
 
                 map.put("dt", obj.toString());
                 return map;

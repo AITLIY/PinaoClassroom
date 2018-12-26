@@ -25,6 +25,7 @@ import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
 import com.yiyin.aobosh.utils.SHA;
+import com.yiyin.aobosh.utils.Sputils;
 import com.yiyin.aobosh.utils.TimeUtils;
 
 import org.json.JSONException;
@@ -53,11 +54,13 @@ public class SplashActivity extends Activity {
 
                 case LOAD_DATA_SUCCESS:
 
+                    GlobalParameterApplication.getInstance().setLoginStatus(true);
                     mHandler.postDelayed(new SplashTask(), 2000);
                     break;
 
                 case LOAD_DATA_FAILE1:
 
+                    GlobalParameterApplication.getInstance().clearUserInfo();   // 清空本地存储的用户信息
                     new AlertDialog.Builder(mContext)
                             .setTitle("提示")
                             .setMessage("登录已失效，是否重新登录？")
@@ -67,14 +70,22 @@ public class SplashActivity extends Activity {
 
                                     Intent intent = new Intent(mContext, LoginActivity.class);
                                     startActivity(intent);
+                                    finish();
+
                                 }
                             })
-                            .setNegativeButton("取消",null)
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    mHandler.postDelayed(new SplashTask(), 2000);
+                                }
+                            })
                             .show();
                     break;
 
                 case LOAD_DATA_FAILE2:
 
+                    GlobalParameterApplication.getInstance().setLoginStatus(false);
                     mHandler.postDelayed(new SplashTask(), 2000);
                     break;
             }
@@ -100,7 +111,7 @@ public class SplashActivity extends Activity {
         setContentView(R.layout.activity_splash);
 
         ImageView bg = findViewById(R.id.splash_bg);
-        Glide.with(this).load(R.drawable.icon_tab).centerCrop().into(bg);
+        Glide.with(this).load(R.drawable.icon_bg_splash).centerCrop().into(bg);
 
         mContext = this;
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
@@ -133,9 +144,6 @@ public class SplashActivity extends Activity {
                         if ("200".equals(code)) {
 
                             String data = jsonObject.getString("data");
-                            JSONObject json = new JSONObject(data);
-                            String captcha = json.getString("code");
-                            LogUtils.i("SplashActivity: captcha " + captcha);
 
                             mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS);
 

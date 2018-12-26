@@ -16,6 +16,9 @@ import com.yiyin.aobosh.activitys.HomepageActivity;
 import com.yiyin.aobosh.activitys.login.LoginActivity;
 import com.yiyin.aobosh.activitys.mine.ChangeMobileActivity;
 import com.yiyin.aobosh.activitys.mine.ChangePasswordActivity;
+import com.yiyin.aobosh.activitys.mine.CollectLessonActivity;
+import com.yiyin.aobosh.activitys.mine.CollectTeacherActivity;
+import com.yiyin.aobosh.activitys.mine.OauthHistoryActivity;
 import com.yiyin.aobosh.activitys.mine.VipCardActivity;
 import com.yiyin.aobosh.activitys.mine.VipServiceActivity;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
@@ -44,7 +47,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         mContext = getContext();
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
 
-        LogUtils.i("ChangeMobileActivity: mobile " + mUserInfo.getMobile() + "uid" + mUserInfo.getUid());
+        LogUtils.i("MineFragment: mobile " + mUserInfo.getMobile() + ", uid " + mUserInfo.getUid());
         init();
         return mView;
     }
@@ -90,34 +93,37 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
             case R.id.user_icon:
 
-                if (mUserInfo != null) {
+                if (GlobalParameterApplication.getInstance().getLoginStatus()) {
                     //TODO
 
                 } else {
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    startActivity(new Intent(mContext, LoginActivity.class));
                 }
                 break;
 
             case R.id.vip_ll:
 
-                startActivity(new Intent(getActivity(), VipServiceActivity.class));
+                startActivity(new Intent(mContext, VipServiceActivity.class));
                 break;
 
             case R.id.cardpw_ll:
 
-                startActivity(new Intent(getActivity(), VipCardActivity.class));
+                startActivity(new Intent(mContext, VipCardActivity.class));
                 break;
 
             case R.id.footprint_ll:
 
+                startActivity(new Intent(mContext, OauthHistoryActivity.class));
                 break;
 
             case R.id.star_lesson_ll:
 
+                startActivity(new Intent(mContext, CollectLessonActivity.class));
                 break;
 
             case R.id.star_teacher_ll:
 
+                startActivity(new Intent(mContext, CollectTeacherActivity.class));
                 break;
 
             case R.id.discounts_ll:
@@ -126,18 +132,19 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
             case R.id.phone_ll:
 
-                startActivity(new Intent(getActivity(), ChangeMobileActivity.class));
+                startActivity(new Intent(mContext, ChangeMobileActivity.class));
                 break;
 
             case R.id.password_ll:
 
-                startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
+                startActivity(new Intent(mContext, ChangePasswordActivity.class));
                 break;
 
             case R.id.exit_ll:
 
-                Sputils.clear(mContext);    // 清空本地存储
-                ((HomepageActivity) getActivity()).BackToTheHomepage(); //回到主页
+                GlobalParameterApplication.getInstance().setLoginStatus(false);
+                GlobalParameterApplication.getInstance().clearUserInfo();   // 清空本地存储的用户信息
+                ((HomepageActivity) getActivity()).BackToTheHomepage();     // 回到主页
                 break;
 
         }

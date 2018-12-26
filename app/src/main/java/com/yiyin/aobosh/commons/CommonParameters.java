@@ -14,4 +14,9 @@ public class CommonParameters {
     public static final String PRICE = "price";
     public static final String HOT = "hot";
     public static final String SCORE = "score";
+
+    public static final String LOGINSTATUS = "Loginstatus";
+
+    public static final int UNIACID = 4;
+
 }

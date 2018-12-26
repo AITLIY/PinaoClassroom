@@ -221,6 +221,7 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
 
 
     private void initData() {
+
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
         mShowList = new ArrayList<>();
         adapter = new LessonListAdapter(mContext, mShowList);
@@ -228,7 +229,10 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
         getLessonData(mSort,mCateId,mKeyword, mPindex); // 无条件初始化搜索
     }
 
+
+    // 是否显示排序列表
     private void isShowlessonSort(boolean isShow) {
+
         if (isShow){
             lesson_sort_iv.setImageResource(R.drawable.icon_tab_sort_top);
             sort_bg.setVisibility(View.VISIBLE);
@@ -240,6 +244,7 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
         }
     }
 
+    // 是否显示筛选列表
     private void isShowlessonfiltrate(boolean isShow) {
         if (isShow){
             lesson_filtrate_iv.setImageResource(R.drawable.icon_tab_sort_top);
@@ -327,7 +332,7 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
         }
     }
 
-    // 根据类型排序
+    // 选择排序方式排序
     private void typeForSort(String type) {
         mSort = type;
         page= 1;
@@ -381,27 +386,25 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
 
                 int tempPos = lesson_item_list.getRefreshableView().getFirstVisiblePosition();
 
-//                if (tempPos > 0) {
-//                    goTop.setVisibility(View.VISIBLE);
-//                } else {
-//                    goTop.setVisibility(View.GONE);
-//                }
+                //                if (tempPos > 0) {
+                //                    goTop.setVisibility(View.VISIBLE);
+                //                } else {
+                //                    goTop.setVisibility(View.GONE);
+                //                }
 
             }
         });
 
-//        goTop.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                lesson_item_list.getRefreshableView().smoothScrollToPosition(0);//移动到首部
-//            }
-//        });
+        //        goTop.setOnClickListener(new View.OnClickListener() {
+        //            @Override
+        //            public void onClick(View view) {
+        //                lesson_item_list.getRefreshableView().smoothScrollToPosition(0);//移动到首部
+        //            }
+        //        });
 
     }
 
-    /**
-     * 初始化列表控件上下拉的状态
-     */
+    //初始化列表控件上下拉的状态
     private void setListView() {
 
         ILoadingLayout startLabels = lesson_item_list.getLoadingLayoutProxy(true, false);

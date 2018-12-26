@@ -6,6 +6,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.yiyin.aobosh.bean.LessonCategory;
 import com.yiyin.aobosh.bean.UserInfo;
+import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.utils.Sputils;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class GlobalParameterApplication extends Application {
         return instance;
     }
 
-    private RequestQueue mRequestQueue;    // Volley网络请求队列
+    private RequestQueue mRequestQueue;                 // Volley网络请求队列
     public RequestQueue getRequestQueue() {
 
         if (mRequestQueue == null) {
@@ -32,12 +33,31 @@ public class GlobalParameterApplication extends Application {
         return mRequestQueue;
     }
 
-    public UserInfo getUserInfo() {
+    public UserInfo getUserInfo() {                     //本地存储的用户信息
 
         return Sputils.getObject(getApplicationContext(), UserInfo.class);
     }
 
-    public static List<LessonCategory> lessonCategory;       //课程分类对象的集合
+
+    public void clearUserInfo() {                       // 清空本地存储的用户信息
+
+        Sputils.clear(getApplicationContext());
+    }
+
+    public void setLoginStatus(boolean status) {        // 设置用户登录状态
+
+        if (status)
+            Sputils.put(getApplicationContext(), CommonParameters.LOGINSTATUS, status);
+        else
+            Sputils.put(getApplicationContext(), CommonParameters.LOGINSTATUS, status);
+    }
+
+    public boolean getLoginStatus() {                   // 获取用户登录状态
+
+        return Sputils.getSpBoolean(getApplicationContext(), CommonParameters.LOGINSTATUS, false);
+    }
+
+        public static List<LessonCategory> lessonCategory;       //课程分类对象的集合
 
     @Override
     public void onCreate() {

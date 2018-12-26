@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -172,11 +173,11 @@ public class VipCardActivity extends Activity {
 
     //--------------------------------------请求服务器数据-------------------------------------------
 
-    // 请求登录
+    // 获取会员等级列表和用户会员等级
     private void getVipShow(final int uid) {
 
         String url = HttpURL.VIP_SHOW_URL;
-        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, url, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 if (!"".equals(s)) {

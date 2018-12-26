@@ -68,7 +68,7 @@ public class LessonListAdapter extends BaseAdapter {
         Glide.with(mContext)
                 .load(mList.get(position).getImages())
                 .into(holder.lessonImg);
-        holder.lessonPerson.setText(mList.get(position).getBuynum() + mList.get(position).getVirtual_buynum() + mList.get(position).getVisit_number() + "已学");
+        holder.lessonPerson.setText(mList.get(position).getBuynum() + mList.get(position).getVirtual_buynum() + mList.get(position).getVisit_number() + "人已学");
         holder.lessonName.setText(mList.get(position).getBookname());
         holder.lessonPrice.setText(mList.get(position).getPrice()+"");
         holder.lessonCount.setText(mList.get(position).getCount()+"");

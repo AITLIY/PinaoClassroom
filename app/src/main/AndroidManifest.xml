@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.yiyin.aobosh">
+    package="com.yiyin.aobosh">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".application.GlobalParameterApplication"
@@ -13,67 +13,52 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".activitys.SplashActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|adjustResize|stateHidden">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activitys.HomepageActivity"
-                  android:launchMode="singleTask"
-                  android:screenOrientation="portrait"/>
-
+        <activity
+            android:name=".activitys.HomepageActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activitys.login.LoginActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activitys.login.LoginSucessActivity"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activitys.login.ForgetPasswordActivity1"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activitys.login.ForgetPasswordActivity2"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activitys.login.ForgetPwdSuccessActivity"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activitys.login.RegisterActivity1"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activitys.login.RegisterActivity2"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activitys.login.RegisterSuccessActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".activitys.mine.ChangePasswordActivity">
-        </activity>
-
-        <activity android:name=".activitys.mine.ChangeMobileActivity">
-        </activity>
-
-        <activity android:name=".activitys.mine.VipServiceActivity">
-        </activity>
-
-        <activity android:name=".activitys.mine.VipCardActivity">
-        </activity>
-
+            android:screenOrientation="portrait" />
+        <activity android:name=".activitys.mine.ChangePasswordActivity" />
+        <activity android:name=".activitys.mine.ChangeMobileActivity" />
+        <activity android:name=".activitys.mine.VipServiceActivity" />
+        <activity android:name=".activitys.mine.VipCardActivity" />
+        <activity android:name=".activitys.mine.CollectLessonActivity" />
+        <activity android:name=".activitys.mine.CollectTeacherActivity" />
+        <activity android:name=".activitys.mine.OauthHistoryActivity"></activity>
     </application>
 
 </manifest>
