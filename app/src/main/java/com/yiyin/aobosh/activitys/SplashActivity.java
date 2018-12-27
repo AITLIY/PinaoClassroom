@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.android.volley.AuthFailureError;
@@ -25,7 +26,6 @@ import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
 import com.yiyin.aobosh.utils.SHA;
-import com.yiyin.aobosh.utils.Sputils;
 import com.yiyin.aobosh.utils.TimeUtils;
 
 import org.json.JSONException;
@@ -107,6 +107,9 @@ public class SplashActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 隐藏状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 

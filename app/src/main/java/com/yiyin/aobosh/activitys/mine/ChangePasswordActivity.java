@@ -16,6 +16,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.githang.statusbar.StatusBarCompat;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.activitys.HomepageActivity;
@@ -87,6 +88,8 @@ public class ChangePasswordActivity extends Activity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
+        //设置状态栏颜色
+        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.app_title_bar), true);
 
         mContext = this;
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();

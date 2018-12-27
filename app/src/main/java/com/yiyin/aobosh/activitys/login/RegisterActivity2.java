@@ -57,6 +57,7 @@ public class RegisterActivity2 extends Activity  implements View.OnClickListener
                 case LOAD_DATA_SUCCESS:
 
                     startActivity(new Intent(mContext, RegisterSuccessActivity.class));
+                    finish();
                     break;
 
                 case LOAD_DATA_FAILE1:

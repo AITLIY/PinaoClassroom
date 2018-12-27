@@ -6,6 +6,30 @@
     android:orientation="vertical"
     tools:context="com.yiyin.aobosh.activitys.mine.CollectLessonActivity">
 
+    <!--标题栏-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/app_title_bar">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="11dp"
+            android:layout_height="22dp"
+            android:layout_marginLeft="21dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_btn_back_black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="@dimen/title_bar_text"
+            android:text="我收藏的讲师"/>
+    </RelativeLayout>
+
     <!--讲师列表-->
     <com.handmark.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/lesson_item_list"

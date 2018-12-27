@@ -3,12 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.yiyin.aobosh.fragments.MineFragment">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
         android:orientation="vertical">
+
+        <!--标题栏-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@color/app_title_bar">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="@dimen/title_bar_text"
+                android:text="个人中心"/>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -19,8 +34,8 @@
 
             <com.yiyin.aobosh.view.CircleImageView
                 android:id="@+id/user_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:src="@drawable/icon_tab_usericon" />
 
             <TextView

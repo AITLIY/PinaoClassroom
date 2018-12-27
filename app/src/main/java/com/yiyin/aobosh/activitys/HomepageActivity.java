@@ -1,24 +1,25 @@
 package com.yiyin.aobosh.activitys;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v4.app.Fragment;
-import android.app.FragmentTransaction;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.githang.statusbar.StatusBarCompat;
+import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.activitys.login.LoginActivity;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.fragments.AllClassFragment;
 import com.yiyin.aobosh.fragments.HomeFragment;
 import com.yiyin.aobosh.fragments.MineFragment;
 import com.yiyin.aobosh.fragments.MyClassFragment;
-import com.yiyin.aobosh.R;
 
 public class HomepageActivity extends AppCompatActivity{
 
@@ -35,6 +36,12 @@ public class HomepageActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
+        // 隐藏标题栏
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+        //设置状态栏颜色
+        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.app_title_bar), true);
 
         init();
     }
@@ -104,7 +111,7 @@ public class HomepageActivity extends AppCompatActivity{
                     break;
                 case R.id.ll_mine:
 
-                    if (GlobalParameterApplication.getInstance().getUserInfo()==null) {
+                    if (!GlobalParameterApplication.getInstance().getLoginStatus()) {
                         startActivity(new Intent(HomepageActivity.this, LoginActivity.class));
                         return;
                     } else {

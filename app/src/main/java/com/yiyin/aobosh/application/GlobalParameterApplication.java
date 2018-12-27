@@ -57,7 +57,7 @@ public class GlobalParameterApplication extends Application {
         return Sputils.getSpBoolean(getApplicationContext(), CommonParameters.LOGINSTATUS, false);
     }
 
-        public static List<LessonCategory> lessonCategory;       //课程分类对象的集合
+    public static List<LessonCategory> lessonCategory;       //课程分类对象的集合
 
     @Override
     public void onCreate() {

@@ -17,6 +17,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.githang.statusbar.StatusBarCompat;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -98,6 +99,8 @@ public class OauthHistoryActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_oauth_history);
+        //设置状态栏颜色
+        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.app_title_bar), true);
         
         init();
     }
@@ -122,12 +125,16 @@ public class OauthHistoryActivity extends Activity {
     // 初始化列表
     private void initPullListView() {
 
+        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         lesson_item_list = findViewById(R.id.lesson_item_list);
-
         setListView();
 
         lesson_item_list.setMode(PullToRefreshBase.Mode.BOTH);
-
         lesson_item_list.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {  //拉动时
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {

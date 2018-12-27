@@ -18,6 +18,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.githang.statusbar.StatusBarCompat;
 import com.google.gson.Gson;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
@@ -109,6 +110,9 @@ public class VipCardActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vip_card);
+        //设置状态栏颜色
+        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.app_title_bar), true);
+
         init();
     }
 
@@ -120,12 +124,12 @@ public class VipCardActivity extends Activity {
 
     private void initView() {
 
-        //        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
-        //            @Override
-        //            public void onClick(View view) {
-        //                finish();
-        //            }
-        //        });
+        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         level_item_rv = findViewById(R.id.level_item_rv);
         card_pwd_et = findViewById(R.id.card_pwd_et);

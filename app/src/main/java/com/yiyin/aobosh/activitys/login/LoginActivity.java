@@ -20,6 +20,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
+import com.yiyin.aobosh.activitys.HomepageActivity;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
@@ -59,7 +60,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
                 case LOAD_DATA_SUCCESS:
 
-                    startActivity(new Intent(mContext, LoginSucessActivity.class));
+                    ToastUtil.show(mContext, "登录成功");
+                    GlobalParameterApplication.getInstance().setLoginStatus(true);
+                    startActivity(new Intent(mContext, HomepageActivity.class));
                     finish();
                     break;
 

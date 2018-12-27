@@ -56,7 +56,7 @@ public class ForgetPasswordActivity2 extends Activity  implements View.OnClickLi
                 case LOAD_DATA_SUCCESS:
 
                     startActivity(new Intent(mContext, ForgetPwdSuccessActivity.class));
-
+                    finish();
                     break;
 
                 case LOAD_DATA_FAILE:

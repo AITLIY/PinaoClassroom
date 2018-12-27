@@ -17,6 +17,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.githang.statusbar.StatusBarCompat;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -24,10 +25,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
-import com.yiyin.aobosh.adapter.LessonListAdapter;
 import com.yiyin.aobosh.adapter.TeacherListAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
-import com.yiyin.aobosh.bean.LessonSearch;
 import com.yiyin.aobosh.bean.TeacherBean;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
@@ -100,7 +99,9 @@ public class CollectTeacherActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collect_teacher);
-        
+        //设置状态栏颜色
+        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.app_title_bar), true);
+
         init();
     }
 
@@ -124,12 +125,16 @@ public class CollectTeacherActivity extends Activity {
     // 初始化列表
     private void initPullListView() {
 
+        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         lesson_item_list = findViewById(R.id.lesson_item_list);
-
         setListView();
 
         lesson_item_list.setMode(PullToRefreshBase.Mode.BOTH);
-
         lesson_item_list.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {  //拉动时
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {

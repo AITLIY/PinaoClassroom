@@ -13,17 +13,16 @@ import android.widget.LinearLayout;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.activitys.HomepageActivity;
-import com.yiyin.aobosh.activitys.login.LoginActivity;
 import com.yiyin.aobosh.activitys.mine.ChangeMobileActivity;
 import com.yiyin.aobosh.activitys.mine.ChangePasswordActivity;
 import com.yiyin.aobosh.activitys.mine.CollectLessonActivity;
 import com.yiyin.aobosh.activitys.mine.CollectTeacherActivity;
 import com.yiyin.aobosh.activitys.mine.OauthHistoryActivity;
+import com.yiyin.aobosh.activitys.mine.UserInfoActivity;
 import com.yiyin.aobosh.activitys.mine.VipCardActivity;
 import com.yiyin.aobosh.activitys.mine.VipServiceActivity;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.UserInfo;
-import com.yiyin.aobosh.utils.Sputils;
 import com.yiyin.aobosh.view.CircleImageView;
 
 /**
@@ -93,12 +92,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
             case R.id.user_icon:
 
-                if (GlobalParameterApplication.getInstance().getLoginStatus()) {
-                    //TODO
+                startActivity(new Intent(mContext, UserInfoActivity.class));
 
-                } else {
-                    startActivity(new Intent(mContext, LoginActivity.class));
-                }
                 break;
 
             case R.id.vip_ll:
