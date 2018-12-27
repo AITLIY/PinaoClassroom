@@ -1,18 +1,14 @@
-package com.yiyin.aobosh.fragments;
-
+package com.yiyin.aobosh.activitys.mine;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,14 +27,15 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
+import com.yiyin.aobosh.adapter.CouponAdapter;
 import com.yiyin.aobosh.adapter.LessonListAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
+import com.yiyin.aobosh.bean.CouponBean;
 import com.yiyin.aobosh.bean.LessonSearch;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
 import com.yiyin.aobosh.utils.SHA;
-import com.yiyin.aobosh.utils.Sputils;
 import com.yiyin.aobosh.utils.TimeUtils;
 import com.yiyin.aobosh.utils.ToastUtil;
 
@@ -50,10 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
-public class MyClassFragment extends Fragment implements View.OnClickListener{
-
-    private View mView;
+public class CouponActivity extends Activity implements View.OnClickListener{
 
     private Context mContext;
     private RequestQueue requestQueue;
@@ -63,9 +57,9 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
     private View all_lesson_v,wait_payment_v,already_payment_v;
 
     private PullToRefreshListView lesson_item_list;            // 课程列表容器
-    private ArrayList<LessonSearch> mLessonSearches;          //课程搜索结果的集合
-    private ArrayList<LessonSearch> mShowList;                //课程显示结果的集合
-    private LessonListAdapter adapter;
+    private ArrayList<CouponBean> mLessonSearches;          //课程搜索结果的集合
+    private ArrayList<CouponBean> mShowList;                //课程显示结果的集合
+    private CouponAdapter adapter;
 
     private static final int SEARCH_LESSON_PARAMETER  = 10;        //参数查询
     private static final int SEARCH_LESSON_PULL_UP = 20;           //上拉加载
@@ -76,6 +70,7 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
     private static final int LOAD_DATA1_SUCCESS = 101;
     private static final int LOAD_DATA1_FAILE = 102;
     private static final int NET_ERROR = 404;
+
 
     @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
@@ -109,14 +104,14 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
         }
     };
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_my_class, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_coupon);
+        //设置状态栏颜色
+        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.app_title_bar), true);
 
-        init(); 
-        return mView;
+        init();
     }
 
     private void init() {
@@ -127,17 +122,17 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
 
     private void initView() {
 
-        all_lesson_ll = mView.findViewById(R.id.all_lesson_ll);
-        wait_payment_ll = mView.findViewById(R.id.wait_payment_ll);
-        already_payment_ll = mView.findViewById(R.id.already_payment_ll);
+        all_lesson_ll = findViewById(R.id.all_lesson_ll);
+        wait_payment_ll = findViewById(R.id.wait_payment_ll);
+        already_payment_ll = findViewById(R.id.already_payment_ll);
 
-        all_lesson_tv = mView.findViewById(R.id.all_lesson_tv);
-        wait_payment_tv = mView.findViewById(R.id.wait_payment_tv);
-        already_payment_tv = mView.findViewById(R.id.already_payment_tv);
+        all_lesson_tv = findViewById(R.id.all_lesson_tv);
+        wait_payment_tv = findViewById(R.id.wait_payment_tv);
+        already_payment_tv = findViewById(R.id.already_payment_tv);
 
-        all_lesson_v = mView.findViewById(R.id.all_lesson_v);
-        wait_payment_v = mView.findViewById(R.id.wait_payment_v);
-        already_payment_v = mView.findViewById(R.id.already_payment_v);
+        all_lesson_v = findViewById(R.id.all_lesson_v);
+        wait_payment_v = findViewById(R.id.wait_payment_v);
+        already_payment_v = findViewById(R.id.already_payment_v);
 
         all_lesson_ll.setOnClickListener(this);
         wait_payment_ll.setOnClickListener(this);
@@ -148,10 +143,10 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
 
     private void initData() {
 
-        mContext = getContext();
+        mContext = this;
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
         mShowList = new ArrayList<>();
-        adapter = new LessonListAdapter(mContext, mShowList);
+        adapter = new CouponAdapter(mContext, mShowList);
         lesson_item_list.setAdapter(adapter);
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
         getLessonData(mUserInfo.getUid(), CommonParameters.ALL);
@@ -160,8 +155,8 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
 
     // 初始化列表
     private void initPullListView() {
-        
-        lesson_item_list = mView.findViewById(R.id.lesson_item_list);
+
+        lesson_item_list = findViewById(R.id.lesson_item_list);
         setListView();
 
         lesson_item_list.setMode(PullToRefreshBase.Mode.BOTH);
@@ -172,7 +167,7 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
 
                 mSearchType = SEARCH_LESSON_PARAMETER;
                 getLessonData(mUserInfo.getUid(),Current_type); // 下拉刷新搜索
-                LogUtils.i("MyClassFragment: onPullDownToRefresh 下拉" + page + "页");
+                LogUtils.i("CouponActivity: onPullDownToRefresh 下拉" + page + "页");
             }
 
             @Override
@@ -180,14 +175,14 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
                 page++;
 
                 mSearchType = SEARCH_LESSON_PULL_UP;
-//                 getLessonData(mUserInfo.getUid(),CommonParameters.UNIACID); // 上拉加载搜索
+                //                 getLessonData(mUserInfo.getUid(),CommonParameters.UNIACID); // 上拉加载搜索
                 lesson_item_list.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         lesson_item_list.onRefreshComplete();
                     }
                 }, 1000);
-                LogUtils.i("MyClassFragment: onPullUpToRefresh 下拉" + page + "页");
+                LogUtils.i("CouponActivity: onPullUpToRefresh 下拉" + page + "页");
             }
         });
 
@@ -248,7 +243,7 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
 
         switch (v.getId()) {
-            
+
             case R.id.all_lesson_ll:
 
                 typeForSort(CommonParameters.ALL);
@@ -270,6 +265,7 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
     // 选择排序方式排序
     private void typeForSort(String type) {
         page= 1;
+
         Current_type = type;
         mSearchType = SEARCH_LESSON_PARAMETER;
         getLessonData(mUserInfo.getUid(),type); // 通过类型排序查找
@@ -278,13 +274,14 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
 
     private void changeTabItemStyle(View view) {
 
-        all_lesson_v.setVisibility(view.getId() ==  R.id.all_lesson_ll ? View.VISIBLE:View.GONE);
+        all_lesson_v.setVisibility(view.getId() == R.id.all_lesson_ll ? View.VISIBLE:View.GONE);
         wait_payment_v.setVisibility(view.getId() == R.id.wait_payment_ll ? View.VISIBLE:View.GONE);
         already_payment_v.setVisibility(view.getId() == R.id.already_payment_ll ? View.VISIBLE:View.GONE);
 
         all_lesson_tv.setTextColor(view.getId() == R.id.all_lesson_ll ? getResources().getColor(R.color.btn_selected) : getResources().getColor(R.color.black));
         wait_payment_tv.setTextColor(view.getId() == R.id.wait_payment_ll ? getResources().getColor(R.color.btn_selected) : getResources().getColor(R.color.black));
         already_payment_tv.setTextColor(view.getId() == R.id.already_payment_ll ? getResources().getColor(R.color.btn_selected) : getResources().getColor(R.color.black));
+
     }
 
 
@@ -297,7 +294,7 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
 
                 mShowList.clear();
                 mShowList.addAll(mLessonSearches);
-                LogUtils.i("MyClassFragment: SEARCH_LESSON_FOR_PARAMETER "  + mShowList.size());
+                LogUtils.i("CouponActivity: SEARCH_LESSON_FOR_PARAMETER "  + mShowList.size());
 
                 adapter.notifyDataSetChanged();
                 lesson_item_list.getRefreshableView().smoothScrollToPosition(0);//移动到首部
@@ -312,7 +309,7 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
             case SEARCH_LESSON_PULL_UP:
 
                 adapter.addLast(mLessonSearches);
-                LogUtils.i("MyClassFragment: SEARCH_LESSON_PULL_UP " + mShowList.size());
+                LogUtils.i("CouponActivity: SEARCH_LESSON_PULL_UP " + mShowList.size());
 
                 adapter.notifyDataSetChanged();
                 lesson_item_list.postDelayed(new Runnable() {
@@ -330,12 +327,12 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
     // 获取我的的课程
     private void getLessonData(final int uid, final String status) {
 
-        String url = HttpURL.MYLESSON_MYLESSON_URL;
+        String url = HttpURL.COUPON_COUPON_URL;
         StringRequest stringRequest = new StringRequest(Request.Method.POST,url,new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 if (!"".equals(s)) {
-                    LogUtils.i("MyClassFragment: result1 " + s);
+                    LogUtils.i("CouponActivity: result1 " + s);
 
                     try {
                         JSONObject jsonObject = new JSONObject(s);
@@ -344,8 +341,8 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
                         if ("200".equals(code)) {
 
                             String data = jsonObject.getString("data");
-//                            mLessonSearches = new Gson().fromJson(data, new TypeToken<List<LessonSearch>>(){}.getType());
-//                            LogUtils.i("MyClassFragment: mLessonSearches.size " + mLessonSearches.size());
+                            mLessonSearches = new Gson().fromJson(data, new TypeToken<List<CouponBean>>(){}.getType());
+                            LogUtils.i("CouponActivity: mLessonSearches.size " + mLessonSearches.size());
 
                             mHandler.sendEmptyMessage(LOAD_DATA1_SUCCESS);
                             return;
@@ -362,7 +359,7 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtils.e("MyClassFragment: volleyError1 " + volleyError.toString());
+                LogUtils.e("CouponActivity: volleyError1 " + volleyError.toString());
                 mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
@@ -374,9 +371,9 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
 
                 try {
 
-                    String token = "Mylessonmylesson" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
-                    LogUtils.i("MyClassFragment: token " + token);
-                    String sha_token = SHA.encryptToSHA(token);
+                    String token = "Couponcoupon" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
+                    LogUtils.i("CouponActivity: token " + token);
+                    String sha_token = SHA.encryptToSHA(token); 
 
                     obj.put("access_token", sha_token);
                     obj.put("uid", uid);
@@ -387,7 +384,7 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
                     e.printStackTrace();
                 }
 
-                LogUtils.i("MyClassFragment json1 " + obj.toString());
+                LogUtils.i("CouponActivity json1 " + obj.toString());
 
                 map.put("dt", obj.toString());
                 return map;

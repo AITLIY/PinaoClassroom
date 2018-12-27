@@ -247,6 +247,8 @@ public class VipCardActivity extends Activity {
         requestQueue.add(stringRequest);
     }
 
+    //--------------------------------------请求服务器数据-------------------------------------------
+
     // 卡密激活
     private void activeVipCard(final int uid,final String code) {
 

@@ -31,7 +31,8 @@ public class HttpURL {
     // 7.我的足迹
     public static final String OAUTH_HISTORY_URL = BASE_URL + "oauth/history";
 
-
+    // 8.我的课程
+    public static final String MYLESSON_MYLESSON_URL = BASE_URL + "mylesson/mylesson";
 
 
     // 1.自动登录
@@ -61,6 +62,9 @@ public class HttpURL {
     // 8.修改密码
     public static final String OAUTH_MODIFYPSW_URL = BASE_URL + "oauth/modifypsw";
 
+    // 8.个人资料修改
+    public static final String OAUTH_MODIFYINFO_URL = BASE_URL + "oauth/modifyinfo";
+
 
 
     // 1.会员等级列表和用户会员等级
@@ -71,6 +75,10 @@ public class HttpURL {
 
     // 3.卡密激活
     public static final String VIP_CARD_URL = BASE_URL + "vip/card";
+
+    // 4.我的优惠券
+    public static final String COUPON_COUPON_URL = BASE_URL + "coupon/coupon";
+
 
 
 }

@@ -8,6 +8,8 @@ public class CommonParameters {
 
     public static final String ANDROID = "android";
     public static final String SECRET_KEY = "5QmXczkdfVTd";
+    public static final String LOGINSTATUS = "Loginstatus";
+    public static final int UNIACID = 4;  //公众号id
 
     //排序规则
     public static final String FREE = "free";
@@ -15,8 +17,9 @@ public class CommonParameters {
     public static final String HOT = "hot";
     public static final String SCORE = "score";
 
-    public static final String LOGINSTATUS = "Loginstatus";
-
-    public static final int UNIACID = 4;
+    //我的课程状态
+    public static final String ALL = "";
+    public static final String NOT_PAID = "0";
+    public static final String PAID = "1";
 
 }

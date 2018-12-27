@@ -365,11 +365,10 @@ public class HomeFragment extends Fragment {
 
             }
         });
-
     }
 
-    //-------------------------------------------课程推荐--------------------------------------------
 
+    //-------------------------------------------课程推荐--------------------------------------------
 
     private void initRecommend() {
         LogUtils.i("HomeFragment: Recommend mRecommendLessons.size " + mRecommendLessons.size());

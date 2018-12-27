@@ -3,13 +3,16 @@ package com.yiyin.aobosh.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.DrmInitData;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.activitys.HomepageActivity;
@@ -17,6 +20,7 @@ import com.yiyin.aobosh.activitys.mine.ChangeMobileActivity;
 import com.yiyin.aobosh.activitys.mine.ChangePasswordActivity;
 import com.yiyin.aobosh.activitys.mine.CollectLessonActivity;
 import com.yiyin.aobosh.activitys.mine.CollectTeacherActivity;
+import com.yiyin.aobosh.activitys.mine.CouponActivity;
 import com.yiyin.aobosh.activitys.mine.OauthHistoryActivity;
 import com.yiyin.aobosh.activitys.mine.UserInfoActivity;
 import com.yiyin.aobosh.activitys.mine.VipCardActivity;
@@ -35,6 +39,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
     private UserInfo mUserInfo;
 
     private CircleImageView userIcon;
+    private TextView name_tv,id_tv;
     private LinearLayout vip_ll,cardpw_ll,footprint_ll,star_lesson_ll,
             star_teacher_ll,discounts_ll,phone_ll,password_ll,exit_ll;
 
@@ -43,10 +48,6 @@ public class MineFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_mine, container, false);
 
-        mContext = getContext();
-        mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
-
-        LogUtils.i("MineFragment: mobile " + mUserInfo.getMobile() + ", uid " + mUserInfo.getUid());
         init();
         return mView;
     }
@@ -55,11 +56,14 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
         initView();
         initListner();
+        initData();
     }
 
     private void initView() {
 
         userIcon = mView.findViewById(R.id.user_icon);
+        name_tv = mView.findViewById(R.id.name_tv);
+        id_tv = mView.findViewById(R.id.id_tv);
         vip_ll = mView.findViewById(R.id.vip_ll);
         cardpw_ll = mView.findViewById(R.id.cardpw_ll);
         footprint_ll = mView.findViewById(R.id.footprint_ll);
@@ -83,6 +87,19 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         phone_ll.setOnClickListener(this);
         password_ll.setOnClickListener(this);
         exit_ll.setOnClickListener(this);
+    }
+
+    private void initData() {
+        mContext = getContext();
+        mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
+        LogUtils.i("MineFragment: mobile " + mUserInfo.getMobile() + ", uid " + mUserInfo.getUid());
+
+        name_tv.setText(mUserInfo.getNickname());
+        id_tv.setText("学号："+mUserInfo.getUid());
+        Glide.with(mContext)
+                .load(mUserInfo.getAvatar())
+                .into(userIcon);
+
     }
 
     @Override
@@ -123,6 +140,7 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
             case R.id.discounts_ll:
 
+                startActivity(new Intent(mContext, CouponActivity.class));
                 break;
 
             case R.id.phone_ll:

@@ -41,6 +41,7 @@
                 android:id="@+id/user_icon"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
+                android:layout_marginRight="5dp"
                 android:src="@drawable/icon_tab_usericon" />
             
             <ImageView
@@ -66,7 +67,7 @@
                 <!--轮播图-->
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="150dp">
+                    android:layout_height="200dp">
 
                     <!--存放图片的ViewPager-->
                     <android.support.v4.view.ViewPager
