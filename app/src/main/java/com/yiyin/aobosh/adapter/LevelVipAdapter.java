@@ -31,9 +31,9 @@ public class LevelVipAdapter extends RecyclerView.Adapter<LevelVipAdapter.ViewHo
 
         public ViewHolder(View v) {
             super(v);
-            level_name = (TextView) v.findViewById(R.id.level_name);
-            level_price = (TextView) v.findViewById(R.id.level_price);
-            join_tv = (TextView) v.findViewById(R.id.join_tv);
+            level_name = v.findViewById(R.id.level_name);
+            level_price = v.findViewById(R.id.level_price);
+            join_tv = v.findViewById(R.id.join_tv);
         }
     }
 

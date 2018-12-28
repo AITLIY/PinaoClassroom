@@ -55,8 +55,8 @@ public class TeacherListAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.teacher_item, parent,false);
 
             holder = new ViewHolder();
-            holder.photo = ((ImageView) convertView.findViewById(R.id.photo_img));
-            holder.teacherdes = (TextView) convertView.findViewById(R.id.teacherdes_tv);
+            holder.photo = convertView.findViewById(R.id.photo_img);
+            holder.teacherdes = convertView.findViewById(R.id.teacherdes_tv);
 
             convertView.setTag(holder);
         } else {

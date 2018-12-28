@@ -65,7 +65,7 @@ public class CouponActivity extends Activity implements View.OnClickListener{
     private static final int SEARCH_LESSON_PULL_UP = 20;           //上拉加载
     private int mSearchType = 10;  // 查询的标志
     private int page = 1;
-    private String Current_type = "";                // 当前类型
+    private String Current_type = CommonParameters.VALID;                // 当前类型
 
     private static final int LOAD_DATA1_SUCCESS = 101;
     private static final int LOAD_DATA1_FAILE = 102;
@@ -246,12 +246,12 @@ public class CouponActivity extends Activity implements View.OnClickListener{
 
             case R.id.all_lesson_ll:
 
-                typeForSort(CommonParameters.ALL);
+                typeForSort(CommonParameters.VALID);
                 break;
 
             case R.id.wait_payment_ll:
 
-                typeForSort(CommonParameters.NOT_PAID);
+                typeForSort(CommonParameters.FAILURE);
                 break;
 
             case R.id.already_payment_ll:
@@ -278,9 +278,9 @@ public class CouponActivity extends Activity implements View.OnClickListener{
         wait_payment_v.setVisibility(view.getId() == R.id.wait_payment_ll ? View.VISIBLE:View.GONE);
         already_payment_v.setVisibility(view.getId() == R.id.already_payment_ll ? View.VISIBLE:View.GONE);
 
-        all_lesson_tv.setTextColor(view.getId() == R.id.all_lesson_ll ? getResources().getColor(R.color.btn_selected) : getResources().getColor(R.color.black));
-        wait_payment_tv.setTextColor(view.getId() == R.id.wait_payment_ll ? getResources().getColor(R.color.btn_selected) : getResources().getColor(R.color.black));
-        already_payment_tv.setTextColor(view.getId() == R.id.already_payment_ll ? getResources().getColor(R.color.btn_selected) : getResources().getColor(R.color.black));
+        all_lesson_tv.setTextColor(view.getId() == R.id.all_lesson_ll ? getResources().getColor(R.color.price_bg) : getResources().getColor(R.color.black));
+        wait_payment_tv.setTextColor(view.getId() == R.id.wait_payment_ll ? getResources().getColor(R.color.price_bg) : getResources().getColor(R.color.black));
+        already_payment_tv.setTextColor(view.getId() == R.id.already_payment_ll ? getResources().getColor(R.color.price_bg) : getResources().getColor(R.color.black));
 
     }
 

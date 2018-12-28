@@ -22,13 +22,17 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.adapter.LessonListAdapter;
+import com.yiyin.aobosh.adapter.LessonOrderAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
+import com.yiyin.aobosh.bean.LessonOrder;
 import com.yiyin.aobosh.bean.LessonSearch;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
@@ -42,6 +46,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -57,15 +62,15 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
     private View all_lesson_v,wait_payment_v,already_payment_v;
 
     private PullToRefreshListView lesson_item_list;            // 课程列表容器
-    private ArrayList<LessonSearch> mLessonSearches;          //课程搜索结果的集合
-    private ArrayList<LessonSearch> mShowList;                //课程显示结果的集合
-    private LessonListAdapter adapter;
+    private ArrayList<LessonOrder> mLessonSearches;          //课程搜索结果的集合
+    private ArrayList<LessonOrder> mShowList;                //课程显示结果的集合
+    private LessonOrderAdapter adapter;
 
     private static final int SEARCH_LESSON_PARAMETER  = 10;        //参数查询
     private static final int SEARCH_LESSON_PULL_UP = 20;           //上拉加载
     private int mSearchType = 10;  // 查询的标志
     private int page = 1;
-    private String Current_type = "";                // 当前类型
+    private String Current_type = CommonParameters.ALL;            // 当前类型
 
     private static final int LOAD_DATA1_SUCCESS = 101;
     private static final int LOAD_DATA1_FAILE = 102;
@@ -145,7 +150,7 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
         mContext = getContext();
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
         mShowList = new ArrayList<>();
-        adapter = new LessonListAdapter(mContext, mShowList);
+        adapter = new LessonOrderAdapter(mContext, mShowList);
         lesson_item_list.setAdapter(adapter);
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
         getLessonData(mUserInfo.getUid(), CommonParameters.ALL);
@@ -337,8 +342,8 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
                         if ("200".equals(code)) {
 
                             String data = jsonObject.getString("data");
-//                            mLessonSearches = new Gson().fromJson(data, new TypeToken<List<LessonSearch>>(){}.getType());
-//                            LogUtils.i("MyClassFragment: mLessonSearches.size " + mLessonSearches.size());
+                            mLessonSearches = new Gson().fromJson(data, new TypeToken<List<LessonOrder>>(){}.getType());
+                            LogUtils.i("MyClassFragment: mLessonSearches.size " + mLessonSearches.size());
 
                             mHandler.sendEmptyMessage(LOAD_DATA1_SUCCESS);
                             return;

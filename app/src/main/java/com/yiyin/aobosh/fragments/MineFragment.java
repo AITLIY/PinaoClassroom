@@ -91,6 +91,12 @@ public class MineFragment extends Fragment implements View.OnClickListener {
 
     private void initData() {
         mContext = getContext();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
         LogUtils.i("MineFragment: mobile " + mUserInfo.getMobile() + ", uid " + mUserInfo.getUid());
 
@@ -99,7 +105,6 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         Glide.with(mContext)
                 .load(mUserInfo.getAvatar())
                 .into(userIcon);
-
     }
 
     @Override

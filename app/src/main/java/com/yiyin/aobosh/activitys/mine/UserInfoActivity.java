@@ -37,6 +37,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.githang.statusbar.StatusBarCompat;
+import com.google.gson.Gson;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
@@ -80,6 +81,9 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
     private static final int LOAD_DATA_FAILE = 102;
     private static final int NET_ERROR = 404;
 
+    private boolean isChangePhono;
+    private boolean isChangeName;
+
     @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
         @Override
@@ -90,7 +94,7 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
 
                 case LOAD_DATA_SUCCESS:
 
-
+                    //todo
                     break;
 
                 case LOAD_DATA_FAILE:
@@ -181,7 +185,17 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
                     return;
                 }
 
-                changeUserInfo(mUserInfo.getUid(), user_name,file);
+                if (!mUserInfo.getNickname().equals(user_name) ) {
+                    isChangeName = true;
+                }
+
+                if (isChangeName || isChangePhono){
+                    changeUserInfo(mUserInfo.getUid(), user_name,file);
+                } else {
+                    //todo
+                    LogUtils.i("UserInfoActivity: 未修改 ");
+                }
+
                 break;
         }
     }
@@ -230,9 +244,9 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
 
                 if (resultCode == RESULT_OK) {
                     Log.d(TAG, "PHOTO_REQUEST_CUT 得到裁剪后图片");
-                    //将Uri图片转换为Bitmap
                     try {
-
+                        isChangePhono = true;
+                        //将Uri图片转换为Bitmap
                         Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uritempFile));
 //                        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(filepath));
                         file = new File(filepath);
@@ -503,6 +517,20 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
 
                             String data = jsonObject.getString("data");
 
+                            JSONObject object = new JSONObject(data);
+
+                            if (isChangeName) {
+                                LogUtils.i("UserInfoActivity: isChangeName ");
+                                mUserInfo.setNickname(object.getString("appname"));
+                            }
+
+                            if (isChangePhono) {
+                                LogUtils.i("UserInfoActivity: isChangePhono ");
+                                mUserInfo.setAvatar(object.getString("appavatar"));
+                            }
+
+                            GlobalParameterApplication.getInstance().setUserInfo(mUserInfo);
+
                             mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS);
 
                             return;
@@ -525,24 +553,19 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
             }
         }) {
 
-//            @Override
-//            public Map<String, File> getFileUploads() {
-//                Map<String, File> files = new HashMap<String, File>();
-//                files.put("file", file);
-//                return files;
-//            }
-//
-//            @Override
-//            public Map<String, String> getStringUploads() {
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("avatar", file.getName());
-//                return params;
-//            }
+            @Override
+            public Map<String, File> getFileUploads() {
+                Map<String, File> files = new HashMap<String, File>();
 
+                if (isChangePhono) {
+                    LogUtils.i("UserInfoActivity json2 getFileUploads " + file.getAbsolutePath());
+                    files.put("avatar", file);
+                }
+                return files;
+            }
 
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
+            public Map<String, String> getStringUploads() {
                 Map<String, String> map = new HashMap<String, String>();
                 JSONObject obj = new JSONObject();
 
@@ -553,7 +576,10 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
 
                     obj.put("access_token", sha_token);
                     obj.put("uid", uid);
-                    obj.put("appname", appname);
+
+                    if (isChangeName)
+                        obj.put("appname", appname);
+
                     obj.put("device", CommonParameters.ANDROID);
 
                 } catch (JSONException e) {
@@ -563,12 +589,12 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
                 LogUtils.i("UserInfoActivity json2 " + obj.toString());
 
                 map.put("dt", obj.toString());
+
                 return map;
             }
 
         };
         requestQueue.add(stringRequest);
     }
-
 
 }

@@ -32,9 +32,9 @@ public class MemberVipAdapter extends RecyclerView.Adapter<MemberVipAdapter.View
 
         public ViewHolder(View v) {
             super(v);
-            level_name = (TextView) v.findViewById(R.id.level_name);
-            discount = (TextView) v.findViewById(R.id.discount);
-            validity = (TextView) v.findViewById(R.id.validity);
+            level_name = v.findViewById(R.id.level_name);
+            discount = v.findViewById(R.id.discount);
+            validity = v.findViewById(R.id.validity);
         }
     }
 

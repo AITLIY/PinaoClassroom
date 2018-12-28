@@ -50,8 +50,8 @@ public class LessonCategoryAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.lesson_category_item, parent,false);
 
             holder = new ViewHolder();
-            holder.categoryIco = ((ImageView) convertView.findViewById(R.id.category_img));
-            holder.categoryText = (TextView) convertView.findViewById(R.id.category_tv);
+            holder.categoryIco = convertView.findViewById(R.id.category_img);
+            holder.categoryText = convertView.findViewById(R.id.category_tv);
 
             convertView.setTag(holder);
         } else {

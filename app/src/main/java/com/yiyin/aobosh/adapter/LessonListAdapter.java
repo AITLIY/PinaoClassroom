@@ -54,11 +54,11 @@ public class LessonListAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.lesson_item, parent,false);
 
             holder = new ViewHolder();
-            holder.lessonImg = ((ImageView) convertView.findViewById(R.id.lesson_img));
-            holder.lessonPerson = (TextView) convertView.findViewById(R.id.lesson_person);
-            holder.lessonName = (TextView) convertView.findViewById(R.id.lesson_name);
-            holder.lessonPrice = (TextView) convertView.findViewById(R.id.lesson_price);
-            holder.lessonCount = (TextView) convertView.findViewById(R.id.lesson_count);
+            holder.lessonImg = convertView.findViewById(R.id.lesson_img);
+            holder.lessonPerson = convertView.findViewById(R.id.lesson_person);
+            holder.lessonName = convertView.findViewById(R.id.lesson_name);
+            holder.lessonPrice = convertView.findViewById(R.id.lesson_price);
+            holder.lessonCount = convertView.findViewById(R.id.lesson_count);
 
             convertView.setTag(holder);
         } else {

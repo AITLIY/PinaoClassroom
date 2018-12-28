@@ -1,6 +1,21 @@
 {
     "logs": [
         {
+            "outputFile": "E:\\Android\\Git\\PinaoClassroom\\PullToRefresh\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-es\\values-es.xml",
+            "map": [
+                {
+                    "source": "E:\\Android\\Git\\PinaoClassroom\\PullToRefresh\\build\\intermediates\\bundles\\debug\\res\\values-es\\values-es.xml",
+                    "from": {
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,133,204",
+                        "endColumns": "77,70,81",
+                        "endOffsets": "128,199,281"
+                    }
+                }
+            ]
+        },
+        {
             "outputFile": "E:\\Git\\PinaoClassroom\\PullToRefresh\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-es\\values-es.xml",
             "map": [
                 {

@@ -63,9 +63,9 @@ public class LessonCategoryAdapter2 extends RecyclerView.Adapter<RecyclerView.Vi
         public ViewHolder1(View view) {
             super(view);
 
-            mItem = (LinearLayout) view.findViewById(R.id.list_item);
-            mIco = (ImageView) view.findViewById(R.id.category_img);
-            mTitle = (TextView) view.findViewById(R.id.category_tv);
+            mItem = view.findViewById(R.id.list_item);
+            mIco = view.findViewById(R.id.category_img);
+            mTitle = view.findViewById(R.id.category_tv);
         }
     }
     public static class ViewHolder2 extends RecyclerView.ViewHolder {
@@ -76,8 +76,8 @@ public class LessonCategoryAdapter2 extends RecyclerView.Adapter<RecyclerView.Vi
         public ViewHolder2(View view) {
             super(view);
 
-            mTitle = (TextView) view.findViewById(R.id.category_title);
-            mLine = (View) view.findViewById(R.id.category_line);
+            mTitle = view.findViewById(R.id.category_title);
+            mLine = view.findViewById(R.id.category_line);
         }
     }
 

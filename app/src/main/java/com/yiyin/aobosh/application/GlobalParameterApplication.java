@@ -33,14 +33,15 @@ public class GlobalParameterApplication extends Application {
         return mRequestQueue;
     }
 
-    public UserInfo getUserInfo() {                     //本地存储的用户信息
+    public void setUserInfo(UserInfo userInfo) {        //存储本地的用户对象
+        Sputils.putObject(getApplicationContext(), userInfo);
+    }
 
+    public UserInfo getUserInfo() {                     //获取本地的用户对象
         return Sputils.getObject(getApplicationContext(), UserInfo.class);
     }
 
-
     public void clearUserInfo() {                       // 清空本地存储的用户信息
-
         Sputils.clear(getApplicationContext());
     }
 
@@ -53,7 +54,6 @@ public class GlobalParameterApplication extends Application {
     }
 
     public boolean getLoginStatus() {                   // 获取用户登录状态
-
         return Sputils.getSpBoolean(getApplicationContext(), CommonParameters.LOGINSTATUS, false);
     }
 

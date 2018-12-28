@@ -196,7 +196,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             String data = jsonObject.getString("data");
                             UserInfo userInfo = new Gson().fromJson(data, UserInfo.class);
 
-                            Sputils.putObject(mContext, userInfo);  // 使用sp存储用户信息
+                            GlobalParameterApplication.getInstance().setUserInfo(userInfo);
 
                             mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS);
 

@@ -53,35 +53,31 @@ public class CouponAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.coupon_item, parent,false);
 
             holder = new ViewHolder();
-            holder.lessonImg = ((ImageView) convertView.findViewById(R.id.lesson_img));
-            holder.lessonPerson = (TextView) convertView.findViewById(R.id.lesson_person);
-            holder.lessonName = (TextView) convertView.findViewById(R.id.lesson_name);
-            holder.lessonPrice = (TextView) convertView.findViewById(R.id.lesson_price);
-            holder.lessonCount = (TextView) convertView.findViewById(R.id.lesson_count);
+
+            holder.amount_tv = convertView.findViewById(R.id.amount_tv);
+            holder.category_tv = convertView.findViewById(R.id.category_tv);
+            holder.conditions_tv = convertView.findViewById(R.id.conditions_tv);
+            holder.date_tv = convertView.findViewById(R.id.date_tv);
 
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-//        Glide.with(mContext)
-//                .load(mList.get(position).getImages())
-//                .into(holder.lessonImg);
-//        holder.lessonPerson.setText(mList.get(position).getBuynum() + mList.get(position).getVirtual_buynum() + mList.get(position).getVisit_number() + "人已学");
-//        holder.lessonName.setText(mList.get(position).getBookname());
-//        holder.lessonPrice.setText(mList.get(position).getPrice()+"");
-//        holder.lessonCount.setText(mList.get(position).getCount()+"");
+        holder.amount_tv.setText(mList.get(position).getAmount());
+        holder.category_tv.setText(mList.get(position).getAmount() + "全场通用券");
+        holder.conditions_tv.setText("满"+mList.get(position).getConditions()+"使用");
+        holder.date_tv.setText("有效期："+mList.get(position).getStartDate()+" 至 " + mList.get(position).getEndDate());
 
         return convertView;
     }
 
     private class ViewHolder {
 
-        public ImageView lessonImg;  //图标
-        public TextView lessonPerson; //人数
-        public TextView lessonName;  //类名
-        public TextView lessonPrice; //价格
-        public TextView lessonCount; //课程数量
+        public TextView amount_tv; //人数
+        public TextView category_tv;  //类名
+        public TextView conditions_tv; //价格
+        public TextView date_tv; //课程数量
 
     }
 
