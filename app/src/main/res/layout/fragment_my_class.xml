@@ -40,7 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:textColor="@color/black"
+                    android:textColor="@color/btn_selected"
                     android:text="全部课程" />
 
                 <View

@@ -3,8 +3,6 @@ package com.yiyin.aobosh.activitys.mine;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -36,16 +34,17 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.githang.statusbar.StatusBarCompat;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
-import com.yiyin.aobosh.activitys.SplashActivity;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
+import com.yiyin.aobosh.utils.MultiPartStack;
+import com.yiyin.aobosh.utils.MultiPartStringRequest;
 import com.yiyin.aobosh.utils.NetworkUtils;
 import com.yiyin.aobosh.utils.SHA;
 import com.yiyin.aobosh.utils.Sputils;
@@ -58,7 +57,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
@@ -149,21 +147,23 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-
-
         switch (v.getId()) {
 
-            case R.id.get_captcha:
+            case R.id.user_icon:
 
                 if (!NetworkUtils.isConnected(mContext)){
                     ToastUtil.show(mContext,"当前无网络");
                     return;
                 }
 
-                if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(UserInfoActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, GET_WRITE_EXTERNAL_STORAGE);
-                } else {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
                     showSettingHeaderPic();
+                else {
+                    if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(UserInfoActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, GET_WRITE_EXTERNAL_STORAGE);
+                    } else {
+                        showSettingHeaderPic();
+                    }
                 }
                 break;
 
@@ -181,7 +181,7 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
                     return;
                 }
 
-                changeUserInfo(mUserInfo.getUid(), "");
+                changeUserInfo(mUserInfo.getUid(), user_name,file);
                 break;
         }
     }
@@ -235,7 +235,7 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
 
                         Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uritempFile));
 //                        Bitmap bitmap = BitmapFactory.decodeStream(new FileInputStream(filepath));
-                        File file = new File(filepath);
+                        file = new File(filepath);
                         saveImage(bitmap,file);
                         setCarHeader(file);
 
@@ -397,8 +397,9 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
         return uri;
     }
 
-    String filepath;
-    Uri uritempFile;
+    private File file ;
+    private String filepath;
+    private Uri uritempFile;
     private void cropPic(Uri uri) {
         Intent intent = new Intent();
         intent.setAction("com.android.camera.action.CROP");
@@ -485,14 +486,14 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
     //--------------------------------------请求服务器数据-------------------------------------------
 
     // 修改用户信息
-    private void changeUserInfo(final int uid,final String appname) {
-
+    private void changeUserInfo(final int uid, final String appname, final File file) {
+        requestQueue = Volley.newRequestQueue(this, new MultiPartStack());
         String url = HttpURL.OAUTH_MODIFYINFO_URL;
-        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, url, new Response.Listener<String>() {
+        MultiPartStringRequest stringRequest = new MultiPartStringRequest(com.android.volley.Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 if (!"".equals(s)) {
-                    LogUtils.i("VipCardActivity: result2 " + s);
+                    LogUtils.i("UserInfoActivity: result2 " + s);
 
                     try {
                         JSONObject jsonObject = new JSONObject(s);
@@ -519,10 +520,26 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtils.e("VipCardActivity: volleyError2 " + volleyError.toString());
+                LogUtils.e("UserInfoActivity: volleyError2 " + volleyError.toString());
                 mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
+
+//            @Override
+//            public Map<String, File> getFileUploads() {
+//                Map<String, File> files = new HashMap<String, File>();
+//                files.put("file", file);
+//                return files;
+//            }
+//
+//            @Override
+//            public Map<String, String> getStringUploads() {
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("avatar", file.getName());
+//                return params;
+//            }
+
+
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
 
@@ -531,7 +548,7 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
 
                 try {
                     String token = "Oauthmodifyinfo" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
-                    LogUtils.i("VipCardActivity: token " + token);
+                    LogUtils.i("UserInfoActivity: token " + token);
                     String sha_token = SHA.encryptToSHA(token);
 
                     obj.put("access_token", sha_token);
@@ -543,7 +560,7 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
                     e.printStackTrace();
                 }
 
-                LogUtils.i("VipCardActivity json2 " + obj.toString());
+                LogUtils.i("UserInfoActivity json2 " + obj.toString());
 
                 map.put("dt", obj.toString());
                 return map;

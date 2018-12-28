@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,9 +22,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.githang.statusbar.StatusBarCompat;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -38,7 +34,6 @@ import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
 import com.yiyin.aobosh.utils.SHA;
-import com.yiyin.aobosh.utils.Sputils;
 import com.yiyin.aobosh.utils.TimeUtils;
 import com.yiyin.aobosh.utils.ToastUtil;
 
@@ -47,7 +42,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -275,7 +269,6 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
         getLessonData(mUserInfo.getUid(),type); // 通过类型排序查找
     }
 
-
     private void changeTabItemStyle(View view) {
 
         all_lesson_v.setVisibility(view.getId() ==  R.id.all_lesson_ll ? View.VISIBLE:View.GONE);
@@ -396,4 +389,6 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
         };
         requestQueue.add(stringRequest);
     }
+
+
 }

@@ -8,10 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.bean.CouponBean;
-import com.yiyin.aobosh.bean.LessonSearch;
 
 import java.util.ArrayList;
 
@@ -52,7 +50,7 @@ public class CouponAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.lesson_item, parent,false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.coupon_item, parent,false);
 
             holder = new ViewHolder();
             holder.lessonImg = ((ImageView) convertView.findViewById(R.id.lesson_img));

@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:textColor="@color/black"
+                android:textColor="@color/price_bg"
                 android:text="未使用" />
 
             <View
@@ -57,7 +57,7 @@
                 android:layout_height="2dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:background="@color/btn_selected"/>
+                android:background="@color/price_bg"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -81,7 +81,7 @@
                 android:layout_height="2dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:background="@color/btn_selected"/>
+                android:background="@color/price_bg"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -105,7 +105,7 @@
                 android:layout_height="2dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:background="@color/btn_selected"/>
+                android:background="@color/price_bg"/>
         </RelativeLayout>
 
     </LinearLayout>
