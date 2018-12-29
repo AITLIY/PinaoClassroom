@@ -1,124 +1,147 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context="com.yiyin.aobosh.fragments.MyClassFragment">
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/white"
+             tools:context="com.yiyin.aobosh.fragments.MyClassFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+
+        <!--标题栏-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@color/app_title_bar">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="我的课程"
+                android:textColor="@color/black"
+                android:textSize="@dimen/title_bar_text"
+                android:textStyle="bold"/>
+        </RelativeLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="45dp">
 
-            <!--标题栏-->
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="@color/app_title_bar">
+                android:id="@+id/all_lesson_ll"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
                 <TextView
+                    android:id="@+id/all_lesson_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/title_bar_text"
-                    android:text="我的课程"/>
+                    android:text="全部课程"
+                    android:textColor="@color/btn_selected"/>
+
+                <View
+                    android:id="@+id/all_lesson_v"
+                    android:layout_width="50dp"
+                    android:layout_height="2dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/btn_selected"
+                    android:visibility="visible"/>
             </RelativeLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="45dp">
+            <RelativeLayout
+                android:id="@+id/wait_payment_ll"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
-                <RelativeLayout
-                    android:id="@+id/all_lesson_ll"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
+                <TextView
+                    android:id="@+id/wait_payment_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="待付款"
+                    android:textColor="@color/black"/>
 
-                    <TextView
-                        android:id="@+id/all_lesson_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:textColor="@color/btn_selected"
-                        android:text="全部课程" />
+                <View
+                    android:id="@+id/wait_payment_v"
+                    android:layout_width="50dp"
+                    android:layout_height="2dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/btn_selected"
+                    android:visibility="gone"/>
+            </RelativeLayout>
 
-                    <View
-                        android:visibility="visible"
-                        android:id="@+id/all_lesson_v"
-                        android:layout_width="50dp"
-                        android:layout_height="2dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:background="@color/btn_selected"/>
-                </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/already_payment_ll"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
-                <RelativeLayout
-                    android:id="@+id/wait_payment_ll"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
+                <TextView
+                    android:id="@+id/already_payment_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="已付款"
+                    android:textColor="@color/black"/>
 
-                    <TextView
-                        android:id="@+id/wait_payment_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:textColor="@color/black"
-                        android:text="待付款" />
+                <View
+                    android:id="@+id/already_payment_v"
+                    android:layout_width="50dp"
+                    android:layout_height="2dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/btn_selected"
+                    android:visibility="gone"/>
+            </RelativeLayout>
 
-                    <View
-                        android:visibility="gone"
-                        android:id="@+id/wait_payment_v"
-                        android:layout_width="50dp"
-                        android:layout_height="2dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:background="@color/btn_selected"/>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/already_payment_ll"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:id="@+id/already_payment_tv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:textColor="@color/black"
-                        android:text="已付款" />
-
-                    <View
-                        android:visibility="gone"
-                        android:id="@+id/already_payment_v"
-                        android:layout_width="50dp"
-                        android:layout_height="2dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:background="@color/btn_selected"/>
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="6dp"
-                android:background="@color/app_bg" />
         </LinearLayout>
 
-        <!--课程列表-->
-        <com.handmark.pulltorefresh.library.PullToRefreshListView
-            android:id="@+id/lesson_item_list"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </com.handmark.pulltorefresh.library.PullToRefreshListView>
+            android:layout_height="6dp"
+            android:background="@color/app_bg"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!--课程列表-->
+            <com.handmark.pulltorefresh.library.PullToRefreshListView
+                android:visibility="gone"
+                android:id="@+id/lesson_item_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="66dp"
+                    android:layout_height="58dp"
+                    android:src="@drawable/icon_bg_not_data"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="您没有课程信息~"/>
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 </FrameLayout>

@@ -3,6 +3,7 @@ package com.yiyin.aobosh.activitys.mine;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -82,7 +83,8 @@ public class VipCardActivity extends Activity {
 
                 case LOAD_DATA_SUCCESS2:
 
-                    ToastUtil.show(mContext, "验证成功");
+                    startActivity(new Intent(mContext, ChangePasswordActivity.class));
+                    finish();
                     break;
 
                 case LOAD_DATA_FAILE1:

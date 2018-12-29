@@ -19,7 +19,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.githang.statusbar.StatusBarCompat;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
-import com.yiyin.aobosh.activitys.HomepageActivity;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
@@ -71,7 +70,7 @@ public class ChangeMobileActivity extends Activity implements View.OnClickListen
 
                 case LOAD_DATA_SUCCESS2:
 
-                    startActivity(new Intent(mContext, HomepageActivity.class));
+                    startActivity(new Intent(mContext, ChangeMoileSuccessActivity.class));
                     break;
 
                 case LOAD_DATA_FAILE2:
@@ -83,7 +82,7 @@ public class ChangeMobileActivity extends Activity implements View.OnClickListen
 
                 case LOAD_DATA_FAILE21:
 
-                    ToastUtil.show(mContext, "验证失败");
+                    ToastUtil.show(mContext, "修改失败");
                     break;
 
                 case NET_ERROR:

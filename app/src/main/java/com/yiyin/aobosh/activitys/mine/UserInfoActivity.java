@@ -30,16 +30,15 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.githang.statusbar.StatusBarCompat;
-import com.google.gson.Gson;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
+import com.yiyin.aobosh.activitys.HomepageActivity;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
@@ -94,12 +93,13 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
 
                 case LOAD_DATA_SUCCESS:
 
-                    //todo
+                    startActivity(new Intent(mContext, HomepageActivity.class));
+                    finish();
                     break;
 
                 case LOAD_DATA_FAILE:
 
-
+                    ToastUtil.show(mContext,"修改失败");
                     break;
             }
         }
@@ -192,8 +192,9 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
                 if (isChangeName || isChangePhono){
                     changeUserInfo(mUserInfo.getUid(), user_name,file);
                 } else {
-                    //todo
                     LogUtils.i("UserInfoActivity: 未修改 ");
+                    startActivity(new Intent(mContext, HomepageActivity.class));
+                    finish();
                 }
 
                 break;

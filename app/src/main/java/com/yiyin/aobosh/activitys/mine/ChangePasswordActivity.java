@@ -19,7 +19,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.githang.statusbar.StatusBarCompat;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
-import com.yiyin.aobosh.activitys.HomepageActivity;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
@@ -59,7 +58,7 @@ public class ChangePasswordActivity extends Activity implements View.OnClickList
                 case LOAD_DATA_SUCCESS:
 
                     ToastUtil.show(mContext, "修改密码成功");
-                    startActivity(new Intent(mContext, HomepageActivity.class));
+                    startActivity(new Intent(mContext, ChangePasswordActivity.class));
                     finish();
                     break;
 
@@ -72,7 +71,7 @@ public class ChangePasswordActivity extends Activity implements View.OnClickList
 
                 case LOAD_DATA_FAILE2:
 
-                    ToastUtil.show(mContext, "登录失败");
+                    ToastUtil.show(mContext, "修改失败");
                     break;
 
                 case NET_ERROR:
