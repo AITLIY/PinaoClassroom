@@ -3,6 +3,7 @@ package com.yiyin.aobosh.activitys.mine;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -25,9 +27,11 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
+import com.yiyin.aobosh.activitys.login.LoginActivity;
+import com.yiyin.aobosh.activitys.yiYinClassroom.YiYinClassroomActivity2;
 import com.yiyin.aobosh.adapter.LessonListAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
-import com.yiyin.aobosh.bean.LessonSearch;
+import com.yiyin.aobosh.bean.RecommendLesson;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
@@ -50,8 +54,8 @@ public class CollectLessonActivity extends Activity {
     private UserInfo mUserInfo;
     
     private PullToRefreshListView lesson_item_list;            // 课程列表容器
-    private ArrayList<LessonSearch> mLessonSearches;          //课程搜索结果的集合
-    private ArrayList<LessonSearch> mShowList;                //课程显示结果的集合
+    private ArrayList<RecommendLesson.LessonBean> mLessonSearches;          //课程搜索结果的集合
+    private ArrayList<RecommendLesson.LessonBean> mShowList;                //课程显示结果的集合
     private LessonListAdapter adapter;
     
     private static final int SEARCH_LESSON_PARAMETER  = 10;        //参数查询
@@ -73,7 +77,14 @@ public class CollectLessonActivity extends Activity {
 
                 case LOAD_DATA1_SUCCESS:
 
-                    upDataLessonListView();
+                    if (mSearchType==SEARCH_LESSON_PARAMETER) {
+
+                        if (mLessonSearches.size()>0){
+                            setViewForResult(true,"");
+                        } else {
+                            setViewForResult(false,"您还没有收藏任何课程信息~");
+                        }
+                    }
                     break;
 
                 case LOAD_DATA1_FAILE:
@@ -82,16 +93,23 @@ public class CollectLessonActivity extends Activity {
                         @Override
                         public void run() {
                             lesson_item_list.onRefreshComplete();
+                            setViewForResult(false,"查询数据失败~");
                         }
                     }, 1000);
-                    ToastUtil.show(mContext,"查询数据失败");
                     break;
 
                 case NET_ERROR:
 
-                    ToastUtil.show(mContext, "网络异常,请稍后重试");
+                    lesson_item_list.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            lesson_item_list.onRefreshComplete();
+                            setViewForResult(false,"网络异常,请稍后重试~");
+                        }
+                    }, 1000);
                     break;
             }
+            upDataLessonListView();
         }
     };
     
@@ -117,10 +135,30 @@ public class CollectLessonActivity extends Activity {
         mShowList = new ArrayList<>();
         adapter = new LessonListAdapter(mContext, mShowList);
         lesson_item_list.setAdapter(adapter);
+        lesson_item_list.setOnItemClickListener(new ItemClick());
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
         getLessonData(mUserInfo.getUid(),CommonParameters.UNIACID);
     }
 
+    class ItemClick implements AdapterView.OnItemClickListener{
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            if (!GlobalParameterApplication.getInstance().getLoginStatus()) {
+                startActivity(new Intent(mContext, LoginActivity.class));
+                return;
+            } else {
+                RecommendLesson.LessonBean lessonBean = mShowList.get(position-1);
+                Intent intent = new Intent(mContext,YiYinClassroomActivity2.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("LessonBean",lessonBean);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+
+        }
+    }
 
     // 初始化列表
     private void initPullListView() {
@@ -142,6 +180,7 @@ public class CollectLessonActivity extends Activity {
 
                 mSearchType = SEARCH_LESSON_PARAMETER;
                 getLessonData(mUserInfo.getUid(),CommonParameters.UNIACID); // 下拉刷新搜索
+                setViewForResult(true,"");
                 LogUtils.i("CollectLessonActivity: onPullDownToRefresh 下拉" + page + "页");
             }
 
@@ -155,6 +194,7 @@ public class CollectLessonActivity extends Activity {
                     @Override
                     public void run() {
                         lesson_item_list.onRefreshComplete();
+                        ToastUtil.show(mContext,"没有更多结果");
                     }
                 }, 1000);
                 LogUtils.i("CollectLessonActivity: onPullUpToRefresh 下拉" + page + "页");
@@ -214,6 +254,20 @@ public class CollectLessonActivity extends Activity {
         //        listview.getRefreshableView().addHeaderView(headView);//为ListView添加头布局
     }
 
+    // 根据获取结果显示view
+    private void setViewForResult(boolean isSuccess,String msg) {
+
+        if (isSuccess) {
+            findViewById(R.id.not_data).setVisibility(View.GONE);
+            findViewById(R.id.not_data_tv);
+
+        } else {
+            findViewById(R.id.not_data).setVisibility(View.VISIBLE);
+            findViewById(R.id.not_data_tv);
+            ((TextView) findViewById(R.id.not_data_tv)).setText(msg);
+        }
+    }
+
     // 更新课程列表数据
     private void upDataLessonListView() {
 
@@ -241,12 +295,10 @@ public class CollectLessonActivity extends Activity {
                 LogUtils.i("CollectLessonActivity: SEARCH_LESSON_PULL_UP " + mShowList.size());
 
                 adapter.notifyDataSetChanged();
-                lesson_item_list.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        lesson_item_list.onRefreshComplete();
-                    }
-                }, 1000);
+                lesson_item_list.onRefreshComplete();
+                if (mLessonSearches.size()==0) {
+                    ToastUtil.show(mContext,"没有更多结果");
+                }
                 break;
         }
     }
@@ -255,7 +307,7 @@ public class CollectLessonActivity extends Activity {
 
     // 获取收藏的课程
     private void getLessonData(final int uid, final int uniacid) {
-
+        mLessonSearches= new ArrayList();
         String url = HttpURL.COLLECT_LESSON_URL;
         StringRequest stringRequest = new StringRequest(Request.Method.POST,url,new Response.Listener<String>() {
             @Override
@@ -270,7 +322,7 @@ public class CollectLessonActivity extends Activity {
                         if ("200".equals(code)) {
 
                             String data = jsonObject.getString("data");
-                            mLessonSearches = new Gson().fromJson(data, new TypeToken<List<LessonSearch>>(){}.getType());
+                            mLessonSearches = new Gson().fromJson(data, new TypeToken<List<RecommendLesson.LessonBean>>(){}.getType());
                             LogUtils.i("CollectLessonActivity: mLessonSearches.size " + mLessonSearches.size());
 
                             mHandler.sendEmptyMessage(LOAD_DATA1_SUCCESS);

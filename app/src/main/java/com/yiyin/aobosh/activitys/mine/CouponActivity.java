@@ -28,10 +28,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.adapter.CouponAdapter;
-import com.yiyin.aobosh.adapter.LessonListAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.CouponBean;
-import com.yiyin.aobosh.bean.LessonSearch;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
@@ -82,7 +80,15 @@ public class CouponActivity extends Activity implements View.OnClickListener{
 
                 case LOAD_DATA1_SUCCESS:
 
-                    upDataLessonListView();
+                    if (mSearchType==SEARCH_LESSON_PARAMETER) {
+
+                        if (mLessonSearches.size()>0){
+                            setViewForResult(true,"");
+
+                        } else {
+                            setViewForResult(false,"您还没有获得任何优惠券~");
+                        }
+                    }
                     break;
 
                 case LOAD_DATA1_FAILE:
@@ -91,16 +97,24 @@ public class CouponActivity extends Activity implements View.OnClickListener{
                         @Override
                         public void run() {
                             lesson_item_list.onRefreshComplete();
+                            setViewForResult(false,"查询数据失败~");
                         }
                     }, 1000);
-                    ToastUtil.show(mContext,"查询数据失败");
                     break;
 
                 case NET_ERROR:
 
-                    ToastUtil.show(mContext, "网络异常,请稍后重试");
+                    lesson_item_list.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            lesson_item_list.onRefreshComplete();
+                            setViewForResult(false,"网络异常,请稍后重试~");
+                        }
+                    }, 1000);
                     break;
             }
+            upDataLessonListView();
+
         }
     };
 
@@ -180,6 +194,7 @@ public class CouponActivity extends Activity implements View.OnClickListener{
                     @Override
                     public void run() {
                         lesson_item_list.onRefreshComplete();
+                        ToastUtil.show(mContext,"没有更多结果");
                     }
                 }, 1000);
                 LogUtils.i("CouponActivity: onPullUpToRefresh 下拉" + page + "页");
@@ -283,7 +298,20 @@ public class CouponActivity extends Activity implements View.OnClickListener{
         already_payment_tv.setTextColor(view.getId() == R.id.already_payment_ll ? getResources().getColor(R.color.price_bg) : getResources().getColor(R.color.black));
 
     }
+    
+    // 根据获取结果显示view
+    private void setViewForResult(boolean isSuccess,String msg) {
 
+        if (isSuccess) {
+            findViewById(R.id.not_data).setVisibility(View.GONE);
+            findViewById(R.id.not_data_tv);
+
+        } else {
+            findViewById(R.id.not_data).setVisibility(View.VISIBLE);
+            findViewById(R.id.not_data_tv);
+            ((TextView) findViewById(R.id.not_data_tv)).setText(msg);
+        }
+    }
 
     // 更新课程列表数据
     private void upDataLessonListView() {
@@ -316,6 +344,7 @@ public class CouponActivity extends Activity implements View.OnClickListener{
                     @Override
                     public void run() {
                         lesson_item_list.onRefreshComplete();
+                        ToastUtil.show(mContext,"没有更多结果");
                     }
                 }, 1000);
                 break;
@@ -326,7 +355,7 @@ public class CouponActivity extends Activity implements View.OnClickListener{
 
     // 获取我的的课程
     private void getLessonData(final int uid, final String status) {
-
+        mLessonSearches= new ArrayList();
         String url = HttpURL.COUPON_COUPON_URL;
         StringRequest stringRequest = new StringRequest(Request.Method.POST,url,new Response.Listener<String>() {
             @Override

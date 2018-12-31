@@ -14,9 +14,9 @@
 
     <View
         android:id="@+id/category_line"
-        android:layout_width="1dp"
+        android:layout_width="0.5dp"
         android:layout_height="10dp"
-        android:background="@color/gray"
+        android:background="@color/black"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true" />
 

@@ -16,10 +16,10 @@ import com.githang.statusbar.StatusBarCompat;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.activitys.login.LoginActivity;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
-import com.yiyin.aobosh.fragments.AllClassFragment;
-import com.yiyin.aobosh.fragments.HomeFragment;
-import com.yiyin.aobosh.fragments.MineFragment;
-import com.yiyin.aobosh.fragments.MyClassFragment;
+import com.yiyin.aobosh.fragments.homeFragment.AllClassFragment;
+import com.yiyin.aobosh.fragments.homeFragment.HomeFragment;
+import com.yiyin.aobosh.fragments.homeFragment.MineFragment;
+import com.yiyin.aobosh.fragments.homeFragment.MyClassFragment;
 
 public class HomepageActivity extends AppCompatActivity{
 
@@ -107,7 +107,13 @@ public class HomepageActivity extends AppCompatActivity{
                     replaceContentPage(mAllClassFragment);
                     break;
                 case R.id.ll_my_class:
-                    replaceContentPage(mMyClassFragment);
+
+                    if (!GlobalParameterApplication.getInstance().getLoginStatus()) {
+                        startActivity(new Intent(HomepageActivity.this, LoginActivity.class));
+                        return;
+                    } else {
+                        replaceContentPage(mMyClassFragment);
+                    }
                     break;
                 case R.id.ll_mine:
 

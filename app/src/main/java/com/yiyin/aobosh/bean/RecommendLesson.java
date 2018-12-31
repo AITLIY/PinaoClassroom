@@ -1,5 +1,6 @@
 package com.yiyin.aobosh.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -94,7 +95,7 @@ public class RecommendLesson {
         this.lesson = lesson;
     }
 
-    public static class LessonBean {
+    public static class LessonBean implements Serializable {
 
         private int id;
         private int uniacid;

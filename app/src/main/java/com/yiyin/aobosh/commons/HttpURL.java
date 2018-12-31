@@ -22,10 +22,10 @@ public class HttpURL {
     // 4.全部课程  筛选（排序和查询）
     public static final String LESSONSON_SEARCH_URL = BASE_URL + "lessonson/search";
 
-    // 5.收藏课程
+    // 5.收藏的课程
     public static final String COLLECT_LESSON_URL = BASE_URL + "collect/clesson";
 
-    // 6.收藏讲师
+    // 6.收藏的讲师
     public static final String COLLECT_TEACHER_URL = BASE_URL + "collect/cteacher";
 
     // 7.我的足迹
@@ -33,6 +33,16 @@ public class HttpURL {
 
     // 8.我的课程
     public static final String MYLESSON_MYLESSON_URL = BASE_URL + "mylesson/mylesson";
+
+    // 9.课程播放页
+    public static final String LESSONSON_FINDSON_URL = BASE_URL + "lessonson/findson";
+
+    // 10.章节列表
+    public static final String LESSONSON_SONLIST_URL = BASE_URL + "lessonson/sonlist";
+
+    // 11.章节列表
+    public static final String LESSONSON_COLLECT_URL = BASE_URL + "lessonson/collect";
+
 
 
     // 1.自动登录

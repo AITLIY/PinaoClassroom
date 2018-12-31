@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.yiyin.aobosh.R;
-import com.yiyin.aobosh.bean.LessonSearch;
 import com.yiyin.aobosh.bean.TeacherBean;
 
 import java.util.ArrayList;

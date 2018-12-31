@@ -58,10 +58,18 @@ public class LessonCategoryAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Glide.with(mContext)
-                .load(mList.get(position).getIco())
-                .into(holder.categoryIco);
+        if ("".equals(mList.get(position).getIco())) {
+            Glide.with(mContext)
+                    .load(mList.get(position).getIco2())
+                    .into(holder.categoryIco);
+        } else {
+            Glide.with(mContext)
+                    .load(mList.get(position).getIco())
+                    .into(holder.categoryIco);
+        }
+
         holder.categoryText.setText(mList.get(position).getName());
+
 
         return convertView;
     }

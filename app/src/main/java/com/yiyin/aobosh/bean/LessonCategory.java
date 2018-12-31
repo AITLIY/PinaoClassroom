@@ -27,11 +27,20 @@ public class LessonCategory {
     private String name;        //二级分类名称
     private int parentid;
     private String ico;         //分类图标
+    private int ico2;         //分类图标
     private String link;
     private int displayorder;   //数字越大排序越靠前
     private int is_show;        //是否显示
     private int addtime;
     private List<SonlistBean> sonlist;
+
+    public int getIco2() {
+        return ico2;
+    }
+
+    public void setIco2(int ico2) {
+        this.ico2 = ico2;
+    }
 
     public int getId() {
         return id;
@@ -136,6 +145,15 @@ public class LessonCategory {
         private int is_show;
         private int addtime;
         private int type;
+        private int position;
+
+        public int getPosition() {
+            return position;
+        }
+
+        public void setPosition(int position) {
+            this.position = position;
+        }
 
         public int getType() {
             return type;

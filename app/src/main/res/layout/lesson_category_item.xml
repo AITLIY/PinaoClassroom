@@ -9,7 +9,7 @@
         android:id="@+id/category_img"
         android:layout_width="38dp"
         android:layout_height="38dp"
-        android:src="@drawable/icon_tab" />
+        android:src="@drawable/icon_btn_catgory_all" />
 
     <TextView
         android:id="@+id/category_tv"

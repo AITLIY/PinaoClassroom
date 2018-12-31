@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -50,7 +51,7 @@ public class CollectTeacherActivity extends Activity {
     private UserInfo mUserInfo;
 
     private PullToRefreshListView lesson_item_list;            // 课程列表容器
-    private ArrayList<TeacherBean> mTeacherBean;          //课程搜索结果的集合
+    private ArrayList<TeacherBean> mTeacherBeans;          //课程搜索结果的集合
     private ArrayList<TeacherBean> mShowList;                //课程显示结果的集合
     private TeacherListAdapter adapter;
 
@@ -73,6 +74,14 @@ public class CollectTeacherActivity extends Activity {
 
                 case LOAD_DATA1_SUCCESS:
 
+                    if (mSearchType==SEARCH_LESSON_PARAMETER) {
+
+                        if (mTeacherBeans.size()>0){
+                            setViewForResult(true,"");
+                        } else {
+                            setViewForResult(false,"您还没有收藏任何讲师信息~");
+                        }
+                    }
                     upDataLessonListView();
                     break;
 
@@ -82,19 +91,26 @@ public class CollectTeacherActivity extends Activity {
                         @Override
                         public void run() {
                             lesson_item_list.onRefreshComplete();
+                            setViewForResult(false,"查询数据失败~");
                         }
                     }, 1000);
-                    ToastUtil.show(mContext,"查询数据失败");
                     break;
 
                 case NET_ERROR:
 
-                    ToastUtil.show(mContext, "网络异常,请稍后重试");
+                    lesson_item_list.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            lesson_item_list.onRefreshComplete();
+                            setViewForResult(false,"网络异常,请稍后重试~");
+                        }
+                    }, 1000);
                     break;
             }
+            upDataLessonListView();
         }
     };
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,7 +134,7 @@ public class CollectTeacherActivity extends Activity {
         adapter = new TeacherListAdapter(mContext, mShowList);
         lesson_item_list.setAdapter(adapter);
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
-        getTeacherData(mUserInfo.getUid(),CommonParameters.UNIACID); 
+        getTeacherData(mUserInfo.getUid(),CommonParameters.UNIACID);
     }
 
 
@@ -142,6 +158,7 @@ public class CollectTeacherActivity extends Activity {
 
                 mSearchType = SEARCH_LESSON_PARAMETER;
                 getTeacherData(mUserInfo.getUid(),CommonParameters.UNIACID); // 下拉刷新搜索
+                setViewForResult(true,"");
                 LogUtils.i("CollectTeacherActivity: onPullDownToRefresh 下拉" + page + "页");
             }
 
@@ -155,6 +172,7 @@ public class CollectTeacherActivity extends Activity {
                     @Override
                     public void run() {
                         lesson_item_list.onRefreshComplete();
+                        ToastUtil.show(mContext,"没有更多结果");
                     }
                 }, 1000);
                 LogUtils.i("CollectTeacherActivity: onPullUpToRefresh 下拉" + page + "页");
@@ -214,6 +232,20 @@ public class CollectTeacherActivity extends Activity {
         //        listview.getRefreshableView().addHeaderView(headView);//为ListView添加头布局
     }
 
+    // 根据获取结果显示view
+    private void setViewForResult(boolean isSuccess,String msg) {
+
+        if (isSuccess) {
+            findViewById(R.id.not_data).setVisibility(View.GONE);
+            findViewById(R.id.not_data_tv);
+
+        } else {
+            findViewById(R.id.not_data).setVisibility(View.VISIBLE);
+            findViewById(R.id.not_data_tv);
+            ((TextView) findViewById(R.id.not_data_tv)).setText(msg);
+        }
+    }
+
     // 更新课程列表数据
     private void upDataLessonListView() {
 
@@ -222,7 +254,7 @@ public class CollectTeacherActivity extends Activity {
             case SEARCH_LESSON_PARAMETER:
 
                 mShowList.clear();
-                mShowList.addAll(mTeacherBean);
+                mShowList.addAll(mTeacherBeans);
                 LogUtils.i("CollectTeacherActivity: SEARCH_LESSON_FOR_PARAMETER "  + mShowList.size());
 
                 adapter.notifyDataSetChanged();
@@ -237,16 +269,14 @@ public class CollectTeacherActivity extends Activity {
 
             case SEARCH_LESSON_PULL_UP:
 
-                adapter.addLast(mTeacherBean);
+                adapter.addLast(mTeacherBeans);
                 LogUtils.i("CollectTeacherActivity: SEARCH_LESSON_PULL_UP " + mShowList.size());
 
                 adapter.notifyDataSetChanged();
-                lesson_item_list.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        lesson_item_list.onRefreshComplete();
-                    }
-                }, 1000);
+                lesson_item_list.onRefreshComplete();
+                if (mTeacherBeans.size()==0) {
+                    ToastUtil.show(mContext,"没有更多结果");
+                }
                 break;
         }
     }
@@ -255,7 +285,7 @@ public class CollectTeacherActivity extends Activity {
 
     // 获取收藏的讲师
     private void getTeacherData(final int uid, final int uniacid) {
-
+        mTeacherBeans= new ArrayList();
         String url = HttpURL.COLLECT_TEACHER_URL;
         StringRequest stringRequest = new StringRequest(Request.Method.POST,url,new Response.Listener<String>() {
             @Override
@@ -270,8 +300,8 @@ public class CollectTeacherActivity extends Activity {
                         if ("200".equals(code)) {
 
                             String data = jsonObject.getString("data");
-                            mTeacherBean = new Gson().fromJson(data, new TypeToken<List<TeacherBean>>(){}.getType());
-                            LogUtils.i("CollectTeacherActivity: mTeacherBean.size " + mTeacherBean.size());
+                            mTeacherBeans = new Gson().fromJson(data, new TypeToken<List<TeacherBean>>(){}.getType());
+                            LogUtils.i("CollectTeacherActivity: mTeacherBean.size " + mTeacherBeans.size());
 
                             mHandler.sendEmptyMessage(LOAD_DATA1_SUCCESS);
                             return;

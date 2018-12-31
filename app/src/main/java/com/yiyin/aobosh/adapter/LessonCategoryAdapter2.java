@@ -43,9 +43,10 @@ public class LessonCategoryAdapter2 extends RecyclerView.Adapter<RecyclerView.Vi
             bean1.setType(1);
             mList.add(bean1);
 
-            for (LessonCategory.SonlistBean bean2 : category.getSonlist()) {
-
+            for (int i=0; i<category.getSonlist().size(); i++) {
+                LessonCategory.SonlistBean bean2 = category.getSonlist().get(i);
                 bean2.setType(2);
+                bean2.setPosition(i);
                 mList.add(bean2);
             }
         }
@@ -116,8 +117,8 @@ public class LessonCategoryAdapter2 extends RecyclerView.Adapter<RecyclerView.Vi
             ViewHolder2 viewHolder2 = (ViewHolder2) holder;
             viewHolder2.mTitle.setText(mList.get(position).getName());
 
-            if (position%4==3) {
-//                viewHolder2.mLine.setVisibility(View.INVISIBLE);
+            if (mList.get(position).getPosition()%4==3) {
+                viewHolder2.mLine.setVisibility(View.INVISIBLE);
             }
         }
 

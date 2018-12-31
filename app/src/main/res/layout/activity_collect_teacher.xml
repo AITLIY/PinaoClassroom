@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/app_bg"
     tools:context="com.yiyin.aobosh.activitys.mine.CollectLessonActivity">
 
     <!--标题栏-->
@@ -30,11 +31,41 @@
             android:text="我收藏的讲师"/>
     </RelativeLayout>
 
-    <!--讲师列表-->
-    <com.handmark.pulltorefresh.library.PullToRefreshListView
-        android:id="@+id/lesson_item_list"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+        <!--讲师列表-->
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+            android:visibility="visible"
+            android:background="@color/white"
+            android:id="@+id/lesson_item_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+        <!--获取为空或者失败-->
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/not_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="66dp"
+                android:layout_height="58dp"
+                android:src="@drawable/icon_bg_not_data"/>
+            <TextView
+                android:id="@+id/not_data_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="您没有任何课程信息~"/>
+        </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

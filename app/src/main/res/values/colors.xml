@@ -13,6 +13,7 @@
     <color name="green">#01BB00</color>
     <color name="gray">#aaa</color>
     <color name="gray_lite">#c5c5c5</color>
+    <color name="title_bar">#ECECEC</color>
 
     <color name="lesson_free">#1828B3</color>
     <color name="lesson_recommend">#7820D0</color>

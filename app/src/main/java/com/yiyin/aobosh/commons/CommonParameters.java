@@ -27,4 +27,8 @@ public class CommonParameters {
     public static final String FAILURE = "1";
     public static final String OVERDUE = "-1";
 
+    //教学类型参数
+    public static final String EXAMPLE = "1";
+    public static final String TEACH = "2";
+
 }

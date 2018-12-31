@@ -28,6 +28,7 @@ android {
 dependencies {
     //    implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
+    //noinspection GradleCompatible
     androidTestImplementation 'com.android.support.test:runner:0.5'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -39,6 +40,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.12.0'
     implementation 'com.google.code.gson:gson:2.8.1'
     implementation 'com.githang:status-bar-compat:latest.integration'
+    compile 'cn.yc:YCVideoPlayerLib:2.6.0'                            //播放器
 
     implementation files('libs/xUtils-2.6.2.jar')
     implementation files('libs/volley.jar')
@@ -46,4 +48,6 @@ dependencies {
     implementation files('libs/httpclient-4.3.5.jar')
     implementation files('libs/httpcore-4.3.2.jar')
     implementation files('libs/httpmime-4.3.5.jar')
+
+
 }

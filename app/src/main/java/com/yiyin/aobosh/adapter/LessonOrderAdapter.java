@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.bean.LessonOrder;
-import com.yiyin.aobosh.bean.LessonSearch;
 
 import java.util.ArrayList;
 

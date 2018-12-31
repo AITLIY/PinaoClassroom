@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.yiyin.aobosh.R;
-import com.yiyin.aobosh.bean.LessonSearch;
+import com.yiyin.aobosh.bean.RecommendLesson;
 
 import java.util.ArrayList;
 
@@ -21,14 +21,14 @@ import java.util.ArrayList;
 public class LessonListAdapter extends BaseAdapter {
 
     private Context mContext;
-    private ArrayList<LessonSearch> mList;
+    private ArrayList<RecommendLesson.LessonBean> mList;
 
-    public LessonListAdapter(Context context, ArrayList<LessonSearch> list) {
+    public LessonListAdapter(Context context, ArrayList<RecommendLesson.LessonBean> list) {
         mContext = context;
         mList = list;
     }
 
-    public void addLast(ArrayList<LessonSearch> list) {
+    public void addLast(ArrayList<RecommendLesson.LessonBean> list) {
         mList.addAll(list);
     }
 
