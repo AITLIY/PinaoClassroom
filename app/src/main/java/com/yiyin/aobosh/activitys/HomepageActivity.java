@@ -125,7 +125,6 @@ public class HomepageActivity extends AppCompatActivity{
                     }
                     break;
             }
-
             changeTabItemStyle(view);
         }
     }
