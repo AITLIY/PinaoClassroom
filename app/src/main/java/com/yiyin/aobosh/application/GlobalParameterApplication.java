@@ -6,6 +6,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.yiyin.aobosh.bean.LessonCategory;
 import com.yiyin.aobosh.bean.UserInfo;
+import com.yiyin.aobosh.bean.VideoBean;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.utils.Sputils;
 

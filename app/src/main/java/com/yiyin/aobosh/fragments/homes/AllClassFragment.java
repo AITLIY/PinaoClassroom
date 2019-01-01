@@ -1,4 +1,4 @@
-package com.yiyin.aobosh.fragments.homeFragment;
+package com.yiyin.aobosh.fragments.homes;
 
 
 import android.annotation.SuppressLint;
@@ -109,7 +109,15 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
 
                 case LOAD_DATA1_SUCCESS:
 
-                    setViewForResult(true,"");
+                    if (mSearchType==SEARCH_LESSON_PARAMETER) {
+
+                        if (mLessonSearches.size()>0){
+                            setViewForResult(true,"");
+
+                        } else {
+                            setViewForResult(false,"没有您要找的课程信息~");
+                        }
+                    }
                     break;
 
                 case LOAD_DATA1_FAILE:
@@ -118,10 +126,7 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
                         @Override
                         public void run() {
                             lesson_item_list.onRefreshComplete();
-
-                            if (mSearchType==SEARCH_LESSON_PARAMETER) {
-                                setViewForResult(false,"没有您要找的课程信息~");
-                            }
+                            setViewForResult(false,"查询数据失败~");
                         }
                     }, 1000);
                     break;

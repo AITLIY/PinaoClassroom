@@ -116,12 +116,12 @@ public class VipServiceActivity extends Activity {
 
     private void initView() {
 
-//        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finish();
-//            }
-//        });
+        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         Member_item_rv = findViewById(R.id.Member_item_rv);
         level_item_rv = findViewById(R.id.level_item_rv);

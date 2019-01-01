@@ -1,36 +1,38 @@
-package com.yiyin.aobosh.activitys.mine;
+package com.yiyin.aobosh.fragments.Videos;
+
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.githang.statusbar.StatusBarCompat;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
-import com.yiyin.aobosh.adapter.CouponAdapter;
+
+import com.yiyin.aobosh.activitys.yiYinClassroom.YiYinClassroomActivity2;
+import com.yiyin.aobosh.adapter.VideoBeanAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
-import com.yiyin.aobosh.bean.CouponBean;
+import com.yiyin.aobosh.bean.RecommendLesson;
 import com.yiyin.aobosh.bean.UserInfo;
+import com.yiyin.aobosh.bean.VideoBean;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
 import com.yiyin.aobosh.utils.SHA;
@@ -45,30 +47,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CouponActivity extends Activity implements View.OnClickListener{
-
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class SonlistFragment extends Fragment implements AdapterView.OnClickListener,AdapterView.OnItemClickListener {
+    
+    private View mView;
     private Context mContext;
     private RequestQueue requestQueue;
     private UserInfo mUserInfo;
-    private RelativeLayout all_lesson_ll,wait_payment_ll,already_payment_ll;
-    private TextView all_lesson_tv,wait_payment_tv,already_payment_tv;
-    private View all_lesson_v,wait_payment_v,already_payment_v;
+    private RecommendLesson.LessonBean mLessonBean;
 
-    private PullToRefreshListView lesson_item_list;            // 课程列表容器
-    private ArrayList<CouponBean> mLessonSearches;          //课程搜索结果的集合
-    private ArrayList<CouponBean> mShowList;                //课程显示结果的集合
-    private CouponAdapter adapter;
+    private TextView lesson_title,example_tv,teach_tv,all_tv;
+
+    private PullToRefreshListView lesson_item_list;             // 章节列表容器
+    private List<VideoBean.ListBean> mListBeans;                // 章节搜索结果的集合
+    private VideoBean mVideoBean ;                              // 章节显示结果的集合
+    private List<VideoBean.ListBean> mShowList;                 // 章节显示结果的集合
+    private VideoBeanAdapter adapter;
 
     private static final int SEARCH_LESSON_PARAMETER  = 10;        //参数查询
     private static final int SEARCH_LESSON_PULL_UP = 20;           //上拉加载
     private int mSearchType = 10;  // 查询的标志
     private int page = 1;
-    private String Current_type = CommonParameters.VALID;                // 当前类型
+    private int lessonID = 1;
+    private String Suffix_type  = CommonParameters.ALL2;            // 当前类型
 
-    private static final int LOAD_DATA1_SUCCESS = 101;
-    private static final int LOAD_DATA1_FAILE = 102;
+    private static final int LOAD_DATA_SUCCESS = 101;
+    private static final int LOAD_DATA_FAILE = 103;
     private static final int NET_ERROR = 404;
-
 
     @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
@@ -78,20 +85,20 @@ public class CouponActivity extends Activity implements View.OnClickListener{
 
             switch (msg.what) {
 
-                case LOAD_DATA1_SUCCESS:
+                case LOAD_DATA_SUCCESS:
 
                     if (mSearchType==SEARCH_LESSON_PARAMETER) {
 
-                        if (mLessonSearches.size()>0){
+                        if (mListBeans.size()>0){
                             setViewForResult(true,"");
 
                         } else {
-                            setViewForResult(false,"您还没有获得任何优惠券~");
+                            setViewForResult(false,"没有获取到课程信息~");
                         }
                     }
                     break;
 
-                case LOAD_DATA1_FAILE:
+                case LOAD_DATA_FAILE:
 
                     lesson_item_list.postDelayed(new Runnable() {
                         @Override
@@ -114,18 +121,16 @@ public class CouponActivity extends Activity implements View.OnClickListener{
                     break;
             }
             upDataLessonListView();
-
         }
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_coupon);
-        //设置状态栏颜色
-        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.app_title_bar), true);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        mView = inflater.inflate(R.layout.fragment_sonlist, container, false);
 
         init();
+        return mView;
     }
 
     private void init() {
@@ -136,48 +141,50 @@ public class CouponActivity extends Activity implements View.OnClickListener{
 
     private void initView() {
 
-        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        lesson_title = mView.findViewById(R.id.lesson_title);
 
-        all_lesson_ll = findViewById(R.id.all_lesson_ll);
-        wait_payment_ll = findViewById(R.id.wait_payment_ll);
-        already_payment_ll = findViewById(R.id.already_payment_ll);
+        example_tv = mView.findViewById(R.id.example_tv);
+        teach_tv = mView.findViewById(R.id.teach_tv);
+        all_tv = mView.findViewById(R.id.all_tv);
 
-        all_lesson_tv = findViewById(R.id.all_lesson_tv);
-        wait_payment_tv = findViewById(R.id.wait_payment_tv);
-        already_payment_tv = findViewById(R.id.already_payment_tv);
-
-        all_lesson_v = findViewById(R.id.all_lesson_v);
-        wait_payment_v = findViewById(R.id.wait_payment_v);
-        already_payment_v = findViewById(R.id.already_payment_v);
-
-        all_lesson_ll.setOnClickListener(this);
-        wait_payment_ll.setOnClickListener(this);
-        already_payment_ll.setOnClickListener(this);
+        example_tv.setOnClickListener(this);
+        teach_tv.setOnClickListener(this);
+        all_tv.setOnClickListener(this);
 
         initPullListView();
     }
 
     private void initData() {
 
-        mContext = this;
+        mContext = getContext();
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
-        mShowList = new ArrayList<>();
-        adapter = new CouponAdapter(mContext, mShowList);
-        lesson_item_list.setAdapter(adapter);
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
-        getLessonData(mUserInfo.getUid(), CommonParameters.ALL);
+        mLessonBean = ((YiYinClassroomActivity2) getActivity()).getLessonBean();
+        lessonID = mLessonBean.getId();
+        lesson_title.setText(mLessonBean.getBookname());
+
+        mShowList = new ArrayList<>();
+        adapter = new VideoBeanAdapter(mContext, mShowList);
+        lesson_item_list.setAdapter(adapter);
+        lesson_item_list.setOnItemClickListener(this);
+        getLessonsonFindson(mUserInfo.getUid(), lessonID, Suffix_type, page);
     }
 
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        adapter.setID(mShowList.get(position-1).getId());
+        adapter.notifyDataSetChanged();
+        LogUtils.i("SonlistFragment: onItemClick " + mShowList.get(position-1).getVideourl());
+        ((YiYinClassroomActivity2)getActivity()).setAudio(mListBeans.get(position-1));
+        ((YiYinClassroomActivity2)getActivity()).playAudio();
+    }
 
     // 初始化列表
     private void initPullListView() {
 
-        lesson_item_list = findViewById(R.id.lesson_item_list);
+        lesson_item_list = mView.findViewById(R.id.lesson_item_list);
         setListView();
 
         lesson_item_list.setMode(PullToRefreshBase.Mode.BOTH);
@@ -187,8 +194,9 @@ public class CouponActivity extends Activity implements View.OnClickListener{
                 page= 1;
 
                 mSearchType = SEARCH_LESSON_PARAMETER;
-                getLessonData(mUserInfo.getUid(),Current_type); // 下拉刷新搜索
-                LogUtils.i("CouponActivity: onPullDownToRefresh 下拉" + page + "页");
+                getLessonsonFindson(mUserInfo.getUid(), lessonID, Suffix_type, page); // 下拉刷新搜索
+                setViewForResult(true,"");
+                LogUtils.i("SonlistFragment: onPullDownToRefresh 下拉" + page + "页");
             }
 
             @Override
@@ -196,15 +204,9 @@ public class CouponActivity extends Activity implements View.OnClickListener{
                 page++;
 
                 mSearchType = SEARCH_LESSON_PULL_UP;
-                //                 getLessonData(mUserInfo.getUid(),CommonParameters.UNIACID); // 上拉加载搜索
-                lesson_item_list.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        lesson_item_list.onRefreshComplete();
-                        ToastUtil.show(mContext,"没有更多结果");
-                    }
-                }, 1000);
-                LogUtils.i("CouponActivity: onPullUpToRefresh 下拉" + page + "页");
+                getLessonsonFindson(mUserInfo.getUid(), lessonID, Suffix_type, page);  // 上拉加载搜索
+
+                LogUtils.i("SonlistFragment: onPullUpToRefresh 下拉" + page + "页");
             }
         });
 
@@ -266,57 +268,43 @@ public class CouponActivity extends Activity implements View.OnClickListener{
 
         switch (v.getId()) {
 
-            case R.id.all_lesson_ll:
+            case R.id.example_tv:
 
-                typeForSort(CommonParameters.VALID);
+                typeForSort(CommonParameters.EXAMPLE);
                 break;
 
-            case R.id.wait_payment_ll:
+            case R.id.teach_tv:
 
-                typeForSort(CommonParameters.FAILURE);
+                typeForSort(CommonParameters.TEACH);
                 break;
 
-            case R.id.already_payment_ll:
+            case R.id.all_tv:
 
-                typeForSort(CommonParameters.OVERDUE);
+                typeForSort(CommonParameters.ALL);
                 break;
         }
-        changeTabItemStyle(v);
+
     }
 
-    // 选择排序方式排序
+    // 选择课程类型
     private void typeForSort(String type) {
         page= 1;
-
-        Current_type = type;
+        Suffix_type = type;
         mSearchType = SEARCH_LESSON_PARAMETER;
-        getLessonData(mUserInfo.getUid(),type); // 通过类型排序查找
+        getLessonsonFindson(mUserInfo.getUid(), lessonID, Suffix_type, page); //根据类型
     }
 
-
-    private void changeTabItemStyle(View view) {
-
-        all_lesson_v.setVisibility(view.getId() == R.id.all_lesson_ll ? View.VISIBLE:View.GONE);
-        wait_payment_v.setVisibility(view.getId() == R.id.wait_payment_ll ? View.VISIBLE:View.GONE);
-        already_payment_v.setVisibility(view.getId() == R.id.already_payment_ll ? View.VISIBLE:View.GONE);
-
-        all_lesson_tv.setTextColor(view.getId() == R.id.all_lesson_ll ? getResources().getColor(R.color.price_bg) : getResources().getColor(R.color.black));
-        wait_payment_tv.setTextColor(view.getId() == R.id.wait_payment_ll ? getResources().getColor(R.color.price_bg) : getResources().getColor(R.color.black));
-        already_payment_tv.setTextColor(view.getId() == R.id.already_payment_ll ? getResources().getColor(R.color.price_bg) : getResources().getColor(R.color.black));
-
-    }
-    
     // 根据获取结果显示view
     private void setViewForResult(boolean isSuccess,String msg) {
 
         if (isSuccess) {
-            findViewById(R.id.not_data).setVisibility(View.GONE);
-            findViewById(R.id.not_data_tv);
+            mView.findViewById(R.id.not_data).setVisibility(View.GONE);
+            mView.findViewById(R.id.not_data_tv);
 
         } else {
-            findViewById(R.id.not_data).setVisibility(View.VISIBLE);
-            findViewById(R.id.not_data_tv);
-            ((TextView) findViewById(R.id.not_data_tv)).setText(msg);
+            mView.findViewById(R.id.not_data).setVisibility(View.VISIBLE);
+            mView.findViewById(R.id.not_data_tv);
+            ((TextView) mView.findViewById(R.id.not_data_tv)).setText(msg);
         }
     }
 
@@ -328,8 +316,13 @@ public class CouponActivity extends Activity implements View.OnClickListener{
             case SEARCH_LESSON_PARAMETER:
 
                 mShowList.clear();
-                mShowList.addAll(mLessonSearches);
-                LogUtils.i("CouponActivity: SEARCH_LESSON_FOR_PARAMETER "  + mShowList.size());
+                mShowList.addAll(mListBeans);
+
+                ((YiYinClassroomActivity2)getActivity()).setAudio(mShowList.get(0));
+                ((YiYinClassroomActivity2)getActivity()).setPlayBg(mVideoBean.getPoster());
+                adapter.setID(mShowList.get(0).getId());
+
+                LogUtils.i("SonlistFragment: SEARCH_LESSON_FOR_PARAMETER "  + mShowList.size());
 
                 adapter.notifyDataSetChanged();
                 lesson_item_list.getRefreshableView().smoothScrollToPosition(0);//移动到首部
@@ -343,32 +336,35 @@ public class CouponActivity extends Activity implements View.OnClickListener{
 
             case SEARCH_LESSON_PULL_UP:
 
-                adapter.addLast(mLessonSearches);
-                LogUtils.i("CouponActivity: SEARCH_LESSON_PULL_UP " + mShowList.size());
+                mShowList.addAll(mListBeans);
+                LogUtils.i("SonlistFragment: SEARCH_LESSON_PULL_UP " + mShowList.size());
 
                 adapter.notifyDataSetChanged();
                 lesson_item_list.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         lesson_item_list.onRefreshComplete();
-                        ToastUtil.show(mContext,"没有更多结果");
+                        if (mListBeans.size()==0){
+                            ToastUtil.show(mContext,"没有更多结果");
+                        }
                     }
                 }, 1000);
                 break;
         }
+
     }
 
     //--------------------------------------请求服务器数据-------------------------------------------
-
-    // 获取我的的课程
-    private void getLessonData(final int uid, final String status) {
-        mLessonSearches= new ArrayList();
-        String url = HttpURL.COUPON_COUPON_URL;
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,url,new Response.Listener<String>() {
+    
+    // 获取视频数据
+    private void getLessonsonFindson(final int uid, final int lessonid, final String suffix, final int pindex) {
+        mListBeans = new ArrayList<>();
+        String url = HttpURL.LESSONSON_SONLIST_URL;
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 if (!"".equals(s)) {
-                    LogUtils.i("CouponActivity: result1 " + s);
+                    LogUtils.i("SonlistFragment: result1 " + s);
 
                     try {
                         JSONObject jsonObject = new JSONObject(s);
@@ -377,17 +373,22 @@ public class CouponActivity extends Activity implements View.OnClickListener{
                         if ("200".equals(code)) {
 
                             String data = jsonObject.getString("data");
-                            mLessonSearches = new Gson().fromJson(data, new TypeToken<List<CouponBean>>(){}.getType());
-                            LogUtils.i("CouponActivity: mLessonSearches.size " + mLessonSearches.size());
+                            LogUtils.i("SonlistFragment: data " + data);
+                            if (!"[]".equals(data)){
+                                mVideoBean = new Gson().fromJson(data, VideoBean.class);
+                                mListBeans = mVideoBean.getList();
+                            }
 
-                            mHandler.sendEmptyMessage(LOAD_DATA1_SUCCESS);
-                            return;
+                            mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS);
+
+                        } else {
+
+                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
                         }
-                        mHandler.sendEmptyMessage(LOAD_DATA1_FAILE);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        mHandler.sendEmptyMessage(LOAD_DATA1_FAILE);
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
                     }
                 }
             }
@@ -395,7 +396,7 @@ public class CouponActivity extends Activity implements View.OnClickListener{
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtils.e("CouponActivity: volleyError1 " + volleyError.toString());
+                LogUtils.e("SonlistFragment: volleyError1 " + volleyError.toString());
                 mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
@@ -407,20 +408,22 @@ public class CouponActivity extends Activity implements View.OnClickListener{
 
                 try {
 
-                    String token = "Couponcoupon" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
-                    LogUtils.i("CouponActivity: token " + token);
-                    String sha_token = SHA.encryptToSHA(token); 
+                    String token = "Lessonsonsonlist" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
+                    LogUtils.i("SonlistFragment: token " + token);
+                    String sha_token = SHA.encryptToSHA(token);
 
                     obj.put("access_token", sha_token);
                     obj.put("uid", uid);
-                    obj.put("status", status);
+                    obj.put("lessonid", lessonid);
+                    obj.put("suffix", suffix);
+                    obj.put("pindex", pindex);
                     obj.put("device", CommonParameters.ANDROID);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                LogUtils.i("CouponActivity json1 " + obj.toString());
+                LogUtils.i("SonlistFragment json1 " + obj.toString());
 
                 map.put("dt", obj.toString());
                 return map;
@@ -429,4 +432,5 @@ public class CouponActivity extends Activity implements View.OnClickListener{
         };
         requestQueue.add(stringRequest);
     }
+
 }

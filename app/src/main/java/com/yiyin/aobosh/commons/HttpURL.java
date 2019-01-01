@@ -40,8 +40,14 @@ public class HttpURL {
     // 10.章节列表
     public static final String LESSONSON_SONLIST_URL = BASE_URL + "lessonson/sonlist";
 
-    // 11.章节列表
+    // 11.课程或讲师收藏
     public static final String LESSONSON_COLLECT_URL = BASE_URL + "lessonson/collect";
+
+    // 12.课程详情
+    public static final String LESSONSON_DESC_URL = BASE_URL + "lessonson/desc";
+
+    // 13.评价
+    public static final String LESSONSON_EVALUATE_URL = BASE_URL + "lessonson/evaluate";
 
 
 

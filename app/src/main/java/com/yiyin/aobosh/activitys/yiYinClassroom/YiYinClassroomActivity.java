@@ -169,7 +169,7 @@ public class YiYinClassroomActivity extends Activity implements SeekBar.OnSeekBa
         });
     }
 
-    private void playAudio() {
+    public void playAudio() {
 
         try {
 

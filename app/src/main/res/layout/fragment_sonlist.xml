@@ -2,12 +2,122 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.yiyin.aobosh.fragments.VideoFragment.SonlistFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    tools:context="com.yiyin.aobosh.fragments.Videos.SonlistFragment">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:background="@color/white"
+        android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:background="@color/title_bar">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/icon_tab_catalogue"/>
+
+            <TextView
+                android:id="@+id/lesson_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textColor="@color/black"
+                android:text="钢琴考级 第二级"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:background="@color/title_bar">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/icon_tab_catalogue"/>
+
+            <TextView
+                android:id="@+id/example_tv"
+                android:layout_width="43dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:background="@drawable/shape_green2_solid"
+                android:textColor="@color/white"
+                android:textSize="14dp"
+                android:text="示范"/>
+
+            <TextView
+                android:id="@+id/teach_tv"
+                android:layout_width="43dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:background="@drawable/shape_green2_solid"
+                android:textColor="@color/white"
+                android:textSize="14dp"
+                android:text="教学"/>
+
+            <TextView
+                android:id="@+id/all_tv"
+                android:layout_width="43dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:background="@drawable/shape_green2_solid"
+                android:textColor="@color/white"
+                android:textSize="14dp"
+                android:text="全部"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
+            <!--课程列表-->
+            <com.handmark.pulltorefresh.library.PullToRefreshListView
+                android:visibility="visible"
+                android:background="@color/white"
+                android:id="@+id/lesson_item_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+            <!--获取为空或者失败-->
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/not_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="66dp"
+                    android:layout_height="58dp"
+                    android:src="@drawable/icon_bg_not_data"/>
+                <TextView
+                    android:id="@+id/not_data_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="您没有任何课程信息~"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
 </FrameLayout>

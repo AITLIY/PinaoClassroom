@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:id="@+id/chaapte_item"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/play_staus"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/icon_tab_play"/>
+
+    <TextView
+        android:id="@+id/chapter_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_marginLeft="5dp"
+        android:text="1.《练习曲》"/>
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/try_listen_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/green2"
+        android:layout_marginLeft="3dp"
+        android:text="[试听]"/>
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/example_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/green2"
+        android:layout_marginLeft="3dp"
+        android:text="[示范]"/>
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/teach_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/green2"
+        android:layout_marginLeft="3dp"
+        android:text="[教学]"/>
+
+</LinearLayout>

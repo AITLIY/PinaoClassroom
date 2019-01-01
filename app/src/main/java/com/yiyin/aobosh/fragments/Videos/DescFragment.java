@@ -1,4 +1,4 @@
-package com.yiyin.aobosh.fragments.VideoFragment;
+package com.yiyin.aobosh.fragments.Videos;
 
 
 import android.os.Bundle;
@@ -12,10 +12,10 @@ import com.yiyin.aobosh.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EvaluateFragment extends Fragment {
+public class DescFragment extends Fragment {
 
 
-    public EvaluateFragment() {
+    public DescFragment() {
         // Required empty public constructor
     }
 
@@ -24,7 +24,7 @@ public class EvaluateFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_evaluate, container, false);
+        return inflater.inflate(R.layout.fragment_desc, container, false);
     }
 
 }

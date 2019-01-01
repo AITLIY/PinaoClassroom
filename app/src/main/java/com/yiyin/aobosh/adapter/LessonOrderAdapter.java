@@ -6,13 +6,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.bean.LessonOrder;
+import com.yiyin.aobosh.bean.VideoBean;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ALIY on 2018/12/19 0019.

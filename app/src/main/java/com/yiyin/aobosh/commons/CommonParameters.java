@@ -30,5 +30,10 @@ public class CommonParameters {
     //教学类型参数
     public static final String EXAMPLE = "1";
     public static final String TEACH = "2";
+    public static final String ALL2 = "";
 
+
+    //教学类型参数
+    public static final String LESSON = "1";
+    public static final String TEACHER = "2";
 }

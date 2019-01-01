@@ -1,4 +1,4 @@
-package com.yiyin.aobosh.fragments.homeFragment;
+package com.yiyin.aobosh.fragments.homes;
 
 
 import android.annotation.SuppressLint;
@@ -32,9 +32,7 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.activitys.AllClassActivity;
-import com.yiyin.aobosh.activitys.HomepageActivity;
 import com.yiyin.aobosh.activitys.login.LoginActivity;
-import com.yiyin.aobosh.activitys.yiYinClassroom.YiYinClassroomActivity;
 import com.yiyin.aobosh.activitys.yiYinClassroom.YiYinClassroomActivity2;
 import com.yiyin.aobosh.adapter.LessonCategoryAdapter;
 import com.yiyin.aobosh.adapter.ViewPagerAdapter;

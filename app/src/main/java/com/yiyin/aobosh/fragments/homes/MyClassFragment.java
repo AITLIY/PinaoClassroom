@@ -1,4 +1,4 @@
-package com.yiyin.aobosh.fragments.homeFragment;
+package com.yiyin.aobosh.fragments.homes;
 
 
 import android.annotation.SuppressLint;
@@ -51,17 +51,17 @@ import java.util.Map;
 public class MyClassFragment extends Fragment implements View.OnClickListener{
 
     private View mView;
-
     private Context mContext;
     private RequestQueue requestQueue;
     private UserInfo mUserInfo;
+
     private RelativeLayout all_lesson_ll,wait_payment_ll,already_payment_ll;
     private TextView all_lesson_tv,wait_payment_tv,already_payment_tv;
     private View all_lesson_v,wait_payment_v,already_payment_v;
 
-    private PullToRefreshListView lesson_item_list;            // 课程列表容器
-    private ArrayList<LessonOrder> mLessonSearches;          //课程搜索结果的集合
-    private ArrayList<LessonOrder> mShowList;                //课程显示结果的集合
+    private PullToRefreshListView lesson_item_list;          // 课程列表容器
+    private ArrayList<LessonOrder> mLessonSearches;          // 课程搜索结果的集合
+    private ArrayList<LessonOrder> mShowList;                // 课程显示结果的集合
     private LessonOrderAdapter adapter;
 
     private static final int SEARCH_LESSON_PARAMETER  = 10;        //参数查询
@@ -281,12 +281,12 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
         changeTabItemStyle(v);
     }
 
-    // 选择排序方式排序
+    // 选择订单类型
     private void typeForSort(String type) {
         page= 1;
         Current_type = type;
         mSearchType = SEARCH_LESSON_PARAMETER;
-        getLessonData(mUserInfo.getUid(),type); // 通过类型排序查找
+        getLessonData(mUserInfo.getUid(),type);
     }
 
     // 设置标题栏颜色

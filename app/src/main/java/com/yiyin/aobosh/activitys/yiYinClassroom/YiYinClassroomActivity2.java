@@ -14,7 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -23,6 +23,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 import com.githang.statusbar.StatusBarCompat;
 import com.google.gson.Gson;
 import com.lidroid.xutils.util.LogUtils;
@@ -33,9 +34,10 @@ import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.bean.VideoBean;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
-import com.yiyin.aobosh.fragments.VideoFragment.DescFragment;
-import com.yiyin.aobosh.fragments.VideoFragment.EvaluateFragment;
-import com.yiyin.aobosh.fragments.VideoFragment.SonlistFragment;
+import com.yiyin.aobosh.fragments.Videos.DescFragment;
+import com.yiyin.aobosh.fragments.Videos.EvaluateFragment;
+import com.yiyin.aobosh.fragments.Videos.SonlistFragment;
+import com.yiyin.aobosh.utils.NetworkUtils;
 import com.yiyin.aobosh.utils.SHA;
 import com.yiyin.aobosh.utils.TimeUtils;
 import com.yiyin.aobosh.utils.ToastUtil;
@@ -55,23 +57,26 @@ import java.util.Map;
 
 public class YiYinClassroomActivity2 extends AppCompatActivity implements View.OnClickListener {
 
-
     private Context mContext;
+    private RecommendLesson.LessonBean mLessonBean;
     private RequestQueue requestQueue;
-    private List<VideoBean.ListBean> mListBeans;
+    private UserInfo mUserInfo;
 
     private VideoPlayer videoPlayer;
     private VideoPlayerController controller;
 
+    private ImageView play_bg, play_start;
     private LinearLayout sonlist_ll, desc_ll, evaluate_ll;
-    private TextView sonlist_tv, desc_tv, evaluate_tv;
+    private TextView sonlist_tv, desc_tv, evaluate_tv,start_study;
     private View sonlist_v, desc_v, evaluate_v;
 
-    private List<Fragment> fragmentsList;
+    private LinearLayout collect_ll;
     private ViewPager viewPager;
-    private int mCurrentItemId;
-
-    private int page = 1;
+    private List<Fragment> fragmentsList;
+    private DescFragment mDescFragment;
+    private SonlistFragment mSonlistFragment;
+    private EvaluateFragment mEvaluateFragment;
+    private int mCurrentItemId = 1;
 
     private static final int LOAD_DATA_SUCCESS = 101;
     private static final int LOAD_DATA_FAILE = 103;
@@ -87,23 +92,22 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
 
                 case LOAD_DATA_SUCCESS:
 
-                    playAudio(mListBeans.get(0));
+
                     break;
 
                 case LOAD_DATA_FAILE:
 
-                    ToastUtil.show(mContext, "失败");
+                    ToastUtil.show(mContext, "收藏失败");
                     break;
 
                 case NET_ERROR:
 
                     ToastUtil.show(mContext, "网络异常,请稍后重试");
                     break;
-
             }
+
         }
     };
-
 
     @Override
     protected void onStop() {
@@ -134,7 +138,6 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
         super.onDestroy();
 
         if (controller != null) {
-
             controller.onPlayStateChanged(7);
         }
     }
@@ -163,6 +166,8 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
     private void initView() {
 
         videoPlayer = findViewById(R.id.video_player);
+        play_bg = findViewById(R.id.play_bg);
+        play_start = findViewById(R.id.play_start);
 
         //详情
         sonlist_ll = findViewById(R.id.sonlist_ll);
@@ -176,104 +181,46 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
         evaluate_ll = findViewById(R.id.evaluate_ll);
         evaluate_tv = findViewById(R.id.evaluate_tv);
         evaluate_v = findViewById(R.id.evaluate_v);
+        collect_ll = findViewById(R.id.collect_ll);
+        start_study = findViewById(R.id.start_study);
 
         sonlist_ll.setOnClickListener(this);
         desc_ll.setOnClickListener(this);
         evaluate_ll.setOnClickListener(this);
+        play_start.setOnClickListener(this);
+        collect_ll.setOnClickListener(this);
+        start_study.setOnClickListener(this);
 
-//        findViewById(R.id.btn_1).setOnClickListener(this);
-//        findViewById(R.id.btn_2).setOnClickListener(this);
-//        findViewById(R.id.btn_3).setOnClickListener(this);
-//        findViewById(R.id.btn_4).setOnClickListener(this);
-    }
-
-//    @Override
-//    public void onClick(View v) {
-//
-//        switch (v.getId()) {
-//            case R.id.btn_1:
-//                if (videoPlayer.isIdle()) {
-//                    ToastUtil.show(mContext, "要点击播放后才能进入小窗口");
-//                } else {
-//                    videoPlayer.enterTinyWindow();
-//                }
-//                break;
-//            case R.id.btn_2:
-//                videoPlayer.enterVerticalScreenScreen();
-//                break;
-//            case R.id.btn_3:
-//                videoPlayer.enterFullScreen();
-//                break;
-//            case R.id.btn_4:
-//                videoPlayer.restart();
-//                break;
+//        if (videoPlayer.isIdle()) {
+//            ToastUtil.show(mContext, "要点击播放后才能进入小窗口");
+//        } else {
+//            videoPlayer.enterTinyWindow();
 //        }
-//    }
-
-    private void initData() {
-
-        mContext = this;
-        requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
-
-        Intent intent = getIntent();
-        if (intent != null) {
-            Bundle bundle = intent.getExtras();
-            //获取里面的Persion里面的数据
-            RecommendLesson.LessonBean lessonBean = (RecommendLesson.LessonBean) bundle.getSerializable("LessonBean");
-            LogUtils.i("YiYinClassroomActivity: lessonBean id " + lessonBean.getId());
-            UserInfo userInfo = GlobalParameterApplication.getInstance().getUserInfo();
-            getLessonsonFindson(userInfo.getUid(), lessonBean.getId(), "", page);
-        }
-
-    }
-
-
-    private void playAudio(VideoBean.ListBean listBean) {
-
-        String videoTitle = listBean.getTitle();
-        String urls = listBean.getVideourl();
-
-        if (videoPlayer == null || urls == null) {
-            return;
-        }
-        LogUtils.d("视频链接" + urls);
-        //设置播放类型
-        videoPlayer.setPlayerType(ConstantKeys.IjkPlayerType.TYPE_IJK);
-        //设置视频地址和请求头部
-        videoPlayer.setUp(urls, null);
-        //创建视频控制器
-        controller = new VideoPlayerController(this);
-        controller.setTitle(videoTitle);
-        controller.setLoadingType(ConstantKeys.Loading.LOADING_QQ);
-        controller.imageView().setBackgroundResource(R.color.black);
-        controller.setOnVideoBackListener(new OnVideoBackListener() {
-            @Override
-            public void onBackClick() {
-                onBackPressed();
-            }
-        });
-        //设置视频控制器
-        videoPlayer.setController(controller);
-        //是否从上一次的位置继续播放
-        videoPlayer.continueFromLastPosition(true);
-        //设置播放速度
-        videoPlayer.setSpeed(1.0f);
+//
+//        videoPlayer.enterVerticalScreenScreen();
+//        videoPlayer.enterFullScreen();
+//        videoPlayer.restart();
     }
 
     private void intiFragment() {
         fragmentsList = new ArrayList<>();
-        fragmentsList.add(new SonlistFragment());
-        fragmentsList.add(new DescFragment());
-        fragmentsList.add(new EvaluateFragment());
+
+        mDescFragment = new DescFragment();
+        mSonlistFragment = new SonlistFragment();
+        mEvaluateFragment = new EvaluateFragment();
+
+        fragmentsList.add(mDescFragment);
+        fragmentsList.add(mSonlistFragment);
+        fragmentsList.add(mEvaluateFragment);
     }
 
     private void initViewPager() {
 
         viewPager = findViewById(R.id.setting_viewpager);
         viewPager.setAdapter(new TabAdapter(getSupportFragmentManager(), fragmentsList));
-        viewPager.setCurrentItem(0);
+        viewPager.setCurrentItem(1);
         //        viewPager.setPageMargin(PxUtils.dpToPx(12,this));
-        viewPager.setOffscreenPageLimit(1);
+        viewPager.setOffscreenPageLimit(2);
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -309,6 +256,81 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
         });
     }
 
+    private void initData() {
+
+        mContext = this;
+        requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
+        mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle bundle = intent.getExtras();
+            //获取里面的Persion里面的数据
+            mLessonBean = (RecommendLesson.LessonBean) bundle.getSerializable("LessonBean");
+            LogUtils.i("YiYinClassroomActivity: lessonBean id " + mLessonBean.getId());
+    }
+
+        initAudio();
+    }
+
+    public RecommendLesson.LessonBean getLessonBean() {
+        return mLessonBean;
+    }
+
+    public void setPlayBg(String url) {
+
+        Glide.with(mContext)
+                .load(url)
+                .placeholder(R.drawable.icon_img_error)//图片加载出来前，显示的图片
+                .error(R.drawable.icon_img_error)//图片加载失败后，显示的图片
+                .into(play_bg);
+    }
+
+    public void initAudio() {
+
+        //设置播放类型
+        videoPlayer.setPlayerType(ConstantKeys.IjkPlayerType.TYPE_IJK);
+
+        //创建视频控制器
+        controller = new VideoPlayerController(this);
+        controller.setLoadingType(ConstantKeys.Loading.LOADING_QQ);
+        controller.imageView().setBackgroundResource(R.color.black);
+        controller.setOnVideoBackListener(new OnVideoBackListener() {
+            @Override
+            public void onBackClick() {
+                onBackPressed();
+            }
+        });
+        //设置视频控制器
+        videoPlayer.setController(controller);
+        //是否从上一次的位置继续播放
+        videoPlayer.continueFromLastPosition(true);
+        //设置播放速度
+        videoPlayer.setSpeed(1.0f);
+    }
+
+    public void setAudio(VideoBean.ListBean listBean) {
+
+        if (videoPlayer == null || listBean == null) {
+            return;
+        }
+
+        videoPlayer.release();
+        String videoTitle = listBean.getTitle();
+        String urls = listBean.getVideourl();
+
+        LogUtils.d("SonlistFragment 视频链接" + urls);
+
+        //设置视频地址和请求头部
+        videoPlayer.setUp(urls, null);
+        controller.setTitle(videoTitle);
+
+    }
+
+    public void playAudio() {
+        videoPlayer.start();
+    }
+
     @Override
     public void onClick(View view) {
 
@@ -328,6 +350,18 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
 
             case R.id.evaluate_ll:
                 viewPager.setCurrentItem(2);
+                break;
+
+            case R.id.collect_ll:
+
+                saveCollect(mUserInfo.getUid(),mLessonBean.getId(),CommonParameters.LESSON);
+                break;
+
+            case R.id.play_start:
+
+                play_bg.setVisibility(View.GONE);
+                play_start.setVisibility(View.GONE);
+                playAudio();
                 break;
         }
         changeTabItemStyle(view);
@@ -382,15 +416,15 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
 
     //--------------------------------------请求服务器数据-------------------------------------------
 
-    // 请求登录
-    private void getLessonsonFindson(final int uid, final int lessonid, final String suffix, final int pindex) {
+    // 收藏点
+    private void saveCollect(final int uid, final int outid, final String ctype) {
 
-        String url = HttpURL.LESSONSON_SONLIST_URL;
+        String url = HttpURL.LESSONSON_COLLECT_URL;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 if (!"".equals(s)) {
-                    LogUtils.i("YiYinClassroomActivity: result1 " + s);
+                    LogUtils.i("YiYinClassroomActivity2: result1 " + s);
 
                     try {
                         JSONObject jsonObject = new JSONObject(s);
@@ -398,9 +432,6 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
 
                         if ("200".equals(code)) {
 
-                            String data = jsonObject.getString("data");
-                            VideoBean mVideoBean = new Gson().fromJson(data, VideoBean.class);
-                            mListBeans = mVideoBean.getList();
 
                             mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS);
 
@@ -419,7 +450,7 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtils.e("YiYinClassroomActivity: volleyError1 " + volleyError.toString());
+                LogUtils.e("YiYinClassroomActivity2: volleyError1 " + volleyError.toString());
                 mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
@@ -431,22 +462,21 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
 
                 try {
 
-                    String token = "Lessonsonsonlist" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
-                    LogUtils.i("YiYinClassroomActivity: token " + token);
+                    String token = "Lessonsoncollect" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
+                    LogUtils.i("YiYinClassroomActivity2: token " + token);
                     String sha_token = SHA.encryptToSHA(token);
 
                     obj.put("access_token", sha_token);
                     obj.put("uid", uid);
-                    obj.put("lessonid", lessonid);
-                    obj.put("suffix", suffix);
-                    obj.put("pindex", pindex);
+                    obj.put("outid", outid);
+                    obj.put("ctype", ctype);
                     obj.put("device", CommonParameters.ANDROID);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                LogUtils.i("YiYinClassroomActivity json1 " + obj.toString());
+                LogUtils.i("YiYinClassroomActivity2 json1 " + obj.toString());
 
                 map.put("dt", obj.toString());
                 return map;
@@ -455,6 +485,5 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
         };
         requestQueue.add(stringRequest);
     }
-
 
 }

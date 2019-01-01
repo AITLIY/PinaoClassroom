@@ -16,10 +16,10 @@ import com.githang.statusbar.StatusBarCompat;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.activitys.login.LoginActivity;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
-import com.yiyin.aobosh.fragments.homeFragment.AllClassFragment;
-import com.yiyin.aobosh.fragments.homeFragment.HomeFragment;
-import com.yiyin.aobosh.fragments.homeFragment.MineFragment;
-import com.yiyin.aobosh.fragments.homeFragment.MyClassFragment;
+import com.yiyin.aobosh.fragments.homes.AllClassFragment;
+import com.yiyin.aobosh.fragments.homes.HomeFragment;
+import com.yiyin.aobosh.fragments.homes.MineFragment;
+import com.yiyin.aobosh.fragments.homes.MyClassFragment;
 
 public class HomepageActivity extends AppCompatActivity{
 
