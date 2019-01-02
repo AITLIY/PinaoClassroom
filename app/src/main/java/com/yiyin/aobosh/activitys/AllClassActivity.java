@@ -37,6 +37,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.Interface.CateIdSearchInterface;
 import com.yiyin.aobosh.R;
+import com.yiyin.aobosh.activitys.login.LoginActivity;
+import com.yiyin.aobosh.activitys.yiYinClassroom.LessonActivity;
 import com.yiyin.aobosh.adapter.LessonCategoryAdapter2;
 import com.yiyin.aobosh.adapter.LessonListAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
@@ -44,6 +46,7 @@ import com.yiyin.aobosh.bean.LessonCategory;
 import com.yiyin.aobosh.bean.RecommendLesson;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
+import com.yiyin.aobosh.fragments.homes.AllClassFragment;
 import com.yiyin.aobosh.utils.SHA;
 import com.yiyin.aobosh.utils.TimeUtils;
 import com.yiyin.aobosh.utils.ToastUtil;
@@ -103,7 +106,15 @@ public class AllClassActivity extends Activity  implements View.OnClickListener,
 
                 case LOAD_DATA1_SUCCESS:
 
-                    setViewForResult(true,"");
+                    if (mSearchType==SEARCH_LESSON_PARAMETER) {
+
+                        if (mLessonSearches.size()>0){
+                            setViewForResult(true,"");
+
+                        } else {
+                            setViewForResult(false,"没有您要找的课程信息~");
+                        }
+                    }
                     break;
 
                 case LOAD_DATA1_FAILE:
@@ -112,10 +123,7 @@ public class AllClassActivity extends Activity  implements View.OnClickListener,
                         @Override
                         public void run() {
                             lesson_item_list.onRefreshComplete();
-
-                            if (mSearchType==SEARCH_LESSON_PARAMETER) {
-                                setViewForResult(false,"没有您要找的课程信息~");
-                            }
+                            setViewForResult(false,"查询数据失败~");
                         }
                     }, 1000);
                     break;
@@ -235,6 +243,7 @@ public class AllClassActivity extends Activity  implements View.OnClickListener,
         mShowList = new ArrayList<>();
         adapter = new LessonListAdapter(mContext, mShowList);
         lesson_item_list.setAdapter(adapter);
+        lesson_item_list.setOnItemClickListener(new ItemClick());
 
         Intent intent = getIntent();
         if (intent != null){
@@ -278,6 +287,28 @@ public class AllClassActivity extends Activity  implements View.OnClickListener,
         }
 
     }
+
+    class ItemClick implements AdapterView.OnItemClickListener{
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            if (!GlobalParameterApplication.getInstance().getLoginStatus()) {
+                startActivity(new Intent(mContext, LoginActivity.class));
+                return;
+            } else {
+                RecommendLesson.LessonBean lessonBean = mShowList.get(position-1);
+                LogUtils.i("AllClassFragment: ItemClick position " + position);
+                Intent intent = new Intent(mContext,LessonActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("LessonBean",lessonBean);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+
+        }
+    }
+
 
     private boolean isSort;
     private boolean isfiltrate;

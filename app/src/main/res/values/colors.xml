@@ -24,5 +24,6 @@
     <color name="btn_selected">#2875FE</color>
     <color name="btn_default">#4F4F4F</color>
     <color name="title_bg">#DD565656</color>
+    <color name="star_bg">#55c5c5c5</color>
     <color name="price_bg">#F72F2F</color>
 </resources>

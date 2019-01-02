@@ -49,6 +49,16 @@ public class HttpURL {
     // 13.评价
     public static final String LESSONSON_EVALUATE_URL = BASE_URL + "lessonson/evaluate";
 
+    // 14.提交课程订单评价
+    public static final String EVALUATE_SUB_URL = BASE_URL + "evaluate/sub";
+
+    // 15.讲师详情
+    public static final String TEACHER_TEACHERDETAIL_URL = BASE_URL + "teacher/teacherdetail";
+
+    // 16.讲师课程列表
+    public static final String TEACHER_TEACHERLESSON_URL = BASE_URL + "teacher/teacherlesson";
+
+
 
 
     // 1.自动登录

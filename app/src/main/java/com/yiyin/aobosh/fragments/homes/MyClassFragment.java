@@ -55,14 +55,14 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
     private RequestQueue requestQueue;
     private UserInfo mUserInfo;
 
-    private RelativeLayout all_lesson_ll,wait_payment_ll,already_payment_ll;
-    private TextView all_lesson_tv,wait_payment_tv,already_payment_tv;
-    private View all_lesson_v,wait_payment_v,already_payment_v;
-
     private PullToRefreshListView lesson_item_list;          // 课程列表容器
     private ArrayList<LessonOrder> mLessonSearches;          // 课程搜索结果的集合
     private ArrayList<LessonOrder> mShowList;                // 课程显示结果的集合
     private LessonOrderAdapter adapter;
+
+    private RelativeLayout all_lesson_ll,wait_payment_ll,already_payment_ll;
+    private TextView all_lesson_tv,wait_payment_tv,already_payment_tv;
+    private View all_lesson_v,wait_payment_v,already_payment_v;
 
     private static final int SEARCH_LESSON_PARAMETER  = 10;        //参数查询
     private static final int SEARCH_LESSON_PULL_UP = 20;           //上拉加载
@@ -121,7 +121,6 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
         }
     };
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -172,7 +171,7 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
 
     // 初始化列表
     private void initPullListView() {
-        
+
         lesson_item_list = mView.findViewById(R.id.lesson_item_list);
         setListView();
 

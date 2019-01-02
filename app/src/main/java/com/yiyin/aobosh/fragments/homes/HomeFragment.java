@@ -33,7 +33,7 @@ import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.activitys.AllClassActivity;
 import com.yiyin.aobosh.activitys.login.LoginActivity;
-import com.yiyin.aobosh.activitys.yiYinClassroom.YiYinClassroomActivity2;
+import com.yiyin.aobosh.activitys.yiYinClassroom.LessonActivity;
 import com.yiyin.aobosh.adapter.LessonCategoryAdapter;
 import com.yiyin.aobosh.adapter.ViewPagerAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
@@ -597,7 +597,7 @@ public class HomeFragment extends Fragment {
             startActivity(new Intent(mContext, LoginActivity.class));
             return;
         } else {
-            Intent intent = new Intent(mContext,YiYinClassroomActivity2.class);
+            Intent intent = new Intent(mContext,LessonActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("LessonBean",lesssonBean);
             intent.putExtras(bundle);

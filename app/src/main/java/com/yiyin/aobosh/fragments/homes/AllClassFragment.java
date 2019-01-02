@@ -38,7 +38,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.activitys.login.LoginActivity;
-import com.yiyin.aobosh.activitys.yiYinClassroom.YiYinClassroomActivity2;
+import com.yiyin.aobosh.activitys.yiYinClassroom.LessonActivity;
 import com.yiyin.aobosh.adapter.LessonCategoryAdapter2;
 import com.yiyin.aobosh.adapter.LessonListAdapter;
 import com.yiyin.aobosh.Interface.CateIdSearchInterface;
@@ -288,7 +288,7 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
             } else {
                 RecommendLesson.LessonBean lessonBean = mShowList.get(position-1);
                 LogUtils.i("AllClassFragment: ItemClick position " + position);
-                Intent intent = new Intent(mContext,YiYinClassroomActivity2.class);
+                Intent intent = new Intent(mContext,LessonActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("LessonBean",lessonBean);
                 intent.putExtras(bundle);

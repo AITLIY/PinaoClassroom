@@ -28,7 +28,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.activitys.login.LoginActivity;
-import com.yiyin.aobosh.activitys.yiYinClassroom.YiYinClassroomActivity2;
+import com.yiyin.aobosh.activitys.yiYinClassroom.LessonActivity;
 import com.yiyin.aobosh.adapter.LessonListAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.RecommendLesson;
@@ -53,7 +53,7 @@ public class OauthHistoryActivity extends Activity {
     private RequestQueue requestQueue;
     private UserInfo mUserInfo;
 
-    private PullToRefreshListView lesson_item_list;            // 课程列表容器
+    private PullToRefreshListView lesson_item_list;                         // 课程列表容器
     private ArrayList<RecommendLesson.LessonBean> mLessonSearches;          //课程搜索结果的集合
     private ArrayList<RecommendLesson.LessonBean> mShowList;                //课程显示结果的集合
     private LessonListAdapter adapter;
@@ -142,7 +142,6 @@ public class OauthHistoryActivity extends Activity {
         getHistory(mUserInfo.getUid(),page);
     }
 
-
     class ItemClick implements AdapterView.OnItemClickListener{
 
         @Override
@@ -153,7 +152,7 @@ public class OauthHistoryActivity extends Activity {
                 return;
             } else {
                 RecommendLesson.LessonBean lessonBean = mShowList.get(position-1);
-                Intent intent = new Intent(mContext,YiYinClassroomActivity2.class);
+                Intent intent = new Intent(mContext,LessonActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("LessonBean",lessonBean);
                 intent.putExtras(bundle);

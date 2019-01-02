@@ -53,7 +53,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class YiYinClassroomActivity2 extends AppCompatActivity implements View.OnClickListener {
+public class LessonActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Context mContext;
     private RecommendLesson.LessonBean mLessonBean;
@@ -77,7 +77,9 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
     private int mCurrentItemId = 1;
 
     private static final int LOAD_DATA_SUCCESS = 101;
-    private static final int LOAD_DATA_FAILE = 103;
+    private static final int LOAD_DATA_FAILE = 102;
+    private static final int LOAD_DATA_SUCCESS2 = 201;
+    private static final int LOAD_DATA_FAILE2 = 202;
     private static final int NET_ERROR = 404;
 
     @SuppressLint("HandlerLeak")
@@ -98,6 +100,16 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
                 case LOAD_DATA_FAILE:
 
                     ToastUtil.show(mContext, "操作失败");
+                    break;
+
+                case LOAD_DATA_SUCCESS2:
+
+                    ToastUtil.show(mContext, "评价成功");
+                    break;
+
+                case LOAD_DATA_FAILE2:
+
+                    ToastUtil.show(mContext, "评价失败");
                     break;
 
                 case NET_ERROR:
@@ -145,7 +157,7 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_yi_yin_classroom2);
+        setContentView(R.layout.activity_lesson);
         // 隐藏标题栏
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -412,7 +424,6 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
 
         List<Fragment> Fragments;
 
-
         public TabAdapter(FragmentManager fm, List fragments) {
             super(fm);
             Fragments = fragments;
@@ -453,7 +464,7 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
             @Override
             public void onResponse(String s) {
                 if (!"".equals(s)) {
-                    LogUtils.i("YiYinClassroomActivity2: result1 " + s);
+                    LogUtils.i("LessonActivity: result1 " + s);
 
                     try {
                         JSONObject jsonObject = new JSONObject(s);
@@ -480,7 +491,7 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtils.e("YiYinClassroomActivity2: volleyError1 " + volleyError.toString());
+                LogUtils.e("LessonActivity: volleyError1 " + volleyError.toString());
                 mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
@@ -493,7 +504,7 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
                 try {
 
                     String token = "Lessonsoncollect" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
-                    LogUtils.i("YiYinClassroomActivity2: token " + token);
+                    LogUtils.i("LessonActivity: token " + token);
                     String sha_token = SHA.encryptToSHA(token);
 
                     obj.put("access_token", sha_token);
@@ -506,7 +517,79 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
                     e.printStackTrace();
                 }
 
-                LogUtils.i("YiYinClassroomActivity2 json1 " + obj.toString());
+                LogUtils.i("LessonActivity json1 " + obj.toString());
+
+                map.put("dt", obj.toString());
+                return map;
+            }
+
+        };
+        requestQueue.add(stringRequest);
+    }
+
+
+    // 提交课程订单评价
+    private void subEvaluate(final int uid, final int order, final String content) {
+
+        String url = HttpURL.EVALUATE_SUB_URL;
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                if (!"".equals(s)) {
+                    LogUtils.i("LessonActivity: result1 " + s);
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(s);
+                        String code = jsonObject.getString("code");
+
+                        if ("200".equals(code)) {
+
+                            String msg = jsonObject.getString("msg");
+
+                            mHandler.obtainMessage(LOAD_DATA_SUCCESS2,msg).sendToTarget();
+
+                        } else {
+
+                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE2);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE2);
+                    }
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtils.e("LessonActivity: volleyError1 " + volleyError.toString());
+                mHandler.sendEmptyMessage(NET_ERROR);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject obj = new JSONObject();
+
+                try {
+
+                    String token = "Evaluatesub" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
+                    LogUtils.i("LessonActivity: token " + token);
+                    String sha_token = SHA.encryptToSHA(token);
+
+                    obj.put("access_token", sha_token);
+                    obj.put("uid", uid);
+                    obj.put("order", order);
+                    obj.put("content", content);
+                    obj.put("device", CommonParameters.ANDROID);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                LogUtils.i("LessonActivity json1 " + obj.toString());
 
                 map.put("dt", obj.toString());
                 return map;

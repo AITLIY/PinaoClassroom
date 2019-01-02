@@ -3,6 +3,7 @@ package com.yiyin.aobosh.activitys.mine;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,8 +27,12 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
+import com.yiyin.aobosh.activitys.login.LoginActivity;
+import com.yiyin.aobosh.activitys.yiYinClassroom.LessonActivity;
+import com.yiyin.aobosh.activitys.yiYinClassroom.TeacherActivity;
 import com.yiyin.aobosh.adapter.TeacherListAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
+import com.yiyin.aobosh.bean.RecommendLesson;
 import com.yiyin.aobosh.bean.TeacherBean;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
@@ -51,7 +56,7 @@ public class CollectTeacherActivity extends Activity {
     private UserInfo mUserInfo;
 
     private PullToRefreshListView lesson_item_list;            // 课程列表容器
-    private ArrayList<TeacherBean> mTeacherBeans;          //课程搜索结果的集合
+    private ArrayList<TeacherBean> mTeacherBeans;            //课程搜索结果的集合
     private ArrayList<TeacherBean> mShowList;                //课程显示结果的集合
     private TeacherListAdapter adapter;
 
@@ -133,10 +138,30 @@ public class CollectTeacherActivity extends Activity {
         mShowList = new ArrayList<>();
         adapter = new TeacherListAdapter(mContext, mShowList);
         lesson_item_list.setAdapter(adapter);
+        lesson_item_list.setOnItemClickListener(new ItemClick());
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
         getTeacherData(mUserInfo.getUid(),CommonParameters.UNIACID);
     }
 
+    class ItemClick implements AdapterView.OnItemClickListener{
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            if (!GlobalParameterApplication.getInstance().getLoginStatus()) {
+                startActivity(new Intent(mContext, LoginActivity.class));
+                return;
+            } else {
+                TeacherBean teacherBean = mShowList.get(position-1);
+                Intent intent = new Intent(mContext,TeacherActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("TeacherBean",teacherBean);
+//                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+
+        }
+    }
 
     // 初始化列表
     private void initPullListView() {
@@ -269,7 +294,7 @@ public class CollectTeacherActivity extends Activity {
 
             case SEARCH_LESSON_PULL_UP:
 
-                adapter.addLast(mTeacherBeans);
+                mShowList.addAll(mTeacherBeans);
                 LogUtils.i("CollectTeacherActivity: SEARCH_LESSON_PULL_UP " + mShowList.size());
 
                 adapter.notifyDataSetChanged();

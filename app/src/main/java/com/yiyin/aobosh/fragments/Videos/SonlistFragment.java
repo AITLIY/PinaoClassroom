@@ -27,7 +27,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 
-import com.yiyin.aobosh.activitys.yiYinClassroom.YiYinClassroomActivity2;
+import com.yiyin.aobosh.activitys.yiYinClassroom.LessonActivity;
 import com.yiyin.aobosh.adapter.VideoBeanAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.RecommendLesson;
@@ -157,7 +157,7 @@ public class SonlistFragment extends Fragment implements AdapterView.OnClickList
         mContext = getContext();
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
-        mLessonBean = ((YiYinClassroomActivity2) getActivity()).getLessonBean();
+        mLessonBean = ((LessonActivity) getActivity()).getLessonBean();
         lessonID = mLessonBean.getId();
         lesson_title.setText(mLessonBean.getBookname());
 
@@ -175,8 +175,8 @@ public class SonlistFragment extends Fragment implements AdapterView.OnClickList
         adapter.setID(mShowList.get(position-1).getId());
         adapter.notifyDataSetChanged();
         LogUtils.i("SonlistFragment: onItemClick " + mShowList.get(position-1).getVideourl());
-        ((YiYinClassroomActivity2)getActivity()).setAudio(mListBeans.get(position-1));
-        ((YiYinClassroomActivity2)getActivity()).playAudio();
+        ((LessonActivity)getActivity()).setAudio(mListBeans.get(position-1));
+        ((LessonActivity)getActivity()).playAudio();
     }
 
     // 初始化列表
@@ -317,8 +317,8 @@ public class SonlistFragment extends Fragment implements AdapterView.OnClickList
                 mShowList.addAll(mListBeans);
 
                 if (mShowList.size()>0) {
-                    ((YiYinClassroomActivity2) getActivity()).setAudio(mShowList.get(0));
-                    ((YiYinClassroomActivity2) getActivity()).setPlayBg(mVideoBean.getPoster());
+                    ((LessonActivity) getActivity()).setAudio(mShowList.get(0));
+                    ((LessonActivity) getActivity()).setPlayBg(mVideoBean.getPoster());
                     adapter.setID(mShowList.get(0).getId());
                 }
 

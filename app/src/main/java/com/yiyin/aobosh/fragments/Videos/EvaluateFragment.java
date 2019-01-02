@@ -27,7 +27,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
-import com.yiyin.aobosh.activitys.yiYinClassroom.YiYinClassroomActivity2;
+import com.yiyin.aobosh.activitys.yiYinClassroom.LessonActivity;
 import com.yiyin.aobosh.adapter.EvaluateBeanAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.EvaluateBean;
@@ -147,7 +147,7 @@ public class EvaluateFragment extends Fragment{
         mContext = getContext();
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
-        mLessonBean = ((YiYinClassroomActivity2) getActivity()).getLessonBean();
+        mLessonBean = ((LessonActivity) getActivity()).getLessonBean();
         lessonID = mLessonBean.getId();
 
         mShowList = new ArrayList<>();
