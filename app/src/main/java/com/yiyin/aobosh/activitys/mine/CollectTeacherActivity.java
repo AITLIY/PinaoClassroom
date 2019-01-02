@@ -159,7 +159,6 @@ public class CollectTeacherActivity extends Activity {
 //                intent.putExtras(bundle);
                 startActivity(intent);
             }
-
         }
     }
 
