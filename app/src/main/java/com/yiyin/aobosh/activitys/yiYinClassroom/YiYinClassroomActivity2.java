@@ -25,7 +25,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.githang.statusbar.StatusBarCompat;
-import com.google.gson.Gson;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
@@ -37,7 +36,6 @@ import com.yiyin.aobosh.commons.HttpURL;
 import com.yiyin.aobosh.fragments.Videos.DescFragment;
 import com.yiyin.aobosh.fragments.Videos.EvaluateFragment;
 import com.yiyin.aobosh.fragments.Videos.SonlistFragment;
-import com.yiyin.aobosh.utils.NetworkUtils;
 import com.yiyin.aobosh.utils.SHA;
 import com.yiyin.aobosh.utils.TimeUtils;
 import com.yiyin.aobosh.utils.ToastUtil;
@@ -70,7 +68,7 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
     private TextView sonlist_tv, desc_tv, evaluate_tv,start_study;
     private View sonlist_v, desc_v, evaluate_v;
 
-    private LinearLayout collect_ll;
+    private LinearLayout advisory_ll,collect_ll;
     private ViewPager viewPager;
     private List<Fragment> fragmentsList;
     private DescFragment mDescFragment;
@@ -92,12 +90,14 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
 
                 case LOAD_DATA_SUCCESS:
 
+                    String info = (String) msg.obj;
+                    ToastUtil.show(mContext, info);
 
                     break;
 
                 case LOAD_DATA_FAILE:
 
-                    ToastUtil.show(mContext, "收藏失败");
+                    ToastUtil.show(mContext, "操作失败");
                     break;
 
                 case NET_ERROR:
@@ -181,13 +181,17 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
         evaluate_ll = findViewById(R.id.evaluate_ll);
         evaluate_tv = findViewById(R.id.evaluate_tv);
         evaluate_v = findViewById(R.id.evaluate_v);
+        advisory_ll = findViewById(R.id.advisory_ll);
         collect_ll = findViewById(R.id.collect_ll);
         start_study = findViewById(R.id.start_study);
 
-        sonlist_ll.setOnClickListener(this);
-        desc_ll.setOnClickListener(this);
-        evaluate_ll.setOnClickListener(this);
+        TabOnClickListener listtener = new TabOnClickListener();
+        sonlist_ll.setOnClickListener(listtener);
+        desc_ll.setOnClickListener(listtener);
+        evaluate_ll.setOnClickListener(listtener);
+
         play_start.setOnClickListener(this);
+        advisory_ll.setOnClickListener(this);
         collect_ll.setOnClickListener(this);
         start_study.setOnClickListener(this);
 
@@ -331,29 +335,47 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
         videoPlayer.start();
     }
 
+
+    class TabOnClickListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View view) {
+
+            if (mCurrentItemId == view.getId()) {
+                return;
+            }
+            mCurrentItemId = view.getId();
+
+            switch (mCurrentItemId) {
+                case R.id.sonlist_ll:
+                    viewPager.setCurrentItem(0);
+                    break;
+
+                case R.id.desc_ll:
+                    viewPager.setCurrentItem(1);
+                    break;
+
+                case R.id.evaluate_ll:
+                    viewPager.setCurrentItem(2);
+
+                    break;
+            }
+
+            changeTabItemStyle(view);
+        }
+    }
+
     @Override
     public void onClick(View view) {
 
-        if (mCurrentItemId == view.getId()) {
-            return;
-        }
-        mCurrentItemId = view.getId();
+        switch (view.getId()) {
 
-        switch (mCurrentItemId) {
-            case R.id.sonlist_ll:
-                viewPager.setCurrentItem(0);
-                break;
+            case R.id.advisory_ll:
+                //todo
 
-            case R.id.desc_ll:
-                viewPager.setCurrentItem(1);
-                break;
-
-            case R.id.evaluate_ll:
-                viewPager.setCurrentItem(2);
                 break;
 
             case R.id.collect_ll:
-
                 saveCollect(mUserInfo.getUid(),mLessonBean.getId(),CommonParameters.LESSON);
                 break;
 
@@ -363,8 +385,15 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
                 play_start.setVisibility(View.GONE);
                 playAudio();
                 break;
+
+            case R.id.start_study:
+
+                play_bg.setVisibility(View.GONE);
+                play_start.setVisibility(View.GONE);
+                playAudio();
+                break;
         }
-        changeTabItemStyle(view);
+
     }
 
     // 设置标题栏颜色
@@ -432,8 +461,9 @@ public class YiYinClassroomActivity2 extends AppCompatActivity implements View.O
 
                         if ("200".equals(code)) {
 
+                            String msg = jsonObject.getString("msg");
 
-                            mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS);
+                            mHandler.obtainMessage(LOAD_DATA_SUCCESS,msg).sendToTarget();
 
                         } else {
 

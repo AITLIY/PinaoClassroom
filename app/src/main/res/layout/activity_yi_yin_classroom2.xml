@@ -156,7 +156,7 @@
         android:background="@color/white">
 
         <LinearLayout
-            android:id="@+id/ll_setting_phone"
+            android:id="@+id/advisory_ll"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -195,6 +195,7 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/star_img"
                 android:layout_width="22dp"
                 android:layout_height="22dp"
                 android:src="@drawable/icon_tab_collect" />

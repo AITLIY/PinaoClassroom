@@ -58,19 +58,18 @@ public class SonlistFragment extends Fragment implements AdapterView.OnClickList
     private UserInfo mUserInfo;
     private RecommendLesson.LessonBean mLessonBean;
 
-    private TextView lesson_title,example_tv,teach_tv,all_tv;
-
-    private PullToRefreshListView lesson_item_list;             // 章节列表容器
+    private VideoBean mVideoBean ;                              // 课程视频对象
     private List<VideoBean.ListBean> mListBeans;                // 章节搜索结果的集合
-    private VideoBean mVideoBean ;                              // 章节显示结果的集合
     private List<VideoBean.ListBean> mShowList;                 // 章节显示结果的集合
+    private PullToRefreshListView lesson_item_list;             // 章节列表容器
     private VideoBeanAdapter adapter;
+    private TextView lesson_title,example_tv,teach_tv,all_tv;
 
     private static final int SEARCH_LESSON_PARAMETER  = 10;        //参数查询
     private static final int SEARCH_LESSON_PULL_UP = 20;           //上拉加载
     private int mSearchType = 10;  // 查询的标志
     private int page = 1;
-    private int lessonID = 1;
+    private int lessonID;
     private String Suffix_type  = CommonParameters.ALL2;            // 当前类型
 
     private static final int LOAD_DATA_SUCCESS = 101;
@@ -142,7 +141,6 @@ public class SonlistFragment extends Fragment implements AdapterView.OnClickList
     private void initView() {
 
         lesson_title = mView.findViewById(R.id.lesson_title);
-
         example_tv = mView.findViewById(R.id.example_tv);
         teach_tv = mView.findViewById(R.id.teach_tv);
         all_tv = mView.findViewById(R.id.all_tv);
@@ -318,9 +316,11 @@ public class SonlistFragment extends Fragment implements AdapterView.OnClickList
                 mShowList.clear();
                 mShowList.addAll(mListBeans);
 
-                ((YiYinClassroomActivity2)getActivity()).setAudio(mShowList.get(0));
-                ((YiYinClassroomActivity2)getActivity()).setPlayBg(mVideoBean.getPoster());
-                adapter.setID(mShowList.get(0).getId());
+                if (mShowList.size()>0) {
+                    ((YiYinClassroomActivity2) getActivity()).setAudio(mShowList.get(0));
+                    ((YiYinClassroomActivity2) getActivity()).setPlayBg(mVideoBean.getPoster());
+                    adapter.setID(mShowList.get(0).getId());
+                }
 
                 LogUtils.i("SonlistFragment: SEARCH_LESSON_FOR_PARAMETER "  + mShowList.size());
 
@@ -353,6 +353,7 @@ public class SonlistFragment extends Fragment implements AdapterView.OnClickList
         }
 
     }
+
 
     //--------------------------------------请求服务器数据-------------------------------------------
     
