@@ -325,11 +325,9 @@ public class MyClassFragment extends Fragment implements View.OnClickListener,Su
 
         if (isSuccess) {
             mView.findViewById(R.id.not_data).setVisibility(View.GONE);
-            mView.findViewById(R.id.not_data_tv);
 
         } else {
             mView.findViewById(R.id.not_data).setVisibility(View.VISIBLE);
-            mView.findViewById(R.id.not_data_tv);
             ((TextView) mView.findViewById(R.id.not_data_tv)).setText(msg);
         }
     }

@@ -153,11 +153,11 @@ public class CollectTeacherActivity extends Activity {
                 return;
             } else {
                 TeacherBean teacherBean = mShowList.get(position-1);
+
                 Intent intent = new Intent(mContext,TeacherActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("TeacherBean",teacherBean);
-//                intent.putExtras(bundle);
+                intent.putExtra("teacherid",teacherBean.getId());
                 startActivity(intent);
+
             }
         }
     }

@@ -255,11 +255,9 @@ public class OauthHistoryActivity extends Activity {
 
         if (isSuccess) {
             findViewById(R.id.not_data).setVisibility(View.GONE);
-            findViewById(R.id.not_data_tv);
 
         } else {
             findViewById(R.id.not_data).setVisibility(View.VISIBLE);
-            findViewById(R.id.not_data_tv);
             ((TextView) findViewById(R.id.not_data_tv)).setText(msg);
         }
     }

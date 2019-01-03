@@ -157,7 +157,7 @@ public class SonlistFragment extends Fragment implements AdapterView.OnClickList
         mContext = getContext();
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
-        mLessonBean = ((LessonActivity) getActivity()).getLessonBean();
+//        mLessonBean = ((LessonActivity) getActivity()).getLessonBean();
         lessonID = mLessonBean.getId();
         lesson_title.setText(mLessonBean.getBookname());
 
@@ -297,11 +297,9 @@ public class SonlistFragment extends Fragment implements AdapterView.OnClickList
 
         if (isSuccess) {
             mView.findViewById(R.id.not_data).setVisibility(View.GONE);
-            mView.findViewById(R.id.not_data_tv);
 
         } else {
             mView.findViewById(R.id.not_data).setVisibility(View.VISIBLE);
-            mView.findViewById(R.id.not_data_tv);
             ((TextView) mView.findViewById(R.id.not_data_tv)).setText(msg);
         }
     }

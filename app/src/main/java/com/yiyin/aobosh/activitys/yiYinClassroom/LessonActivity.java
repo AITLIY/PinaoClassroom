@@ -14,9 +14,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -26,9 +30,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
 import com.githang.statusbar.StatusBarCompat;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.handmark.pulltorefresh.library.ILoadingLayout;
+import com.handmark.pulltorefresh.library.PullToRefreshBase;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
+import com.yiyin.aobosh.adapter.EvaluateBeanAdapter;
+import com.yiyin.aobosh.adapter.VideoBeanAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
+import com.yiyin.aobosh.bean.EvaluateBean;
+import com.yiyin.aobosh.bean.LessonDetail;
 import com.yiyin.aobosh.bean.RecommendLesson;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.bean.VideoBean;
@@ -54,7 +67,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LessonActivity extends AppCompatActivity implements View.OnClickListener {
+public class LessonActivity extends AppCompatActivity implements View.OnClickListener,AdapterView.OnItemClickListener {
 
     private Context mContext;
     private RecommendLesson.LessonBean mLessonBean;
@@ -64,22 +77,55 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
     private VideoPlayer videoPlayer;
     private VideoPlayerController controller;
 
-    private ImageView play_bg, play_start;
-    private LinearLayout sonlist_ll, desc_ll, evaluate_ll,btn_menu_ll,write_comment_ll,submit_comment;
+    private ImageView play_bg, play_start;              //播放
+    private LinearLayout lesson_detail_ll,lesson_list_ll,lesson_evaluate_ll;
+    private LinearLayout desc_ll,sonlist_ll,evaluate_ll,btn_menu_ll,write_comment_ll,submit_comment;
     private TextView sonlist_tv, desc_tv, evaluate_tv,start_study;
     private View sonlist_v, desc_v, evaluate_v;
-    private EditText comment_et;
+    private ImageView star_img;
 
-    private LinearLayout advisory_ll,collect_ll;
-    private ViewPager viewPager;
-    private List<Fragment> fragmentsList;
-    private DescFragment mDescFragment;
-    private SonlistFragment mSonlistFragment;
-    private EvaluateFragment mEvaluateFragment;
-    private int mCurrentItemId = 1;
+    private EditText comment_et;                        //评论文字
+    private LinearLayout advisory_ll,collect_ll;        //开始学习 /评论
 
-    private static final int LOAD_DATA_SUCCESS = 101;
-    private static final int LOAD_DATA_FAILE = 102;
+    private LessonDetail mLessonDetail;                 //课程详情对象
+    private TextView bookname_tv,difficulty_tv;
+    private LinearLayout teacher_detail;
+    private WebView lesson_descript,teacher_detail_content;
+
+
+    private VideoBean mVideoBean ;                              // 课程视频对象
+    private List<VideoBean.ListBean> mListBeans;                // 章节搜索结果的集合
+    private List<VideoBean.ListBean> mShowList;                 // 章节显示结果的集合
+    private PullToRefreshListView lesson_item_list;             // 章节列表容器
+    private VideoBeanAdapter adapter;
+    private TextView lesson_title,example_tv,teach_tv,all_tv;
+
+    private static final int SEARCH_LESSON_PARAMETER  = 10;        //参数查询
+    private static final int SEARCH_LESSON_PULL_UP = 20;           //上拉加载
+    private int mSearchType = 10;  // 查询的标志
+    private int page = 1;
+    private String Suffix_type  = CommonParameters.ALL2;            // 当前类型
+
+    private List<EvaluateBean> mListBeans2;                // 课程评价搜索结果的集合
+    private List<EvaluateBean> mShowList2;                 // 课程评价显示结果的集合
+    private PullToRefreshListView lesson_item_list2;             // 列表容器
+    private EvaluateBeanAdapter adapter2;
+
+    private static final int SEARCH_LESSON_PARAMETER2  = 10;        //参数查询
+    private static final int SEARCH_LESSON_PULL_UP2 = 20;           //上拉加载
+    private int mSearchType2 = 10;  // 查询的标志
+    private int page2 = 1;
+
+    private int lessonID;
+    private int mCurrentItemId = -1;
+
+    private static final int LOAD_DATA_SUCCESS01 = 1001;
+    private static final int LOAD_DATA_SUCCESS02 = 2001;
+    private static final int LOAD_DATA_SUCCESS03 = 3001;
+    private static final int LOAD_DATA_FAILE = 1002;
+
+    private static final int LOAD_DATA_SUCCESS1 = 101;
+    private static final int LOAD_DATA_FAILE1 = 102;
     private static final int LOAD_DATA_SUCCESS2 = 201;
     private static final int LOAD_DATA_FAILE2 = 202;
     private static final int NET_ERROR = 404;
@@ -92,14 +138,59 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
             switch (msg.what) {
 
-                case LOAD_DATA_SUCCESS:
+                case LOAD_DATA_SUCCESS01:
 
-                    String info = (String) msg.obj;
-                    ToastUtil.show(mContext, info);
+                    setViewContent();
+                    break;
 
+                case LOAD_DATA_SUCCESS02:
+
+                    if (mSearchType==SEARCH_LESSON_PARAMETER) {
+
+                        if (mListBeans.size()>0){
+                            setViewForResult(true,"");
+
+                        } else {
+                            setViewForResult(false,"没有获取到课程信息~");
+                        }
+                    }
+                    upDataLessonListView();
+                    LogUtils.i("EvaluateFragment: sonlist_ll " );
+                    break;
+
+                case LOAD_DATA_SUCCESS03:
+
+                    if (mSearchType2==SEARCH_LESSON_PARAMETER2) {
+
+                        if (mListBeans2.size()>0){
+                            setViewForResult2(true,"");
+
+                        } else {
+                            setViewForResult2(false,"还没有人评论信息~");
+                        }
+                    }
+                    upDataLessonListView2();
                     break;
 
                 case LOAD_DATA_FAILE:
+
+                    lesson_item_list2.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            lesson_item_list2.onRefreshComplete();
+                            setViewForResult2(false,"查询数据失败~");
+                        }
+                    }, 1000);
+                    break;
+
+                case LOAD_DATA_SUCCESS1:
+
+                    String info = (String) msg.obj;
+                    ToastUtil.show(mContext, info);
+//                    star_img.setImageResource(mTeacherDetailBeans.get(0).getIscollect() == 1 ? R.drawable.icon_tab_star1 : R.drawable.icon_tab_star0);
+                    break;
+
+                case LOAD_DATA_FAILE1:
 
                     ToastUtil.show(mContext, "操作失败");
                     break;
@@ -173,8 +264,6 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
     private void init() {
         initView();
-        intiFragment();
-        initViewPager();
         initData();
     }
 
@@ -192,37 +281,40 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
         play_start = findViewById(R.id.play_start);
 
         //详情
+        lesson_detail_ll = findViewById(R.id.lesson_detail_ll);
         sonlist_ll = findViewById(R.id.sonlist_ll);
         sonlist_tv = findViewById(R.id.sonlist_tv);
         sonlist_v = findViewById(R.id.sonlist_v);
         //目录
+        lesson_list_ll = findViewById(R.id.lesson_list_ll);
         desc_ll = findViewById(R.id.desc_ll);
         desc_tv = findViewById(R.id.desc_tv);
         desc_v = findViewById(R.id.desc_v);
         //评价
+        lesson_evaluate_ll = findViewById(R.id.lesson_evaluate_ll);
         evaluate_ll = findViewById(R.id.evaluate_ll);
         evaluate_tv = findViewById(R.id.evaluate_tv);
         evaluate_v = findViewById(R.id.evaluate_v);
 
-        comment_et = findViewById(R.id.comment_et);
-
+        //开始学习
+        btn_menu_ll = findViewById(R.id.btn_menu_ll);
         advisory_ll = findViewById(R.id.advisory_ll);
         collect_ll = findViewById(R.id.collect_ll);
         start_study = findViewById(R.id.start_study);
-        btn_menu_ll = findViewById(R.id.btn_menu_ll);
+
+        star_img = findViewById(R.id.star_img);
+
+         //评论
         write_comment_ll = findViewById(R.id.write_comment_ll);
+        comment_et = findViewById(R.id.comment_et);
         submit_comment = findViewById(R.id.submit_comment);
 
+        //标题
         TabOnClickListener listtener = new TabOnClickListener();
         sonlist_ll.setOnClickListener(listtener);
         desc_ll.setOnClickListener(listtener);
         evaluate_ll.setOnClickListener(listtener);
 
-        play_start.setOnClickListener(this);
-        advisory_ll.setOnClickListener(this);
-        collect_ll.setOnClickListener(this);
-        start_study.setOnClickListener(this);
-        submit_comment.setOnClickListener(this);
 
 //        if (videoPlayer.isIdle()) {
 //            ToastUtil.show(mContext, "要点击播放后才能进入小窗口");
@@ -233,75 +325,36 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 //        videoPlayer.enterVerticalScreenScreen();
 //        videoPlayer.enterFullScreen();
 //        videoPlayer.restart();
-    }
-
-    private void intiFragment() {
-        fragmentsList = new ArrayList<>();
-
-        mDescFragment = new DescFragment();
-        mSonlistFragment = new SonlistFragment();
-        mEvaluateFragment = new EvaluateFragment();
-
-        fragmentsList.add(mDescFragment);
-        fragmentsList.add(mSonlistFragment);
-        fragmentsList.add(mEvaluateFragment);
-    }
-
-    private void initViewPager() {
-
-        viewPager = findViewById(R.id.setting_viewpager);
-        viewPager.setAdapter(new TabAdapter(getSupportFragmentManager(), fragmentsList));
-        if (GlobalParameterApplication.isShowComment) {
-            viewPager.setCurrentItem(2);
-            changeTabItemStyle(evaluate_ll);
-            showCommentView(true);
-        } else {
-            viewPager.setCurrentItem(1);
-            showCommentView(false);
-        }
-        //        viewPager.setPageMargin(PxUtils.dpToPx(12,this));
-        viewPager.setOffscreenPageLimit(2);
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-
-                switch (position) {
-                    case 0:
-                        mCurrentItemId = sonlist_ll.getId();
-                        changeTabItemStyle(sonlist_ll);
-                        showCommentView(false);
-                        break;
-
-                    case 1:
-                        mCurrentItemId = desc_ll.getId();
-                        changeTabItemStyle(desc_ll);
-                        showCommentView(false);
-                        break;
-
-                    case 2:
-                        mCurrentItemId = evaluate_ll.getId();
-                        changeTabItemStyle(evaluate_ll);
-
-                        if (GlobalParameterApplication.isShowComment){
-                            showCommentView(true);
-                        } else {
-                            showCommentView(false);
-                        }
-                        break;
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
 
 
-            }
-        });
+        //课程详情
+        bookname_tv = findViewById(R.id.bookname_tv);
+        difficulty_tv = findViewById(R.id.difficulty_tv);
+        teacher_detail = findViewById(R.id.teacher_detail);
+        lesson_descript = findViewById(R.id.lesson_descript);
+        teacher_detail_content = findViewById(R.id.teacher_detail_content);
+
+        //课程列表
+        lesson_title = findViewById(R.id.lesson_title);
+        example_tv = findViewById(R.id.example_tv);
+        teach_tv = findViewById(R.id.teach_tv);
+        all_tv = findViewById(R.id.all_tv);
+        initPullListView();
+        //课程评价
+        initPullListView2();
+
+        play_start.setOnClickListener(this);
+        advisory_ll.setOnClickListener(this);
+        collect_ll.setOnClickListener(this);
+        start_study.setOnClickListener(this);
+        submit_comment.setOnClickListener(this);
+
+        teacher_detail.setOnClickListener(this);
+
+        example_tv.setOnClickListener(this);
+        teach_tv.setOnClickListener(this);
+        all_tv.setOnClickListener(this);
+
     }
 
     private void initData() {
@@ -313,16 +366,47 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
         Intent intent = getIntent();
         if (intent != null) {
             Bundle bundle = intent.getExtras();
-            //获取里面的Persion里面的数据
             mLessonBean = (RecommendLesson.LessonBean) bundle.getSerializable("LessonBean");
             LogUtils.i("LessonActivity: lessonBean id " + mLessonBean.getId());
-    }
+        }
+        lessonID = mLessonBean.getId();
 
         initAudio();
+
+        if (GlobalParameterApplication.isShowComment) {
+            changeTabItemStyle(evaluate_ll);
+            mCurrentItemId = evaluate_ll.getId();
+            showCommentView(true);
+        } else {
+            showCommentView(false);
+            mCurrentItemId = sonlist_ll.getId();
+        }
+
+        lesson_title.setText(mLessonBean.getBookname());
+
+        mShowList = new ArrayList<>();
+        adapter = new VideoBeanAdapter(mContext, mShowList);
+        lesson_item_list.setAdapter(adapter);
+        lesson_item_list.setOnItemClickListener(this);
+        getLessonsonFindson(mUserInfo.getUid(), lessonID, Suffix_type, page);
+
+        mShowList2 = new ArrayList<>();
+        adapter2 = new EvaluateBeanAdapter(mContext, mShowList2);
+        lesson_item_list2.setAdapter(adapter2);
+//        getLessonsonEvaluate(mUserInfo.getUid(), lessonID, page2);
     }
 
-    public RecommendLesson.LessonBean getLessonBean() {
-        return mLessonBean;
+    //显示评论还是开始学习
+    private void showCommentView(boolean isShow) {
+
+        if (isShow) {
+            btn_menu_ll.setVisibility(View.GONE);
+            write_comment_ll.setVisibility(View.VISIBLE);
+
+        } else {
+            btn_menu_ll.setVisibility(View.VISIBLE);
+            write_comment_ll.setVisibility(View.GONE);
+        }
     }
 
     public void setPlayBg(String url) {
@@ -380,6 +464,71 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+
+            case R.id.advisory_ll:
+                //todo
+
+                break;
+
+            case R.id.collect_ll:     //收藏课程
+                saveCollect(mUserInfo.getUid(),mLessonBean.getId(),CommonParameters.LESSON);
+                break;
+
+            case R.id.play_start:       //开始播放
+
+                play_bg.setVisibility(View.GONE);
+                play_start.setVisibility(View.GONE);
+                playAudio();
+                break;
+
+            case R.id.start_study:      //开始学习
+
+                play_bg.setVisibility(View.GONE);
+                play_start.setVisibility(View.GONE);
+                playAudio();
+                break;
+
+            case R.id.submit_comment:       //提交评价
+
+                String comment = comment_et.getText().toString();
+
+                if ("".equals(comment)){
+                    ToastUtil.show(mContext,"评论输入不能为空");
+                    return;
+                }
+
+                subEvaluate(mUserInfo.getUid(),mLessonBean.getOrdersn(),comment);
+                break;
+
+            case R.id.teacher_detail:
+
+                Intent intent = new Intent(mContext,TeacherActivity.class);
+                intent.putExtra("teacherid",mLessonDetail.getTeacherid());
+                startActivity(intent);
+
+            case R.id.example_tv:
+
+                typeForSort(CommonParameters.EXAMPLE);
+                break;
+
+            case R.id.teach_tv:
+
+                typeForSort(CommonParameters.TEACH);
+                break;
+
+            case R.id.all_tv:
+
+                typeForSort(CommonParameters.ALL);
+                break;
+        }
+
+    }
+
+
     class TabOnClickListener implements View.OnClickListener{
 
         @Override
@@ -391,81 +540,29 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
             mCurrentItemId = view.getId();
 
             switch (mCurrentItemId) {
-                case R.id.sonlist_ll:
-                    viewPager.setCurrentItem(0);
+                case R.id.desc_ll:
+                    getlessonsonDesc(mUserInfo.getUid(), mLessonBean.getId());
                     break;
 
-                case R.id.desc_ll:
-                    viewPager.setCurrentItem(1);
+                case R.id.sonlist_ll:
+
                     break;
 
                 case R.id.evaluate_ll:
-                    viewPager.setCurrentItem(2);
+                    getLessonsonEvaluate(mUserInfo.getUid(), lessonID, page2);
 
                     break;
             }
-
             changeTabItemStyle(view);
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-
-        switch (view.getId()) {
-
-            case R.id.advisory_ll:
-                //todo
-
-                break;
-
-            case R.id.collect_ll:
-                saveCollect(mUserInfo.getUid(),mLessonBean.getId(),CommonParameters.LESSON);
-                break;
-
-            case R.id.play_start:
-
-                play_bg.setVisibility(View.GONE);
-                play_start.setVisibility(View.GONE);
-                playAudio();
-                break;
-
-            case R.id.start_study:
-
-                play_bg.setVisibility(View.GONE);
-                play_start.setVisibility(View.GONE);
-                playAudio();
-                break;
-
-            case R.id.submit_comment:
-
-                String comment = comment_et.getText().toString();
-
-                if ("".equals(comment)){
-                    ToastUtil.show(mContext,"评论输入不能为空");
-                    return;
-                }
-
-                subEvaluate(mUserInfo.getUid(),mLessonBean.getOrdersn(),comment);
-                break;
-        }
-
-    }
-
-    private void showCommentView(boolean isShow) {
-
-        if (isShow) {
-            btn_menu_ll.setVisibility(View.GONE);
-            write_comment_ll.setVisibility(View.VISIBLE);
-
-        } else {
-            btn_menu_ll.setVisibility(View.VISIBLE);
-            write_comment_ll.setVisibility(View.GONE);
         }
     }
 
     // 设置标题栏颜色
     private void changeTabItemStyle(View view) {
+
+        lesson_detail_ll.setVisibility(view.getId() ==  R.id.desc_ll ? View.VISIBLE:View.GONE);
+        lesson_list_ll.setVisibility(view.getId() == R.id.sonlist_ll ? View.VISIBLE:View.GONE);
+        lesson_evaluate_ll.setVisibility(view.getId() == R.id.evaluate_ll ? View.VISIBLE:View.GONE);
 
         sonlist_v.setBackgroundColor(view.getId() ==  R.id.sonlist_ll ? getResources().getColor(R.color.btn_selected) : getResources().getColor(R.color.white));
         desc_v.setBackgroundColor(view.getId() == R.id.desc_ll ? getResources().getColor(R.color.btn_selected) : getResources().getColor(R.color.white));
@@ -476,43 +573,548 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
         evaluate_tv.setTextColor(view.getId() == R.id.evaluate_ll ? getResources().getColor(R.color.btn_selected) : getResources().getColor(R.color.black));
     }
 
-    public class TabAdapter extends FragmentPagerAdapter {
+    //-------------------------------------------课程详情--------------------------------------------
 
-        List<Fragment> Fragments;
 
-        public TabAdapter(FragmentManager fm, List fragments) {
-            super(fm);
-            Fragments = fragments;
+    private void setViewContent() {
+        bookname_tv.setText("课程名称："+mLessonDetail.getBookname());
+        difficulty_tv.setText("课程难度："+mLessonDetail.getDifficulty());
+        lesson_descript.loadDataWithBaseURL(null,mLessonDetail.getDescript(),"text/html","uft-8",null);
+        teacher_detail_content.loadDataWithBaseURL(null,mLessonDetail.getTeacherdes(),"text/html","uft-8",null);
+    }
+
+    //-------------------------------------------课程列表--------------------------------------------
+
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        adapter.setID(mShowList.get(position-1).getId());
+        adapter.notifyDataSetChanged();
+        LogUtils.i("SonlistFragment: onItemClick " + mShowList.get(position-1).getVideourl());
+        setAudio(mShowList.get(position-1));
+        playAudio();
+    }
+
+    // 初始化列表
+    private void initPullListView() {
+
+        lesson_item_list = findViewById(R.id.lesson_item_list);
+        setListView();
+
+        lesson_item_list.setMode(PullToRefreshBase.Mode.BOTH);
+        lesson_item_list.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {  //拉动时
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                page= 1;
+
+                mSearchType = SEARCH_LESSON_PARAMETER;
+                getLessonsonFindson(mUserInfo.getUid(), lessonID, Suffix_type, page); // 下拉刷新搜索
+                setViewForResult(true,"");
+                LogUtils.i("SonlistFragment: onPullDownToRefresh 下拉" + page + "页");
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                page++;
+
+                mSearchType = SEARCH_LESSON_PULL_UP;
+                getLessonsonFindson(mUserInfo.getUid(), lessonID, Suffix_type, page);  // 上拉加载搜索
+
+                LogUtils.i("SonlistFragment: onPullUpToRefresh 下拉" + page + "页");
+            }
+        });
+
+        lesson_item_list.setOnItemClickListener(new AdapterView.OnItemClickListener() { //点击item时
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+
+        lesson_item_list.setOnScrollListener(new AbsListView.OnScrollListener() {  //列表滑动时
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                int tempPos = lesson_item_list.getRefreshableView().getFirstVisiblePosition();
+
+                //                if (tempPos > 0) {
+                //                    goTop.setVisibility(View.VISIBLE);
+                //                } else {
+                //                    goTop.setVisibility(View.GONE);
+                //                }
+
+            }
+        });
+
+        //        goTop.setOnClickListener(new View.OnClickListener() {
+        //            @Override
+        //            public void onClick(View view) {
+        //                lesson_item_list.getRefreshableView().smoothScrollToPosition(0);//移动到首部
+        //            }
+        //        });
+
+    }
+
+    //初始化列表控件上下拉的状态
+    private void setListView() {
+
+        ILoadingLayout startLabels = lesson_item_list.getLoadingLayoutProxy(true, false);
+        startLabels.setPullLabel("下拉刷新...");// 刚下拉时，显示的提示
+        startLabels.setRefreshingLabel("正在载入...");// 刷新时
+        startLabels.setReleaseLabel("放开刷新...");// 下来达到一定距离时，显示的提示
+
+        ILoadingLayout endLabels = lesson_item_list.getLoadingLayoutProxy(false, true);
+        endLabels.setPullLabel("上拉刷新...");// 刚下拉时，显示的提示
+        endLabels.setRefreshingLabel("正在载入...");// 刷新时
+        endLabels.setReleaseLabel("放开刷新...");// 下来达到一定距离时，显示的提示
+
+        //        headView = LayoutInflater.from(this).inflate(R.layout.headview, null);
+        //        listview.getRefreshableView().addHeaderView(headView);//为ListView添加头布局
+    }
+
+    // 选择课程类型
+    private void typeForSort(String type) {
+        page= 1;
+        Suffix_type = type;
+        mSearchType = SEARCH_LESSON_PARAMETER;
+        getLessonsonFindson(mUserInfo.getUid(), lessonID, Suffix_type, page); //根据类型
+    }
+
+    // 根据获取结果显示view
+    private void setViewForResult(boolean isSuccess,String msg) {
+
+        if (isSuccess) {
+            findViewById(R.id.not_data).setVisibility(View.GONE);
+
+        } else {
+            findViewById(R.id.not_data).setVisibility(View.VISIBLE);
+            ((TextView) findViewById(R.id.not_data_tv)).setText(msg);
+        }
+    }
+    // 更新课程列表数据
+    private void upDataLessonListView() {
+
+        switch (mSearchType) {
+
+            case SEARCH_LESSON_PARAMETER:
+
+                mShowList.clear();
+                mShowList.addAll(mListBeans);
+
+                if (mShowList.size()>0) {
+                    setAudio(mShowList.get(0));
+                    setPlayBg(mVideoBean.getPoster());
+                    adapter.setID(mShowList.get(0).getId());
+                }
+
+                LogUtils.i("SonlistFragment: SEARCH_LESSON_FOR_PARAMETER "  + mShowList.size());
+
+                adapter.notifyDataSetChanged();
+                lesson_item_list.getRefreshableView().smoothScrollToPosition(0);//移动到首部
+                lesson_item_list.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        lesson_item_list.onRefreshComplete();
+                    }
+                }, 1000);
+                break;
+
+            case SEARCH_LESSON_PULL_UP:
+
+                mShowList.addAll(mListBeans);
+                LogUtils.i("SonlistFragment: SEARCH_LESSON_PULL_UP " + mShowList.size());
+
+                adapter.notifyDataSetChanged();
+                lesson_item_list.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        lesson_item_list.onRefreshComplete();
+                        if (mListBeans.size()==0){
+                            ToastUtil.show(mContext,"没有更多结果");
+                        }
+                    }
+                }, 1000);
+                break;
         }
 
-        @Override
-        public Fragment getItem(int position) {
-            return Fragments.get(position);
-        }
+    }
+    
+    //-------------------------------------------课程评价--------------------------------------------
 
-        @Override
-        public int getCount() {
-            return Fragments.size();
-        }
+    // 初始化列表
+    private void initPullListView2() {
 
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            return super.instantiateItem(container, position);
-        }
+        lesson_item_list2 = findViewById(R.id.lesson_item_list2);
+        setListView2();
 
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            super.destroyItem(container, position, object);
-            Fragment fragment = Fragments.get(position);
-            if (fragment != null)
-                fragment.onDestroyView();
+        lesson_item_list2.setMode(PullToRefreshBase.Mode.BOTH);
+        lesson_item_list2.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {  //拉动时
+            @Override
+            public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
+                page2= 1;
+
+                mSearchType2 = SEARCH_LESSON_PARAMETER2;
+                getLessonsonEvaluate(mUserInfo.getUid(), lessonID, page2); // 下拉刷新搜索
+                setViewForResult2(true,"");
+                LogUtils.i("EvaluateFragment: onPullDownToRefresh 下拉" + page2 + "页");
+            }
+
+            @Override
+            public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
+                page2++;
+
+                mSearchType2 = SEARCH_LESSON_PULL_UP2;
+                getLessonsonEvaluate(mUserInfo.getUid(), lessonID, page2);  // 上拉加载搜索
+
+                LogUtils.i("EvaluateFragment: onPullUpToRefresh 下拉" + page2 + "页");
+            }
+        });
+
+        lesson_item_list2.setOnItemClickListener(new AdapterView.OnItemClickListener() { //点击item时
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+
+        lesson_item_list2.setOnScrollListener(new AbsListView.OnScrollListener() {  //列表滑动时
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                int tempPos = lesson_item_list2.getRefreshableView().getFirstVisiblePosition();
+
+                //                if (tempPos > 0) {
+                //                    goTop.setVisibility(View.VISIBLE);
+                //                } else {
+                //                    goTop.setVisibility(View.GONE);
+                //                }
+
+            }
+        });
+
+        //        goTop.setOnClickListener(new View.OnClickListener() {
+        //            @Override
+        //            public void onClick(View view) {
+        //                lesson_item_list2.getRefreshableView().smoothScrollToPosition(0);//移动到首部
+        //            }
+        //        });
+
+    }
+
+    //初始化列表控件上下拉的状态
+    private void setListView2() {
+
+        ILoadingLayout startLabels = lesson_item_list2.getLoadingLayoutProxy(true, false);
+        startLabels.setPullLabel("下拉刷新...");// 刚下拉时，显示的提示
+        startLabels.setRefreshingLabel("正在载入...");// 刷新时
+        startLabels.setReleaseLabel("放开刷新...");// 下来达到一定距离时，显示的提示
+
+        ILoadingLayout endLabels = lesson_item_list2.getLoadingLayoutProxy(false, true);
+        endLabels.setPullLabel("上拉刷新...");// 刚下拉时，显示的提示
+        endLabels.setRefreshingLabel("正在载入...");// 刷新时
+        endLabels.setReleaseLabel("放开刷新...");// 下来达到一定距离时，显示的提示
+
+        //        headView = LayoutInflater.from(this).inflate(R.layout.headview, null);
+        //        listview.getRefreshableView().addHeaderView(headView);//为ListView添加头布局
+    }
+
+    // 根据获取结果显示view
+    private void setViewForResult2(boolean isSuccess,String msg) {
+
+        if (isSuccess) {
+            findViewById(R.id.not_data).setVisibility(View.GONE);
+
+        } else {
+            findViewById(R.id.not_data).setVisibility(View.VISIBLE);
+            ((TextView) findViewById(R.id.not_data_tv)).setText(msg);
+        }
+    }
+
+    // 更新课程列表数据
+    private void upDataLessonListView2() {
+
+        switch (mSearchType2) {
+
+            case SEARCH_LESSON_PARAMETER2:
+
+                mShowList2.clear();
+                mShowList2.addAll(mListBeans2);
+
+                LogUtils.i("EvaluateFragment: SEARCH_LESSON_FOR_PARAMETER "  + mShowList2.size());
+
+                adapter2.notifyDataSetChanged();
+                lesson_item_list2.getRefreshableView().smoothScrollToPosition(0);//移动到首部
+                lesson_item_list2.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        lesson_item_list2.onRefreshComplete();
+                    }
+                }, 1000);
+                break;
+
+            case SEARCH_LESSON_PULL_UP2:
+
+                mShowList2.addAll(mListBeans2);
+                LogUtils.i("EvaluateFragment: SEARCH_LESSON_PULL_UP2 " + mShowList2.size());
+
+                adapter2.notifyDataSetChanged();
+                lesson_item_list2.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        lesson_item_list2.onRefreshComplete();
+                        if (mListBeans2.size()==0){
+                            ToastUtil.show(mContext,"没有更多结果");
+                        }
+                    }
+                }, 1000);
+                break;
         }
     }
 
 
+    
     //--------------------------------------请求服务器数据-------------------------------------------
+    
+    // 获取课程详情
+    private void getlessonsonDesc(final int uid, final int lessonid) {
 
-    // 收藏点
+        String url = HttpURL.LESSONSON_DESC_URL;
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                if (!"".equals(s)) {
+                    LogUtils.i("DescFragment: result1 " + s);
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(s);
+                        String code = jsonObject.getString("code");
+
+                        if ("200".equals(code)) {
+
+                            String data = jsonObject.getString("data");
+                            LogUtils.i("DescFragment: data " + data);
+                            if (!"[]".equals(data)) {
+                                mLessonDetail = new Gson().fromJson(data, LessonDetail.class);
+                            }
+                            //                            LogUtils.i("DescFragment: Descript " + mLessonDetail.getDescript());
+                            //                            LogUtils.i("DescFragment: Teacherdes " + mLessonDetail.getTeacherdes());
+                            mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS01);
+
+                        } else {
+
+                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+                    }
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtils.e("DescFragment: volleyError1 " + volleyError.toString());
+                mHandler.sendEmptyMessage(NET_ERROR);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject obj = new JSONObject();
+
+                try {
+
+                    String token = "Lessonsondesc" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
+                    LogUtils.i("DescFragment: token " + token);
+                    String sha_token = SHA.encryptToSHA(token);
+
+                    obj.put("access_token", sha_token);
+                    obj.put("uid", uid);
+                    obj.put("lessonid", lessonid);
+                    obj.put("device", CommonParameters.ANDROID);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                LogUtils.i("DescFragment json1 " + obj.toString());
+
+                map.put("dt", obj.toString());
+                return map;
+            }
+
+        };
+        requestQueue.add(stringRequest);
+    }
+
+    // 获取视频列表数据
+    private void getLessonsonFindson(final int uid, final int lessonid, final String suffix, final int pindex) {
+        mListBeans = new ArrayList<>();
+        String url = HttpURL.LESSONSON_SONLIST_URL;
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                if (!"".equals(s)) {
+                    LogUtils.i("SonlistFragment: result1 " + s);
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(s);
+                        String code = jsonObject.getString("code");
+
+                        if ("200".equals(code)) {
+
+                            String data = jsonObject.getString("data");
+                            LogUtils.i("SonlistFragment: data " + data);
+                            if (!"[]".equals(data)){
+                                mVideoBean = new Gson().fromJson(data, VideoBean.class);
+                                mListBeans = mVideoBean.getList();
+                            }
+
+                            mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS02);
+
+                        } else {
+
+                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+                    }
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtils.e("SonlistFragment: volleyError1 " + volleyError.toString());
+                mHandler.sendEmptyMessage(NET_ERROR);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject obj = new JSONObject();
+
+                try {
+
+                    String token = "Lessonsonsonlist" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
+                    LogUtils.i("SonlistFragment: token " + token);
+                    String sha_token = SHA.encryptToSHA(token);
+
+                    obj.put("access_token", sha_token);
+                    obj.put("uid", uid);
+                    obj.put("lessonid", lessonid);
+                    obj.put("suffix", suffix);
+                    obj.put("pindex", pindex);
+                    obj.put("device", CommonParameters.ANDROID);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                LogUtils.i("SonlistFragment json1 " + obj.toString());
+
+                map.put("dt", obj.toString());
+                return map;
+            }
+
+        };
+        requestQueue.add(stringRequest);
+    }
+
+    // 获取评论列表
+    private void getLessonsonEvaluate(final int uid, final int lessonid, final int pindex) {
+        mListBeans2 = new ArrayList<>();
+        String url = HttpURL.LESSONSON_EVALUATE_URL;
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                if (!"".equals(s)) {
+                    LogUtils.i("EvaluateFragment: result1 " + s);
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(s);
+                        String code = jsonObject.getString("code");
+
+                        if ("200".equals(code)) {
+
+                            String data = jsonObject.getString("data");
+                            LogUtils.i("EvaluateFragment: data " + data);
+                            if (!"[]".equals(data)) {
+                                mListBeans2 = new Gson().fromJson(data, new TypeToken<List<EvaluateBean>>() {
+                                }.getType());
+                            }
+
+                            mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS03);
+
+                        } else {
+
+                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+                    }
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtils.e("EvaluateFragment: volleyError1 " + volleyError.toString());
+                mHandler.sendEmptyMessage(NET_ERROR);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject obj = new JSONObject();
+
+                try {
+
+                    String token = "Lessonsonevaluate" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
+                    LogUtils.i("EvaluateFragment: token " + token);
+                    String sha_token = SHA.encryptToSHA(token);
+
+                    obj.put("access_token", sha_token);
+                    obj.put("uid", uid);
+                    obj.put("lessonid", lessonid);
+                    obj.put("pindex", pindex);
+                    obj.put("device", CommonParameters.ANDROID);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                LogUtils.i("EvaluateFragment json1 " + obj.toString());
+
+                map.put("dt", obj.toString());
+                return map;
+            }
+
+        };
+        requestQueue.add(stringRequest);
+    }
+    
+    // 收藏
     private void saveCollect(final int uid, final int outid, final String ctype) {
 
         String url = HttpURL.LESSONSON_COLLECT_URL;
@@ -530,16 +1132,16 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
                             String msg = jsonObject.getString("msg");
 
-                            mHandler.obtainMessage(LOAD_DATA_SUCCESS,msg).sendToTarget();
+                            mHandler.obtainMessage(LOAD_DATA_SUCCESS1,msg).sendToTarget();
 
                         } else {
 
-                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE1);
                         }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE1);
                     }
                 }
             }

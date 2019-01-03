@@ -129,7 +129,6 @@ public class YiYinClassroomActivity extends Activity implements SeekBar.OnSeekBa
         Intent intent = getIntent();
         if (intent != null) {
             Bundle bundle = intent.getExtras();
-            //获取里面的Persion里面的数据
             RecommendLesson.LessonBean lessonBean = (RecommendLesson.LessonBean) bundle.getSerializable("LessonBean");
             LogUtils.i("YiYinClassroomActivity: lessonBean id " + lessonBean.getId());
             UserInfo userInfo = GlobalParameterApplication.getInstance().getUserInfo();

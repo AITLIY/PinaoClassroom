@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -21,6 +23,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -35,12 +38,14 @@ import com.yiyin.aobosh.adapter.LessonOrderAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.LessonOrder;
 import com.yiyin.aobosh.bean.RecommendLesson;
+import com.yiyin.aobosh.bean.TeacherDetailBean;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
 import com.yiyin.aobosh.utils.SHA;
 import com.yiyin.aobosh.utils.TimeUtils;
 import com.yiyin.aobosh.utils.ToastUtil;
+import com.yiyin.aobosh.view.CircleImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,23 +61,35 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
     private RequestQueue requestQueue;
     private UserInfo mUserInfo;
 
+    private WebView teacher_detail_content;
     private PullToRefreshListView lesson_item_list;                         // 课程列表容器
     private ArrayList<RecommendLesson.LessonBean> mLessonSearches;          //课程搜索结果的集合
     private ArrayList<RecommendLesson.LessonBean> mShowList;                //课程显示结果的集合
     private LessonListAdapter adapter;
 
+    private ArrayList<TeacherDetailBean> mTeacherDetailBeans;          //课程搜索结果的集合
+
+    private TextView teacher_name,lesson_total,student_num;
+    private LinearLayout star_ll;
+    private ImageView star_img;
+    private CircleImageView teacher_icon;
+    private RelativeLayout all_lesson_ll,teacher_detail_ll;
     private TextView all_lesson_tv,teacher_detail_tv;
     private View all_lesson_v,teacher_detail_v;
-    private RelativeLayout all_lesson_ll,teacher_detail_ll;
+
 
     private static final int SEARCH_LESSON_PARAMETER  = 10;        //参数查询
     private static final int SEARCH_LESSON_PULL_UP = 20;           //上拉加载
     private int mSearchType = 10;  // 查询的标志
     private int page = 1;
-    private int ID = 2;
+    private int teacherID = 2;
 
-    private static final int LOAD_DATA1_SUCCESS = 101;
-    private static final int LOAD_DATA1_FAILE = 102;
+    private static final int LOAD_DATA_SUCCESS = 101;
+    private static final int LOAD_DATA_FAILE = 102;
+    private static final int LOAD_DATA_SUCCESS1 = 201;
+    private static final int LOAD_DATA_FAILE1 = 202;
+    private static final int LOAD_DATA_SUCCESS2 = 301;
+    private static final int LOAD_DATA_FAILE2 = 302;
     private static final int NET_ERROR = 404;
 
 
@@ -84,7 +101,7 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
 
             switch (msg.what) {
 
-                case LOAD_DATA1_SUCCESS:
+                case LOAD_DATA_SUCCESS:
 
                     if (mSearchType==SEARCH_LESSON_PARAMETER) {
 
@@ -92,12 +109,40 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
                             setViewForResult(true,"");
 
                         } else {
-                            setViewForResult(false,"您没有任何课程信息~");
+                            setViewForResult(false,"没有任何课程信息~");
                         }
                     }
                     break;
 
-                case LOAD_DATA1_FAILE:
+                case LOAD_DATA_FAILE:
+
+                    lesson_item_list.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            lesson_item_list.onRefreshComplete();
+                            setViewForResult(false,"查询数据失败~");
+                        }
+                    }, 1000);
+                    break;
+
+                case LOAD_DATA_SUCCESS1:
+
+                    String info = (String) msg.obj;
+                    ToastUtil.show(mContext, info);
+//                    star_img.setImageResource(mTeacherDetailBeans.get(0).getIscollect() == 1 ? R.drawable.icon_tab_star1 : R.drawable.icon_tab_star0);
+                    break;
+
+                case LOAD_DATA_FAILE1:
+
+                    ToastUtil.show(mContext, "操作失败");
+                    break;
+
+                case LOAD_DATA_SUCCESS2:
+
+                    setViewContent();
+                    break;
+
+                case LOAD_DATA_FAILE2:
 
                     lesson_item_list.postDelayed(new Runnable() {
                         @Override
@@ -140,15 +185,23 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
 
     private void initView() {
 
+        teacher_icon = findViewById(R.id.teacher_icon);
+        teacher_name = findViewById(R.id.teacher_name);
+        lesson_total = findViewById(R.id.lesson_total);
+        student_num = findViewById(R.id.student_num);
+        star_ll = findViewById(R.id.star_ll);
+        star_img = findViewById(R.id.star_img);
+        teacher_detail_content = findViewById(R.id.teacher_detail_content);
+
         all_lesson_ll = findViewById(R.id.all_lesson_ll);
-        teacher_detail_ll = findViewById(R.id.teacher_detail_ll);
-        
         all_lesson_tv = findViewById(R.id.all_lesson_tv);
-        teacher_detail_tv = findViewById(R.id.teacher_detail_tv);
-        
         all_lesson_v = findViewById(R.id.all_lesson_v);
+        teacher_detail_ll = findViewById(R.id.teacher_detail_ll);
+        teacher_detail_tv = findViewById(R.id.teacher_detail_tv);
         teacher_detail_v = findViewById(R.id.teacher_detail_v);
-        
+
+
+        star_ll.setOnClickListener(this);
         all_lesson_ll.setOnClickListener(this);
         teacher_detail_ll.setOnClickListener(this);
 
@@ -164,7 +217,16 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
         lesson_item_list.setAdapter(adapter);
         lesson_item_list.setOnItemClickListener(new ItemClick());
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
-        getLessonData(ID,mUserInfo.getUid(),page);
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            teacherID = intent.getIntExtra("teacherid",0);
+
+            LogUtils.i("TeacherActivity: teacherID " + teacherID);
+        }
+
+        getLessonData(teacherID,mUserInfo.getUid(),page);
+        getTeacherDetail(teacherID,mUserInfo.getUid());
     }
 
     class ItemClick implements AdapterView.OnItemClickListener{
@@ -201,7 +263,7 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
                 page= 1;
 
                 mSearchType = SEARCH_LESSON_PARAMETER;
-                getLessonData(ID,mUserInfo.getUid(),page); // 下拉刷新搜索
+                getLessonData(teacherID,mUserInfo.getUid(),page); // 下拉刷新搜索
                 setViewForResult(true,"");
                 LogUtils.i("TeacherActivity: onPullDownToRefresh 下拉" + page + "页");
             }
@@ -211,7 +273,7 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
                 page++;
 
                 mSearchType = SEARCH_LESSON_PULL_UP;
-                getLessonData(ID,mUserInfo.getUid(),page); // 上拉加载搜索
+                getLessonData(teacherID,mUserInfo.getUid(),page); // 上拉加载搜索
 
                 LogUtils.i("TeacherActivity: onPullUpToRefresh 下拉" + page + "页");
             }
@@ -277,28 +339,34 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
 
         switch (v.getId()) {
 
+            case R.id.star_ll:
+
+                saveCollect(mUserInfo.getUid(),teacherID,CommonParameters.TEACHER);
+                break;
             case R.id.all_lesson_ll:
 
-               
+                changeTabItemStyle(v);
                 break;
 
             case R.id.teacher_detail_ll:
 
-                
+                changeTabItemStyle(v);
                 break;
-
         }
-        changeTabItemStyle(v);
+
     }
 
     // 设置标题栏颜色
     private void changeTabItemStyle(View view) {
 
-        all_lesson_v.setVisibility(view.getId() ==  R.id.all_lesson_ll ? View.VISIBLE:View.GONE);
-        teacher_detail_v.setVisibility(view.getId() == R.id.teacher_detail_ll ? View.VISIBLE:View.GONE);
-        
         all_lesson_tv.setTextColor(view.getId() == R.id.all_lesson_ll ? getResources().getColor(R.color.btn_selected) : getResources().getColor(R.color.black));
         teacher_detail_tv.setTextColor(view.getId() == R.id.teacher_detail_ll ? getResources().getColor(R.color.btn_selected) : getResources().getColor(R.color.black));
+
+        all_lesson_v.setVisibility(view.getId() ==  R.id.all_lesson_ll ? View.VISIBLE:View.GONE);
+        teacher_detail_v.setVisibility(view.getId() == R.id.teacher_detail_ll ? View.VISIBLE:View.GONE);
+
+        lesson_item_list.setVisibility(view.getId() ==  R.id.all_lesson_ll ? View.VISIBLE:View.GONE);
+        teacher_detail_content.setVisibility(view.getId() == R.id.teacher_detail_ll ? View.VISIBLE:View.GONE);
     }
 
     // 根据获取结果显示view
@@ -306,14 +374,13 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
 
         if (isSuccess) {
             findViewById(R.id.not_data).setVisibility(View.GONE);
-            findViewById(R.id.not_data_tv);
 
         } else {
             findViewById(R.id.not_data).setVisibility(View.VISIBLE);
-            findViewById(R.id.not_data_tv);
             ((TextView) findViewById(R.id.not_data_tv)).setText(msg);
         }
     }
+
 
     // 更新课程列表数据
     private void upDataLessonListView() {
@@ -355,6 +422,22 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
         }
     }
 
+
+    private void setViewContent() {
+
+        Glide.with(mContext)
+                .load(mTeacherDetailBeans.get(0).getTeacherphoto())
+                .into(teacher_icon);
+
+        teacher_name.setText(mTeacherDetailBeans.get(0).getTeacher());
+        lesson_total.setText(mTeacherDetailBeans.get(0).getTotal());
+        student_num.setText(mTeacherDetailBeans.get(0).getStudent_num()+"");
+        star_img.setImageResource(mTeacherDetailBeans.get(0).getIscollect() == 1 ? R.drawable.icon_tab_star1 : R.drawable.icon_tab_star0);
+
+        teacher_detail_content.loadDataWithBaseURL(null,mTeacherDetailBeans.get(0).getTeacherdes(),"text/html","uft-8",null);
+    }
+
+
     //--------------------------------------请求服务器数据-------------------------------------------
 
     // 获取讲师课程列表
@@ -377,14 +460,14 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
                             mLessonSearches = new Gson().fromJson(data, new TypeToken<List<RecommendLesson.LessonBean>>(){}.getType());
                             LogUtils.i("TeacherActivity: mLessonSearches.size " + mLessonSearches.size());
 
-                            mHandler.sendEmptyMessage(LOAD_DATA1_SUCCESS);
+                            mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS);
                             return;
                         }
-                        mHandler.sendEmptyMessage(LOAD_DATA1_FAILE);
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        mHandler.sendEmptyMessage(LOAD_DATA1_FAILE);
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
                     }
                 }
             }
@@ -428,5 +511,150 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
         requestQueue.add(stringRequest);
     }
 
+
+    // 获取讲师详情
+    private void getTeacherDetail(final int id,final int uid) {
+
+        String url = HttpURL.TEACHER_TEACHERDETAIL_URL;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,url,new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                if (!"".equals(s)) {
+                    LogUtils.i("TeacherActivity: result2 " + s);
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(s);
+                        String code = jsonObject.getString("code");
+
+                        if ("200".equals(code)) {
+
+                            String data = jsonObject.getString("data");
+
+                            if (!"[]".equals(data)) {
+                                mTeacherDetailBeans = new Gson().fromJson(data, new TypeToken<List<TeacherDetailBean>>() {}.getType());
+                            }
+                            LogUtils.i("TeacherActivity: mTeacherDetailBeans.size " + mTeacherDetailBeans.size());
+
+                            mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS2);
+                            return;
+                        }
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE2);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE2);
+                    }
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtils.e("TeacherActivity: volleyError2 " + volleyError.toString());
+                mHandler.sendEmptyMessage(NET_ERROR);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject obj = new JSONObject();
+
+                try {
+
+                    String token = "Teacherteacherdetail" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
+                    LogUtils.i("TeacherActivity: token " + token);
+                    String sha_token = SHA.encryptToSHA(token);
+
+                    obj.put("access_token", sha_token);
+                    obj.put("id", id);
+                    obj.put("uid", uid);
+                    obj.put("device", CommonParameters.ANDROID);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                LogUtils.i("TeacherActivity json2 " + obj.toString());
+
+                map.put("dt", obj.toString());
+                return map;
+            }
+
+        };
+        requestQueue.add(stringRequest);
+    }
+
+
+    // 收藏
+    private void saveCollect(final int uid, final int outid, final String ctype) {
+
+        String url = HttpURL.LESSONSON_COLLECT_URL;
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                if (!"".equals(s)) {
+                    LogUtils.i("LessonActivity: result1 " + s);
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(s);
+                        String code = jsonObject.getString("code");
+
+                        if ("200".equals(code)) {
+
+                            String msg = jsonObject.getString("msg");
+
+                            mHandler.obtainMessage(LOAD_DATA_SUCCESS1,msg).sendToTarget();
+
+                        } else {
+
+                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE1);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE1);
+                    }
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtils.e("LessonActivity: volleyError1 " + volleyError.toString());
+                mHandler.sendEmptyMessage(NET_ERROR);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject obj = new JSONObject();
+
+                try {
+
+                    String token = "Lessonsoncollect" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
+                    LogUtils.i("LessonActivity: token " + token);
+                    String sha_token = SHA.encryptToSHA(token);
+
+                    obj.put("access_token", sha_token);
+                    obj.put("uid", uid);
+                    obj.put("outid", outid);
+                    obj.put("ctype", ctype);
+                    obj.put("device", CommonParameters.ANDROID);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                LogUtils.i("LessonActivity json1 " + obj.toString());
+
+                map.put("dt", obj.toString());
+                return map;
+            }
+
+        };
+        requestQueue.add(stringRequest);
+    }
 
 }
