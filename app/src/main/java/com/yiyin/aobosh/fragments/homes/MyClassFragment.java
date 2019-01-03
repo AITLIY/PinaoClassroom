@@ -3,6 +3,7 @@ package com.yiyin.aobosh.fragments.homes;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -28,10 +29,13 @@ import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
+import com.yiyin.aobosh.Interface.SubmitCommentInterface;
 import com.yiyin.aobosh.R;
+import com.yiyin.aobosh.activitys.yiYinClassroom.LessonActivity;
 import com.yiyin.aobosh.adapter.LessonOrderAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.LessonOrder;
+import com.yiyin.aobosh.bean.RecommendLesson;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
@@ -48,7 +52,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MyClassFragment extends Fragment implements View.OnClickListener{
+public class MyClassFragment extends Fragment implements View.OnClickListener,SubmitCommentInterface {
 
     private View mView;
     private Context mContext;
@@ -162,12 +166,28 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
         mContext = getContext();
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
         mShowList = new ArrayList<>();
-        adapter = new LessonOrderAdapter(mContext, mShowList);
+        adapter = new LessonOrderAdapter(mContext, mShowList,this);
         lesson_item_list.setAdapter(adapter);
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
         getLessonData(mUserInfo.getUid(), CommonParameters.ALL);
     }
 
+    @Override
+    public void onSubmit(LessonOrder order) {
+
+        GlobalParameterApplication.isShowComment = true;
+        Intent intent = new Intent(mContext, LessonActivity.class);
+
+        RecommendLesson.LessonBean lessonBean = new RecommendLesson.LessonBean();
+        lessonBean.setId(order.getLessonid());
+        lessonBean.setBookname(order.getBookname());
+        lessonBean.setOrdersn(order.getOrdersn());
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("LessonBean",lessonBean);
+        intent.putExtras(bundle);
+        getActivity().startActivity(intent);
+    }
 
     // 初始化列表
     private void initPullListView() {
@@ -354,6 +374,7 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+
     //--------------------------------------请求服务器数据-------------------------------------------
 
     // 获取我的的课程
@@ -425,6 +446,5 @@ public class MyClassFragment extends Fragment implements View.OnClickListener{
         };
         requestQueue.add(stringRequest);
     }
-
 
 }

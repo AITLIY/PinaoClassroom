@@ -359,9 +359,9 @@ public class HomeFragment extends Fragment {
             mNewCategory.add(mlessonCategory.get(i));
             if (i==8) {
                 lessonCategory.setIco("");
+                lessonCategory.setIco2(R.drawable.icon_btn_catgory_all);
                 lessonCategory.setId(0);
                 lessonCategory.setName("全部分类");
-                lessonCategory.setIco2(R.drawable.icon_btn_catgory_all);
                 mNewCategory.add(lessonCategory);
             }
         }

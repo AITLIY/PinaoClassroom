@@ -6,7 +6,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.yiyin.aobosh.bean.LessonCategory;
 import com.yiyin.aobosh.bean.UserInfo;
-import com.yiyin.aobosh.bean.VideoBean;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.utils.Sputils;
 
@@ -59,6 +58,7 @@ public class GlobalParameterApplication extends Application {
     }
 
     public static List<LessonCategory> lessonCategory;       //课程分类对象的集合
+    public static boolean isShowComment;                     //是否显示评论
 
     @Override
     public void onCreate() {

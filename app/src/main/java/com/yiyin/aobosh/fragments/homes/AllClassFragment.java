@@ -93,7 +93,6 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
     private String mSort = "";
     private String mCateId = ""; 
     private String mKeyword = "";
-    private String mPindex = "1";
 
     private static final int LOAD_DATA1_SUCCESS = 101;
     private static final int LOAD_DATA1_FAILE = 102;
@@ -211,9 +210,8 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
                     mCateId = "";
                     mKeyword = search_keyword;
                     page= 1;
-                    mPindex = page + "";
                     mSearchType = SEARCH_LESSON_PARAMETER;
-                    getLessonData(mSort,mCateId,mKeyword, mPindex); // 通过关键字搜索
+                    getLessonData(mSort,mCateId,mKeyword, page); // 通过关键字搜索
 
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (imm != null) {
@@ -245,7 +243,7 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
         adapter = new LessonListAdapter(mContext, mShowList);
         lesson_item_list.setAdapter(adapter);
         lesson_item_list.setOnItemClickListener(new ItemClick());
-        getLessonData(mSort,mCateId,mKeyword, mPindex); // 初始化搜索
+        getLessonData(mSort,mCateId,mKeyword, page); // 初始化搜索
     }
 
 
@@ -376,9 +374,8 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
     private void typeForSort(String type) {
         mSort = type;
         page= 1;
-        mPindex = page + "";
         mSearchType = SEARCH_LESSON_PARAMETER;
-        getLessonData(mSort,mCateId,mKeyword, mPindex); // 通过类型排序搜索
+        getLessonData(mSort,mCateId,mKeyword, page); // 通过类型排序搜索
     }
 
     // 初始化列表
@@ -392,9 +389,9 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page= 1;
-                mPindex = page + "";
+
                 mSearchType = SEARCH_LESSON_PARAMETER;
-                getLessonData(mSort,mCateId,mKeyword, mPindex); // 下拉刷新搜索
+                getLessonData(mSort,mCateId,mKeyword, page); // 下拉刷新搜索
                 setViewForResult(true,"");
                 LogUtils.i("AllClassFragment: onPullDownToRefresh 下拉" + page + "页");
             }
@@ -402,9 +399,9 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-                mPindex = page + "";
+
                 mSearchType = SEARCH_LESSON_PULL_UP;
-                getLessonData(mSort,mCateId,mKeyword, mPindex); // 上拉加载搜索
+                getLessonData(mSort,mCateId,mKeyword, page); // 上拉加载搜索
 
                 LogUtils.i("AllClassFragment: onPullUpToRefresh 下拉" + page + "页");
             }
@@ -481,10 +478,11 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
 
         mCateId = sonlistBean.getId()+"";
         mKeyword = "";
+        mSort = "";
         page= 1;
-        mPindex = page + "";
+
         mSearchType = SEARCH_LESSON_PARAMETER;
-        getLessonData(mSort,mCateId,mKeyword, mPindex); // 通过id搜索
+        getLessonData(mSort,mCateId,mKeyword, page); // 通过id搜索
     }
 
     static class  NewStaggeredGridLayoutManager extends StaggeredGridLayoutManager {
@@ -556,7 +554,7 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
     //--------------------------------------请求服务器数据-------------------------------------------
 
     // 获取课程数据列表
-    private void getLessonData(final String sort, final String cateId, final String keyword, final String pindex) {
+    private void getLessonData(final String sort, final String cateId, final String keyword, final int pindex) {
         mLessonSearches= new ArrayList();
         String url = HttpURL.LESSONSON_SEARCH_URL;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST,url,new Response.Listener<String>() {

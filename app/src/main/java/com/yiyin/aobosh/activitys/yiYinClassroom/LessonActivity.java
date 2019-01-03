@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -64,9 +65,10 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
     private VideoPlayerController controller;
 
     private ImageView play_bg, play_start;
-    private LinearLayout sonlist_ll, desc_ll, evaluate_ll;
+    private LinearLayout sonlist_ll, desc_ll, evaluate_ll,btn_menu_ll,write_comment_ll,submit_comment;
     private TextView sonlist_tv, desc_tv, evaluate_tv,start_study;
     private View sonlist_v, desc_v, evaluate_v;
+    private EditText comment_et;
 
     private LinearLayout advisory_ll,collect_ll;
     private ViewPager viewPager;
@@ -152,6 +154,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
         if (controller != null) {
             controller.onPlayStateChanged(7);
         }
+        GlobalParameterApplication.isShowComment = false;
     }
 
     @Override
@@ -177,6 +180,13 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
     private void initView() {
 
+        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         videoPlayer = findViewById(R.id.video_player);
         play_bg = findViewById(R.id.play_bg);
         play_start = findViewById(R.id.play_start);
@@ -193,9 +203,15 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
         evaluate_ll = findViewById(R.id.evaluate_ll);
         evaluate_tv = findViewById(R.id.evaluate_tv);
         evaluate_v = findViewById(R.id.evaluate_v);
+
+        comment_et = findViewById(R.id.comment_et);
+
         advisory_ll = findViewById(R.id.advisory_ll);
         collect_ll = findViewById(R.id.collect_ll);
         start_study = findViewById(R.id.start_study);
+        btn_menu_ll = findViewById(R.id.btn_menu_ll);
+        write_comment_ll = findViewById(R.id.write_comment_ll);
+        submit_comment = findViewById(R.id.submit_comment);
 
         TabOnClickListener listtener = new TabOnClickListener();
         sonlist_ll.setOnClickListener(listtener);
@@ -206,6 +222,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
         advisory_ll.setOnClickListener(this);
         collect_ll.setOnClickListener(this);
         start_study.setOnClickListener(this);
+        submit_comment.setOnClickListener(this);
 
 //        if (videoPlayer.isIdle()) {
 //            ToastUtil.show(mContext, "要点击播放后才能进入小窗口");
@@ -234,7 +251,14 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
         viewPager = findViewById(R.id.setting_viewpager);
         viewPager.setAdapter(new TabAdapter(getSupportFragmentManager(), fragmentsList));
-        viewPager.setCurrentItem(1);
+        if (GlobalParameterApplication.isShowComment) {
+            viewPager.setCurrentItem(2);
+            changeTabItemStyle(evaluate_ll);
+            showCommentView(true);
+        } else {
+            viewPager.setCurrentItem(1);
+            showCommentView(false);
+        }
         //        viewPager.setPageMargin(PxUtils.dpToPx(12,this));
         viewPager.setOffscreenPageLimit(2);
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -248,18 +272,26 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
                 switch (position) {
                     case 0:
-                        changeTabItemStyle(sonlist_ll);
                         mCurrentItemId = sonlist_ll.getId();
+                        changeTabItemStyle(sonlist_ll);
+                        showCommentView(false);
                         break;
 
                     case 1:
-                        changeTabItemStyle(desc_ll);
                         mCurrentItemId = desc_ll.getId();
+                        changeTabItemStyle(desc_ll);
+                        showCommentView(false);
                         break;
 
                     case 2:
-                        changeTabItemStyle(evaluate_ll);
                         mCurrentItemId = evaluate_ll.getId();
+                        changeTabItemStyle(evaluate_ll);
+
+                        if (GlobalParameterApplication.isShowComment){
+                            showCommentView(true);
+                        } else {
+                            showCommentView(false);
+                        }
                         break;
                 }
             }
@@ -283,7 +315,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
             Bundle bundle = intent.getExtras();
             //获取里面的Persion里面的数据
             mLessonBean = (RecommendLesson.LessonBean) bundle.getSerializable("LessonBean");
-            LogUtils.i("YiYinClassroomActivity: lessonBean id " + mLessonBean.getId());
+            LogUtils.i("LessonActivity: lessonBean id " + mLessonBean.getId());
     }
 
         initAudio();
@@ -404,8 +436,32 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
                 play_start.setVisibility(View.GONE);
                 playAudio();
                 break;
+
+            case R.id.submit_comment:
+
+                String comment = comment_et.getText().toString();
+
+                if ("".equals(comment)){
+                    ToastUtil.show(mContext,"评论输入不能为空");
+                    return;
+                }
+
+                subEvaluate(mUserInfo.getUid(),mLessonBean.getOrdersn(),comment);
+                break;
         }
 
+    }
+
+    private void showCommentView(boolean isShow) {
+
+        if (isShow) {
+            btn_menu_ll.setVisibility(View.GONE);
+            write_comment_ll.setVisibility(View.VISIBLE);
+
+        } else {
+            btn_menu_ll.setVisibility(View.VISIBLE);
+            write_comment_ll.setVisibility(View.GONE);
+        }
     }
 
     // 设置标题栏颜色
@@ -529,7 +585,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
 
     // 提交课程订单评价
-    private void subEvaluate(final int uid, final int order, final String content) {
+    private void subEvaluate(final int uid, final String order, final String content) {
 
         String url = HttpURL.EVALUATE_SUB_URL;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, url, new Response.Listener<String>() {

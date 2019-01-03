@@ -34,6 +34,14 @@ public class LessonCategoryAdapter2 extends RecyclerView.Adapter<RecyclerView.Vi
 
     public LessonCategoryAdapter2(Context context, List<LessonCategory> lists, CateIdSearchInterface cateIdSearch) {
 
+        LessonCategory.SonlistBean bean = new LessonCategory.SonlistBean();
+        bean.setIco("");
+        bean.setIco2(R.drawable.icon_btn_catgory_all);
+        bean.setName("全部分类");
+        bean.setId(0);
+        bean.setType(1);
+        mList.add(bean);
+
         for (LessonCategory category : lists) {
 
             LessonCategory.SonlistBean bean1 = new LessonCategory.SonlistBean();
@@ -109,9 +117,17 @@ public class LessonCategoryAdapter2 extends RecyclerView.Adapter<RecyclerView.Vi
             viewHolder1.mItem.setLayoutParams(staggeredGridLayoutManager);
 
             viewHolder1.mTitle.setText(mList.get(position).getName());
-            Glide.with(mContext)
-                    .load(mList.get(position).getIco())
-                    .into(((ViewHolder1) holder).mIco);
+
+            if ("".equals(mList.get(position).getIco())) {
+                Glide.with(mContext)
+                        .load(mList.get(position).getIco2())
+                        .into(((ViewHolder1) holder).mIco);
+
+            } else {
+                Glide.with(mContext)
+                        .load(mList.get(position).getIco())
+                        .into(((ViewHolder1) holder).mIco);
+            }
 
         } else {
             ViewHolder2 viewHolder2 = (ViewHolder2) holder;
@@ -119,6 +135,8 @@ public class LessonCategoryAdapter2 extends RecyclerView.Adapter<RecyclerView.Vi
 
             if (mList.get(position).getPosition()%4==3) {
                 viewHolder2.mLine.setVisibility(View.INVISIBLE);
+            } else {
+                viewHolder2.mLine.setVisibility(View.VISIBLE);
             }
         }
 

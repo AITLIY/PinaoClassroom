@@ -61,7 +61,7 @@ public class LessonOrder {
     private String invoice;
     private String paytype;
     private int paytime;
-    private int validity;
+    private String validity;
     private int member1;
     private String commission1;
     private int member2;
@@ -228,11 +228,11 @@ public class LessonOrder {
         this.paytime = paytime;
     }
 
-    public int getValidity() {
+    public String getValidity() {
         return validity;
     }
 
-    public void setValidity(int validity) {
+    public void setValidity(String validity) {
         this.validity = validity;
     }
 

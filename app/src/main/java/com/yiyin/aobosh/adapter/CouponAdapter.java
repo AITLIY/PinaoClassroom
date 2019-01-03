@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yiyin.aobosh.R;
@@ -65,8 +64,8 @@ public class CouponAdapter extends BaseAdapter {
         }
 
         holder.amount_tv.setText(mList.get(position).getAmount());
-        holder.category_tv.setText(mList.get(position).getAmount() + "全场通用券");
-        holder.conditions_tv.setText("满"+mList.get(position).getConditions()+"使用");
+        holder.category_tv.setText(mList.get(position).getAmount() + "元课程券");
+        holder.conditions_tv.setText("满"+mList.get(position).getConditions()+"元,"+mList.get(position).getCategory_name()+"可使用");
         holder.date_tv.setText("有效期："+mList.get(position).getStartDate()+" 至 " + mList.get(position).getEndDate());
 
         return convertView;

@@ -140,12 +140,21 @@ public class LessonCategory {
         private String name;
         private int parentid;
         private String ico;
+        private int ico2;
         private String link;
         private int displayorder;
         private int is_show;
         private int addtime;
         private int type;
         private int position;
+
+        public int getIco2() {
+            return ico2;
+        }
+
+        public void setIco2(int ico2) {
+            this.ico2 = ico2;
+        }
 
         public int getPosition() {
             return position;

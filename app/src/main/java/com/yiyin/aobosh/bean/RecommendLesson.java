@@ -112,6 +112,15 @@ public class RecommendLesson {
         private int buynum;         //购买人数
         private int visit_number;   //访问人数
         private int count;          //已更新课程
+        private String ordersn;        //订单id
+
+        public String getOrdersn() {
+            return ordersn;
+        }
+
+        public void setOrdersn(String ordersn) {
+            this.ordersn = ordersn;
+        }
 
         public int getId() {
             return id;

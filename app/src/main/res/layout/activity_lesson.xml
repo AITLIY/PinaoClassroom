@@ -151,6 +151,7 @@
     </android.support.v4.view.ViewPager>
 
     <LinearLayout
+        android:id="@+id/btn_menu_ll"
         android:layout_width="match_parent"
         android:layout_height="51dp"
         android:background="@color/white">
@@ -218,6 +219,54 @@
             android:textColor="@color/white"
             android:textSize="18sp"
             android:text="开始学习"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray"/>
+
+    <LinearLayout
+        android:id="@+id/write_comment_ll"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:background="@drawable/shape_gray_solid">
+
+            <EditText
+                android:id="@+id/comment_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:background="@null"
+                android:hint="写评价..."
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/submit_comment"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray"
+                android:textSize="16sp"
+                android:text="发表"/>
+        </LinearLayout>
 
     </LinearLayout>
 
