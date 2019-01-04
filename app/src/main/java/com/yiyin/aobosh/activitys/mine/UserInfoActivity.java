@@ -47,7 +47,7 @@ import com.yiyin.aobosh.utils.MultiPartStack;
 import com.yiyin.aobosh.utils.MultiPartStringRequest;
 import com.yiyin.aobosh.utils.NetworkUtils;
 import com.yiyin.aobosh.utils.SHA;
-import com.yiyin.aobosh.utils.Sputils;
+import com.yiyin.aobosh.utils.SpUtils;
 import com.yiyin.aobosh.utils.TimeUtils;
 import com.yiyin.aobosh.utils.ToastUtil;
 import com.yiyin.aobosh.view.CircleImageView;
@@ -144,6 +144,8 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
 
         Glide.with(mContext)
                 .load(mUserInfo.getAvatar())
+                .placeholder(R.drawable.icon_tab_usericon)
+                .error(R.drawable.icon_tab_usericon)
                 .into(userIcon);
         user_name_ed.setText(mUserInfo.getNickname());
     }
@@ -225,7 +227,7 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
 
                 if (resultCode == RESULT_OK) {
 
-                    String filepath2 = Sputils.getSpString(mContext, CAPTURE_PIC_TEMP_PATH, "");
+                    String filepath2 = SpUtils.getSpString(mContext, CAPTURE_PIC_TEMP_PATH, "");
                     Log.d(TAG,"CAPTURE_CAMEIA: get imgpath :" + filepath2);
 
                     File spath = new File(filepath2);
@@ -358,7 +360,7 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
 
             String filepath =  Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
                     + "Aobosh" + File.separator + "ico" + File.separator + System.currentTimeMillis() + ".jpg";
-            Sputils.put(mContext, CAPTURE_PIC_TEMP_PATH, filepath);
+            SpUtils.put(mContext, CAPTURE_PIC_TEMP_PATH, filepath);
 
             Log.i(TAG, "CAPTURE_CAMEIA: put imgpath " + filepath);
 

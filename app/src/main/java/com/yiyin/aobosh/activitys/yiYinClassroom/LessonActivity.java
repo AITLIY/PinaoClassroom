@@ -6,14 +6,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -47,9 +42,6 @@ import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.bean.VideoBean;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
-import com.yiyin.aobosh.fragments.Videos.DescFragment;
-import com.yiyin.aobosh.fragments.Videos.EvaluateFragment;
-import com.yiyin.aobosh.fragments.Videos.SonlistFragment;
 import com.yiyin.aobosh.utils.SHA;
 import com.yiyin.aobosh.utils.TimeUtils;
 import com.yiyin.aobosh.utils.ToastUtil;
@@ -187,7 +179,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
                     String info = (String) msg.obj;
                     ToastUtil.show(mContext, info);
-//                    star_img.setImageResource(mTeacherDetailBeans.get(0).getIscollect() == 1 ? R.drawable.icon_tab_star1 : R.drawable.icon_tab_star0);
+                    star_img.setImageResource("收藏成功".equals(info)  ? R.drawable.icon_tab_collect1: R.drawable.icon_tab_collect0);
                     break;
 
                 case LOAD_DATA_FAILE1:
@@ -382,6 +374,8 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
             mCurrentItemId = sonlist_ll.getId();
         }
 
+        getlessonsonDesc(mUserInfo.getUid(), mLessonBean.getId());
+
         lesson_title.setText(mLessonBean.getBookname());
 
         mShowList = new ArrayList<>();
@@ -393,7 +387,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
         mShowList2 = new ArrayList<>();
         adapter2 = new EvaluateBeanAdapter(mContext, mShowList2);
         lesson_item_list2.setAdapter(adapter2);
-//        getLessonsonEvaluate(mUserInfo.getUid(), lessonID, page2);
+        getLessonsonEvaluate(mUserInfo.getUid(), lessonID, page2);
     }
 
     //显示评论还是开始学习
@@ -541,7 +535,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
             switch (mCurrentItemId) {
                 case R.id.desc_ll:
-                    getlessonsonDesc(mUserInfo.getUid(), mLessonBean.getId());
+//                    getlessonsonDesc(mUserInfo.getUid(), mLessonBean.getId());
                     break;
 
                 case R.id.sonlist_ll:
@@ -549,7 +543,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
                     break;
 
                 case R.id.evaluate_ll:
-                    getLessonsonEvaluate(mUserInfo.getUid(), lessonID, page2);
+//                    getLessonsonEvaluate(mUserInfo.getUid(), lessonID, page2);
 
                     break;
             }
@@ -577,11 +571,13 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
 
     private void setViewContent() {
+
         bookname_tv.setText("课程名称："+mLessonDetail.getBookname());
         difficulty_tv.setText("课程难度："+mLessonDetail.getDifficulty());
         lesson_descript.loadDataWithBaseURL(null,mLessonDetail.getDescript(),"text/html","uft-8",null);
         teacher_detail_content.loadDataWithBaseURL(null,mLessonDetail.getTeacherdes(),"text/html","uft-8",null);
     }
+
 
     //-------------------------------------------课程列表--------------------------------------------
 
@@ -610,7 +606,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
                 mSearchType = SEARCH_LESSON_PARAMETER;
                 getLessonsonFindson(mUserInfo.getUid(), lessonID, Suffix_type, page); // 下拉刷新搜索
-                setViewForResult(true,"");
+
                 LogUtils.i("SonlistFragment: onPullDownToRefresh 下拉" + page + "页");
             }
 
@@ -691,7 +687,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
         if (isSuccess) {
             findViewById(R.id.not_data).setVisibility(View.GONE);
-
+            star_img.setImageResource(mVideoBean.getIscollect()==1  ? R.drawable.icon_tab_collect1: R.drawable.icon_tab_collect0);
         } else {
             findViewById(R.id.not_data).setVisibility(View.VISIBLE);
             ((TextView) findViewById(R.id.not_data_tv)).setText(msg);

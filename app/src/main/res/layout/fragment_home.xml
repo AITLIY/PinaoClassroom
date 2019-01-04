@@ -37,19 +37,24 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"/>
 
-            <com.yiyin.aobosh.view.CircleImageView
-                android:id="@+id/user_icon"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginRight="5dp"
-                android:src="@drawable/icon_tab_usericon" />
-            
-            <ImageView
-                android:id="@+id/iv_back"
-                android:layout_width="16dp"
-                android:layout_height="19dp"
-                android:layout_marginRight="15dp"
-                android:src="@drawable/icon_btn_home_down"/>
+            <LinearLayout
+                android:id="@+id/more_ll"
+                android:layout_width="80dp"
+                android:layout_height="match_parent">
+
+                <com.yiyin.aobosh.view.CircleImageView
+                    android:id="@+id/user_icon"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/icon_tab_usericon" />
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="19dp"
+                    android:layout_marginRight="15dp"
+                    android:src="@drawable/icon_btn_home_down"/>
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -204,15 +209,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"/>
 
-                        <TextView
-                            android:id="@+id/container2_more"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="10dp"
-                            android:gravity="center"
-                            android:text="更多 >"
-                            android:textColor="@color/black"
-                            android:textSize="12sp"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -267,15 +263,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"/>
 
-                        <TextView
-                            android:id="@+id/container3_more"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginRight="10dp"
-                            android:gravity="center"
-                            android:text="更多 >"
-                            android:textColor="@color/black"
-                            android:textSize="12sp"/>
                     </LinearLayout>
 
                     <LinearLayout

@@ -24,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.bumptech.glide.Glide;
+import com.githang.statusbar.StatusBarCompat;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
@@ -32,11 +33,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.activitys.login.LoginActivity;
-import com.yiyin.aobosh.activitys.mine.OauthHistoryActivity;
 import com.yiyin.aobosh.adapter.LessonListAdapter;
-import com.yiyin.aobosh.adapter.LessonOrderAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
-import com.yiyin.aobosh.bean.LessonOrder;
 import com.yiyin.aobosh.bean.RecommendLesson;
 import com.yiyin.aobosh.bean.TeacherDetailBean;
 import com.yiyin.aobosh.bean.UserInfo;
@@ -129,7 +127,7 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
 
                     String info = (String) msg.obj;
                     ToastUtil.show(mContext, info);
-//                    star_img.setImageResource(mTeacherDetailBeans.get(0).getIscollect() == 1 ? R.drawable.icon_tab_star1 : R.drawable.icon_tab_star0);
+                    star_img.setImageResource("收藏成功".equals(info) ? R.drawable.icon_tab_star1 : R.drawable.icon_tab_star0);
                     break;
 
                 case LOAD_DATA_FAILE1:
@@ -173,6 +171,8 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher);
+        //设置状态栏颜色
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.app_title_bar), true);
 
         init();
     }
@@ -184,6 +184,13 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
     }
 
     private void initView() {
+
+        findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         teacher_icon = findViewById(R.id.teacher_icon);
         teacher_name = findViewById(R.id.teacher_name);
@@ -206,6 +213,20 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
         teacher_detail_ll.setOnClickListener(this);
 
         initPullListView();
+    }
+
+    private void setViewContent() {
+
+        Glide.with(mContext)
+                .load(mTeacherDetailBeans.get(0).getTeacherphoto())
+                .into(teacher_icon);
+
+        teacher_name.setText(mTeacherDetailBeans.get(0).getTeacher());
+        lesson_total.setText(mTeacherDetailBeans.get(0).getTotal());
+        student_num.setText(mTeacherDetailBeans.get(0).getStudent_num()+"");
+        star_img.setImageResource(mTeacherDetailBeans.get(0).getIscollect() == 1 ? R.drawable.icon_tab_star1 : R.drawable.icon_tab_star0);
+
+        teacher_detail_content.loadDataWithBaseURL(null,mTeacherDetailBeans.get(0).getTeacherdes(),"text/html","uft-8",null);
     }
 
     private void initData() {
@@ -420,21 +441,6 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
                 }, 1000);
                 break;
         }
-    }
-
-
-    private void setViewContent() {
-
-        Glide.with(mContext)
-                .load(mTeacherDetailBeans.get(0).getTeacherphoto())
-                .into(teacher_icon);
-
-        teacher_name.setText(mTeacherDetailBeans.get(0).getTeacher());
-        lesson_total.setText(mTeacherDetailBeans.get(0).getTotal());
-        student_num.setText(mTeacherDetailBeans.get(0).getStudent_num()+"");
-        star_img.setImageResource(mTeacherDetailBeans.get(0).getIscollect() == 1 ? R.drawable.icon_tab_star1 : R.drawable.icon_tab_star0);
-
-        teacher_detail_content.loadDataWithBaseURL(null,mTeacherDetailBeans.get(0).getTeacherdes(),"text/html","uft-8",null);
     }
 
 

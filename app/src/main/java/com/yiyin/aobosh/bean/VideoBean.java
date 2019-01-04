@@ -17,6 +17,15 @@ public class VideoBean {
     private String poster;           // 视频播放封面图
     private int total;               // 评价数量
     private List<ListBean> list;
+    private int iscollect;
+
+    public int getIscollect() {
+        return iscollect;
+    }
+
+    public void setIscollect(int iscollect) {
+        this.iscollect = iscollect;
+    }
 
     public String getPoster() {
         return poster;

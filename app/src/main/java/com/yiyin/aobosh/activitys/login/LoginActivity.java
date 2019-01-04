@@ -27,7 +27,6 @@ import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
 import com.yiyin.aobosh.utils.NetworkUtils;
 import com.yiyin.aobosh.utils.SHA;
-import com.yiyin.aobosh.utils.Sputils;
 import com.yiyin.aobosh.utils.TimeUtils;
 import com.yiyin.aobosh.utils.ToastUtil;
 

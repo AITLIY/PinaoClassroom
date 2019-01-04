@@ -7,7 +7,7 @@ import com.android.volley.toolbox.Volley;
 import com.yiyin.aobosh.bean.LessonCategory;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
-import com.yiyin.aobosh.utils.Sputils;
+import com.yiyin.aobosh.utils.SpUtils;
 
 import java.util.List;
 
@@ -34,27 +34,27 @@ public class GlobalParameterApplication extends Application {
     }
 
     public void setUserInfo(UserInfo userInfo) {        //存储本地的用户对象
-        Sputils.putObject(getApplicationContext(), userInfo);
+        SpUtils.putObject(getApplicationContext(), userInfo);
     }
 
     public UserInfo getUserInfo() {                     //获取本地的用户对象
-        return Sputils.getObject(getApplicationContext(), UserInfo.class);
+        return SpUtils.getObject(getApplicationContext(), UserInfo.class);
     }
 
     public void clearUserInfo() {                       // 清空本地存储的用户信息
-        Sputils.clear(getApplicationContext());
+        SpUtils.clear(getApplicationContext());
     }
 
     public void setLoginStatus(boolean status) {        // 设置用户登录状态
 
         if (status)
-            Sputils.put(getApplicationContext(), CommonParameters.LOGINSTATUS, status);
+            SpUtils.put(getApplicationContext(), CommonParameters.LOGINSTATUS, status);
         else
-            Sputils.put(getApplicationContext(), CommonParameters.LOGINSTATUS, status);
+            SpUtils.put(getApplicationContext(), CommonParameters.LOGINSTATUS, status);
     }
 
     public boolean getLoginStatus() {                   // 获取用户登录状态
-        return Sputils.getSpBoolean(getApplicationContext(), CommonParameters.LOGINSTATUS, false);
+        return SpUtils.getSpBoolean(getApplicationContext(), CommonParameters.LOGINSTATUS, false);
     }
 
     public static List<LessonCategory> lessonCategory;       //课程分类对象的集合

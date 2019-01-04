@@ -40,6 +40,7 @@ import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.Banner;
 import com.yiyin.aobosh.bean.LessonCategory;
 import com.yiyin.aobosh.bean.RecommendLesson;
+import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
 import com.yiyin.aobosh.utils.PxUtils;
@@ -64,6 +65,10 @@ public class HomeFragment extends Fragment {
     private View mView;
     private Context mContext;
     private RequestQueue requestQueue;
+    private UserInfo mUserInfo;
+
+    private LinearLayout more_ll;
+    private ImageView user_icon;
 
     private ViewPager mViewPager;
     private ViewPagerAdapter mViewPagerAdapter;
@@ -80,7 +85,6 @@ public class HomeFragment extends Fragment {
 
     private LinearLayout mContainer1, mContainer2, mContainer3;
     private TextView container1_title, container2_title, container3_title;
-    private TextView container2_more, container3_more;
 
     private List<Banner> mBanners;                      //轮播图对象的集合
     private List<LessonCategory> mlessonCategory;       //课程分类对象的集合
@@ -170,6 +174,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void initView() {
+
+        more_ll = mView.findViewById(R.id.more_ll);
+        user_icon = mView.findViewById(R.id.user_icon);
+
         mViewPager = mView.findViewById(R.id.banner_vp);
         mTvPagerTitle = mView.findViewById(R.id.tv_pager_title);
 
@@ -181,12 +189,36 @@ public class HomeFragment extends Fragment {
         container1_title = mView.findViewById(R.id.container1_title);
         container2_title = mView.findViewById(R.id.container2_title);
         container3_title = mView.findViewById(R.id.container3_title);
-        container2_more = mView.findViewById(R.id.container2_more);
-        container3_more = mView.findViewById(R.id.container3_more);
+
     }
 
     private void initData() {
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
+        mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
+
+        if (mUserInfo!=null) {
+
+            Glide.with(mContext)
+                    .load(mUserInfo.getAvatar())
+                    .placeholder(R.drawable.icon_tab_usericon)//图片加载出来前，显示的图片
+                    .error(R.drawable.icon_tab_usericon)
+                    .into(user_icon);
+        }
+
+        more_ll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (mUserInfo!=null) {
+
+                } else {
+                    startActivity(new Intent(mContext,LoginActivity.class));
+                }
+
+            }
+
+        });
+
         getBannerData();
         getCategoryData();
         getRecommendData();
@@ -449,13 +481,6 @@ public class HomeFragment extends Fragment {
                             LinearLayout layout2 = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.recommend_type2,mContainer2,false);
                             mContainer2.addView(layout2);
                             container2_title.setText(lesson.getRec_name());
-                            container2_more.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    LogUtils.i("HomeFragment: Recommend LessonBean 点击了 " + mRecommendLessons.get(1).getRec_name());
-                                }
-                            });
-
 
                             ImageView item = layout2.findViewById(R.id.type2_item1);
                             Glide.with(mContext)
@@ -532,12 +557,6 @@ public class HomeFragment extends Fragment {
                         LinearLayout layout3 = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.recommend_type3,mContainer3,false);
                         mContainer3.addView(layout3);
                         container3_title.setText(lesson.getRec_name());
-                        container3_more.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                LogUtils.i("HomeFragment: Recommend LessonBean 点击了 " + mRecommendLessons.get(2).getRec_name());
-                            }
-                        });
 
                         //item1
                         ImageView type3_img1 = layout3.findViewById(R.id.type3_img1);

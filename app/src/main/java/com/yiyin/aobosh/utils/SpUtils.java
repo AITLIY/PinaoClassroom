@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
  * 封装了首选项的工具类
  * 
  * */
-public class Sputils {
+public class SpUtils {
 
     //保存一个对象，object必须是普通类，而不是泛型，如果是泛型
     public static void putObject(Context context, Object object) {

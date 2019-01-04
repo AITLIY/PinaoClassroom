@@ -103,6 +103,8 @@ public class MineFragment extends Fragment implements View.OnClickListener {
         id_tv.setText("学号："+mUserInfo.getUid());
         Glide.with(mContext)
                 .load(mUserInfo.getAvatar())
+                .placeholder(R.drawable.icon_tab_usericon)
+                .error(R.drawable.icon_tab_usericon)
                 .into(userIcon);
     }
 
