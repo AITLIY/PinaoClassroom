@@ -3,7 +3,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:background="@color/app_bg"
-             tools:context="com.yiyin.aobosh.fragments.homes.MyClassFragment">
+             tools:context="com.yiyin.aobosh.fragments.homes.MyLessonFragment">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

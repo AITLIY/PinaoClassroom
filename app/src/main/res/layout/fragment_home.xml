@@ -40,7 +40,8 @@
             <LinearLayout
                 android:id="@+id/more_ll"
                 android:layout_width="80dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:gravity="center_vertical">
 
                 <com.yiyin.aobosh.view.CircleImageView
                     android:id="@+id/user_icon"
@@ -62,7 +63,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="none">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

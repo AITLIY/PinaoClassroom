@@ -61,26 +61,26 @@ public class SplashActivity extends Activity {
                 case LOAD_DATA_FAILE1:
 
                     GlobalParameterApplication.getInstance().clearUserInfo();   // 清空本地存储的用户信息
-                    new AlertDialog.Builder(mContext)
-                            .setTitle("提示")
-                            .setMessage("登录已失效，是否重新登录？")
-                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    Intent intent = new Intent(mContext, LoginActivity.class);
-                                    startActivity(intent);
-                                    finish();
-
-                                }
-                            })
-                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
+//                    new AlertDialog.Builder(mContext)
+//                            .setTitle("提示")
+//                            .setMessage("登录已失效，是否重新登录？")
+//                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//
+//                                    Intent intent = new Intent(mContext, LoginActivity.class);
+//                                    startActivity(intent);
+//                                    finish();
+//
+//                                }
+//                            })
+//                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
                                     mHandler.postDelayed(new SplashTask(), 2000);
-                                }
-                            })
-                            .show();
+//                                }
+//                            })
+//                            .show();
                     break;
 
                 case LOAD_DATA_FAILE2:

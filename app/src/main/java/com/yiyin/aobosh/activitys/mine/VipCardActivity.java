@@ -83,7 +83,7 @@ public class VipCardActivity extends Activity {
 
                 case LOAD_DATA_SUCCESS2:
 
-                    startActivity(new Intent(mContext, ChangePasswordActivity.class));
+                    startActivity(new Intent(mContext, VipCardSuccessActivity.class));
                     finish();
                     break;
 
@@ -276,8 +276,6 @@ public class VipCardActivity extends Activity {
                             LogUtils.i("VipCardActivity: msg " + msg);
                             mHandler.obtainMessage(LOAD_DATA_FAILE1,msg).sendToTarget();
                         }
-
-                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE2);
 
                     } catch (JSONException e) {
                         e.printStackTrace();

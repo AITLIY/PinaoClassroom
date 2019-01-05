@@ -1,24 +1,33 @@
 package com.yiyin.aobosh.fragments.homes;
 
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.PaintDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -32,7 +41,12 @@ import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.activitys.AllClassActivity;
+import com.yiyin.aobosh.activitys.HomepageActivity;
 import com.yiyin.aobosh.activitys.login.LoginActivity;
+import com.yiyin.aobosh.activitys.mine.CouponActivity;
+import com.yiyin.aobosh.activitys.mine.OauthHistoryActivity;
+import com.yiyin.aobosh.activitys.mine.UserInfoActivity;
+import com.yiyin.aobosh.activitys.mine.VipServiceActivity;
 import com.yiyin.aobosh.activitys.yiYinClassroom.LessonActivity;
 import com.yiyin.aobosh.adapter.LessonCategoryAdapter;
 import com.yiyin.aobosh.adapter.ViewPagerAdapter;
@@ -197,10 +211,9 @@ public class HomeFragment extends Fragment {
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
 
         if (mUserInfo!=null) {
-
+            LogUtils.i("HomeFragment: mUserInfo " + mUserInfo);
             Glide.with(mContext)
                     .load(mUserInfo.getAvatar())
-                    .placeholder(R.drawable.icon_tab_usericon)//图片加载出来前，显示的图片
                     .error(R.drawable.icon_tab_usericon)
                     .into(user_icon);
         }
@@ -211,6 +224,7 @@ public class HomeFragment extends Fragment {
 
                 if (mUserInfo!=null) {
 
+                    showMenu();
                 } else {
                     startActivity(new Intent(mContext,LoginActivity.class));
                 }
@@ -222,6 +236,58 @@ public class HomeFragment extends Fragment {
         getBannerData();
         getCategoryData();
         getRecommendData();
+    }
+
+    private PopupWindow popupWindow;
+    public void showMenu() {
+
+        View view = LayoutInflater.from(mContext).inflate(R.layout.pw_user_menu, null);
+
+        popupWindow = new PopupWindow(view, PxUtils.dip2px(mContext,135), PxUtils.dip2px(mContext,160));
+        popupWindow.setFocusable(true);
+        popupWindow.setBackgroundDrawable(new PaintDrawable(00000));
+        popupWindow.showAtLocation(getActivity().getWindow().getDecorView(), Gravity.TOP|Gravity.START, PxUtils.dip2px(mContext,216), PxUtils.dip2px(mContext,76));
+
+        //我的学习
+        view.findViewById(R.id.my_learn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(mContext, OauthHistoryActivity.class));
+                popupWindow.dismiss();
+            }
+        });
+
+        //我的课程
+        view.findViewById(R.id.my_lesson).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                ((HomepageActivity) getActivity()).goToMyLesson();
+                popupWindow.dismiss();
+            }
+        });
+
+        //我的优惠券
+        view.findViewById(R.id.my_coupon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(mContext, CouponActivity.class));
+                popupWindow.dismiss();
+            }
+        });
+
+        //我的VIP
+        view.findViewById(R.id.my_vip).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(mContext, VipServiceActivity.class));
+                popupWindow.dismiss();
+            }
+        });
+
     }
 
     //-------------------------------------------轮播图---------------------------------------------------

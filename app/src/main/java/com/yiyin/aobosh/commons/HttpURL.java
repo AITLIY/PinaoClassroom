@@ -102,9 +102,17 @@ public class HttpURL {
     // 3.卡密激活
     public static final String VIP_CARD_URL = BASE_URL + "vip/card";
 
-    // 4.我的优惠券
+    // 4.VIP订单
+    public static final String VIP_VIPORDER_URL = BASE_URL + "vip/viporder";
+
+    // 5.购买时生成的订单信息
+    public static final String VIP_BUYVIP_URL = BASE_URL + "vip/buyvip";
+
+    // 6.我的优惠券
     public static final String COUPON_COUPON_URL = BASE_URL + "coupon/coupon";
 
+    // 7.课程优惠码转换
+    public static final String COUPON_TRANSFOR_URL = BASE_URL + "coupon/transfor";
 
 
 }

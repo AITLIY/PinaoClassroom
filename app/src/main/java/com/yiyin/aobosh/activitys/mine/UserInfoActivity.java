@@ -93,6 +93,7 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
 
                 case LOAD_DATA_SUCCESS:
 
+                    ToastUtil.show(mContext,"修改成功");
                     startActivity(new Intent(mContext, HomepageActivity.class));
                     finish();
                     break;
@@ -144,7 +145,6 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
 
         Glide.with(mContext)
                 .load(mUserInfo.getAvatar())
-                .placeholder(R.drawable.icon_tab_usericon)
                 .error(R.drawable.icon_tab_usericon)
                 .into(userIcon);
         user_name_ed.setText(mUserInfo.getNickname());
@@ -195,6 +195,7 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
                     changeUserInfo(mUserInfo.getUid(), user_name,file);
                 } else {
                     LogUtils.i("UserInfoActivity: 未修改 ");
+                    ToastUtil.show(mContext,"修改成功");
                     startActivity(new Intent(mContext, HomepageActivity.class));
                     finish();
                 }
@@ -300,7 +301,7 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
     private static final int REQUEST_CODE_CAPTURE_CAMEIA = 202;
     private static final int PHOTO_REQUEST_CUT = 203;
     private static final String CAPTURE_PIC_TEMP_PATH = "capture_picture_temp_path";
-    private static final String CAPTURE_PIC_PATH = "capture_picture_pat";
+
 
     public void showSettingHeaderPic() {
 
@@ -308,7 +309,7 @@ public class UserInfoActivity extends Activity implements View.OnClickListener {
 
         popupWindow = new PopupWindow(view, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setFocusable(true);
-        popupWindow.setBackgroundDrawable(new PaintDrawable());
+        popupWindow.setBackgroundDrawable(new PaintDrawable(00000));
 
         //拍照
         view.findViewById(R.id.camera).setOnClickListener(new View.OnClickListener() {

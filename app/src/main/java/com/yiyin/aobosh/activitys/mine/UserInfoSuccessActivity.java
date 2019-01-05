@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.githang.statusbar.StatusBarCompat;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.activitys.HomepageActivity;
 
@@ -17,6 +18,8 @@ public class UserInfoSuccessActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info_success);
+        //设置状态栏颜色
+        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.app_title_bar), true);
 
         mContext = this;
         initView();

@@ -3,12 +3,16 @@ package com.yiyin.aobosh.activitys.mine;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -19,12 +23,17 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.githang.statusbar.StatusBarCompat;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.adapter.LevelVipAdapter;
 import com.yiyin.aobosh.adapter.MemberVipAdapter;
+import com.yiyin.aobosh.adapter.VipOrderAdapter;
+import com.yiyin.aobosh.adapter.VipOrderAdapter2;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
+import com.yiyin.aobosh.bean.RecommendLesson;
 import com.yiyin.aobosh.bean.UserInfo;
+import com.yiyin.aobosh.bean.VipOrderBean;
 import com.yiyin.aobosh.bean.VipShow;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
@@ -48,17 +57,24 @@ public class VipServiceActivity extends Activity {
 
     private List<VipShow.MemberVipListBean> mMemberVipListBeans;    // 我的会员
     private List<VipShow.LevelListBean> mLevelListBeans;            // 会员类别
+    private List<VipOrderBean> mVipOrderBeans;                      // 会员订单
 
-    private RecyclerView Member_item_rv,level_item_rv;
+    private RecyclerView Member_list_rv,level_list_rv;//,order_list_rv
     private TextView is_vip,not_vip;
+    private LinearLayout have_vip_card;
 
     private MemberVipAdapter mAdapter1;
     private LevelVipAdapter mAdapter2;
+//    private VipOrderAdapter mAdapter3;
+    private VipOrderAdapter2 mAdapter3;
+    private ListView order_list_rv;
 
     private static final int LOAD_DATA_SUCCESS1 = 101;
     private static final int LOAD_DATA_FAILE1 = 102;
     private static final int LOAD_DATA_SUCCESS2 = 201;
     private static final int LOAD_DATA_FAILE2 = 202;
+    private static final int LOAD_DATA_SUCCESS3 = 301;
+    private static final int LOAD_DATA_FAILE3 = 302;
     private static final int NET_ERROR = 404;
 
     @SuppressLint("HandlerLeak")
@@ -85,6 +101,15 @@ public class VipServiceActivity extends Activity {
                     break;
 
                 case LOAD_DATA_FAILE2:
+
+                    break;
+
+                case LOAD_DATA_SUCCESS3:
+
+                    initVipDataView2();
+                    break;
+
+                case LOAD_DATA_FAILE3:
 
                     break;
 
@@ -123,10 +148,35 @@ public class VipServiceActivity extends Activity {
             }
         });
 
-        Member_item_rv = findViewById(R.id.Member_item_rv);
-        level_item_rv = findViewById(R.id.level_item_rv);
         is_vip = findViewById(R.id.is_vip);
         not_vip = findViewById(R.id.not_vip);
+        have_vip_card = findViewById(R.id.have_vip_card);
+        Member_list_rv = findViewById(R.id.Member_list_rv);
+        level_list_rv = findViewById(R.id.level_list_rv);
+        order_list_rv = findViewById(R.id.order_list_rv);
+
+        have_vip_card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mContext,VipCardActivity.class));
+                finish();
+            }
+        });
+
+//        order_list_rv.setLayoutManager(new LinearLayoutManager(this){
+//            @Override
+//            public boolean canScrollVertically() {
+//                //解决ScrollView里存在多个RecyclerView时滑动卡顿的问题
+//                //如果你的RecyclerView是水平滑动的话可以重写canScrollHorizontally方法
+//                return false;
+//            }
+//        });
+//        //解决数据加载不完的问题
+//        order_list_rv.setNestedScrollingEnabled(false);
+//        order_list_rv.setHasFixedSize(true);
+//        //解决数据加载完成后, 没有停留在顶部的问题
+//        order_list_rv.setFocusable(false);
+
     }
 
     private void initData() {
@@ -137,9 +187,11 @@ public class VipServiceActivity extends Activity {
 
         mMemberVipListBeans = new ArrayList<>();
         mLevelListBeans = new ArrayList<>();
+        mVipOrderBeans = new ArrayList<>();
 
         getVipBuy(mUserInfo.getUid());
         getVipShow(mUserInfo.getUid());
+        getVipOrder(mUserInfo.getUid());
     }
 
     private void showVipUI(boolean isVip) {
@@ -158,12 +210,20 @@ public class VipServiceActivity extends Activity {
     private void initVipDataView() {
 
         mAdapter1 = new MemberVipAdapter(mMemberVipListBeans);
-        Member_item_rv.setLayoutManager(new LinearLayoutManager(mContext));
-        Member_item_rv.setAdapter(mAdapter1);
+        Member_list_rv.setLayoutManager(new LinearLayoutManager(mContext));
+        Member_list_rv.setAdapter(mAdapter1);
 
         mAdapter2 = new LevelVipAdapter(mLevelListBeans);
-        level_item_rv.setLayoutManager(new LinearLayoutManager(mContext));
-        level_item_rv.setAdapter(mAdapter2);
+        level_list_rv.setLayoutManager(new LinearLayoutManager(mContext));
+        level_list_rv.setAdapter(mAdapter2);
+    }
+
+    private void initVipDataView2() {
+
+        mAdapter3 = new VipOrderAdapter2(mContext,mVipOrderBeans);
+//        order_list_rv.setLayoutManager(new LinearLayoutManager(mContext));
+        order_list_rv.setAdapter(mAdapter3);
+
     }
 
     //--------------------------------------请求服务器数据-------------------------------------------
@@ -302,6 +362,74 @@ public class VipServiceActivity extends Activity {
                 }
 
                 LogUtils.i("VipServiceActivity json2 " + obj.toString());
+
+                map.put("dt", obj.toString());
+                return map;
+            }
+
+        };
+        requestQueue.add(stringRequest);
+    }
+
+    // VIP订单
+    private void getVipOrder(final int uid) {
+
+        String url = HttpURL.VIP_VIPORDER_URL;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,url,new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                if (!"".equals(s)) {
+                    LogUtils.i("VipServiceActivity: result3 " + s);
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(s);
+                        String code = jsonObject.getString("code");
+
+                        if ("200".equals(code)) {
+
+                            String data = jsonObject.getString("data");
+                            mVipOrderBeans = new Gson().fromJson(data, new TypeToken<List<VipOrderBean>>() {}.getType());
+
+                            mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS3);
+                            return;
+                        }
+
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE3);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE3);
+                    }
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtils.e("VipServiceActivity: volleyError3 " + volleyError.toString());
+                mHandler.sendEmptyMessage(NET_ERROR);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject obj = new JSONObject();
+
+                try {
+                    String token = "Vipviporder" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
+                    LogUtils.i("VipServiceActivity: token " + token);
+                    String sha_token = SHA.encryptToSHA(token);
+
+                    obj.put("access_token", sha_token);
+                    obj.put("uid", uid);
+                    obj.put("device", CommonParameters.ANDROID);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                LogUtils.i("VipServiceActivity json3 " + obj.toString());
 
                 map.put("dt", obj.toString());
                 return map;

@@ -19,7 +19,8 @@ import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.fragments.homes.AllClassFragment;
 import com.yiyin.aobosh.fragments.homes.HomeFragment;
 import com.yiyin.aobosh.fragments.homes.MineFragment;
-import com.yiyin.aobosh.fragments.homes.MyClassFragment;
+import com.yiyin.aobosh.fragments.homes.MyLessonFragment;
+import com.yiyin.aobosh.fragments.homes.MyLessonFragment;
 
 public class HomepageActivity extends AppCompatActivity{
 
@@ -29,7 +30,7 @@ public class HomepageActivity extends AppCompatActivity{
     FrameLayout content_fl;
     HomeFragment mHomeFragment;
     AllClassFragment mAllClassFragment;
-    MyClassFragment mMyClassFragment;
+    MyLessonFragment mMyLessonFragment;
     MineFragment mMineFragment;
 
     @Override
@@ -85,7 +86,7 @@ public class HomepageActivity extends AppCompatActivity{
         mHomeFragment = new HomeFragment();
         replaceContentPage(mHomeFragment);//默认加载
         mAllClassFragment = new AllClassFragment();
-        mMyClassFragment = new MyClassFragment();
+        mMyLessonFragment = new MyLessonFragment();
         mMineFragment = new MineFragment();
     }
 
@@ -112,7 +113,7 @@ public class HomepageActivity extends AppCompatActivity{
                         startActivity(new Intent(HomepageActivity.this, LoginActivity.class));
                         return;
                     } else {
-                        replaceContentPage(mMyClassFragment);
+                        replaceContentPage(mMyLessonFragment);
                     }
                     break;
                 case R.id.ll_mine:
@@ -153,6 +154,13 @@ public class HomepageActivity extends AppCompatActivity{
         mTabItemId = ll_homepage.getId();
         replaceContentPage(mHomeFragment);
         changeTabItemStyle(ll_homepage);
+    }
+
+    // 去我的课程
+    public void goToMyLesson (){
+        mTabItemId = ll_my_class.getId();
+        replaceContentPage(mMyLessonFragment);
+        changeTabItemStyle(ll_my_class);
     }
 
 }
