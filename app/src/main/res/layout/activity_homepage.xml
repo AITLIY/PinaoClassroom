@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.yiyin.aobosh.activitys.HomepageActivity">
+    tools:context="com.yiyin.aobosh.UI.activitys.HomepageActivity">
 
     <!--装载fragment的容器-->
     <FrameLayout

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/app_bg"
-    tools:context="com.yiyin.aobosh.activitys.mine.CollectTeacherActivity">
+    tools:context="com.yiyin.aobosh.UI.activitys.mine.CollectTeacherActivity">
 
     <!--标题栏-->
     <RelativeLayout

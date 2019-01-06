@@ -82,14 +82,20 @@ public class HttpURL {
     // 7.忘记密码
     public static final String OAUTH_FORGETPWD_URL = BASE_URL + "oauth/forgetpwd";
 
-    // 9.修改手机
+    // 8.修改手机
     public static final String OAUTH_MODIFYMBL_URL = BASE_URL + "oauth/modifymbl";
 
-    // 8.修改密码
+    // 9.修改密码
     public static final String OAUTH_MODIFYPSW_URL = BASE_URL + "oauth/modifypsw";
 
-    // 8.个人资料修改
+    // 10.个人资料修改
     public static final String OAUTH_MODIFYINFO_URL = BASE_URL + "oauth/modifyinfo";
+
+    // 11.微信授权
+    public static final String OAUTH_GETSESSION_URL = BASE_URL + "oauth/getSession";
+
+    // 12.微信登录
+    public static final String OAUTH_WXLOGIN_URL = BASE_URL + "oauth/wxlogin";
 
 
 

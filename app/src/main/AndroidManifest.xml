@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yiyin.aobosh">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.yiyin.aobosh"
+    android:versionCode="101"
+    android:versionName="1.01">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".application.GlobalParameterApplication"
@@ -17,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activitys.SplashActivity"
+            android:name=".UI.activitys.SplashActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|adjustResize|stateHidden">
             <intent-filter>
@@ -27,83 +32,84 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activitys.HomepageActivity"
+            android:name=".UI.activitys.HomepageActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.login.LoginActivity"
+            android:name=".UI.activitys.login.LoginActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.login.LoginSucessActivity"
+            android:name=".UI.activitys.login.LoginSucessActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.login.ForgetPasswordActivity1"
+            android:name=".UI.activitys.login.ForgetPasswordActivity1"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.login.ForgetPasswordActivity2"
+            android:name=".UI.activitys.login.ForgetPasswordActivity2"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.login.ForgetPwdSuccessActivity"
+            android:name=".UI.activitys.login.ForgetPwdSuccessActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.login.RegisterActivity1"
+            android:name=".UI.activitys.login.RegisterActivity1"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.login.RegisterActivity2"
+            android:name=".UI.activitys.login.RegisterActivity2"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.login.RegisterSuccessActivity"
+            android:name=".UI.activitys.login.RegisterSuccessActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.mine.ChangePasswordActivity"
+            android:name=".UI.activitys.mine.ChangePasswordActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.mine.ChangeMobileActivity"
+            android:name=".UI.activitys.mine.ChangeMobileActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.mine.VipServiceActivity"
+            android:name=".UI.activitys.mine.VipServiceActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.mine.VipCardActivity"
+            android:name=".UI.activitys.mine.VipCardActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.mine.CollectLessonActivity"
+            android:name=".UI.activitys.mine.CollectLessonActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.mine.CollectTeacherActivity"
+            android:name=".UI.activitys.mine.CollectTeacherActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.mine.OauthHistoryActivity"
+            android:name=".UI.activitys.mine.OauthHistoryActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.mine.UserInfoActivity"
+            android:name=".UI.activitys.mine.UserInfoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.mine.CouponActivity"
+            android:name=".UI.activitys.mine.CouponActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.mine.UserInfoSuccessActivity"
+            android:name=".UI.activitys.mine.UserInfoSuccessActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.mine.ChangeMoileSuccessActivity"
+            android:name=".UI.activitys.mine.ChangeMoileSuccessActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.mine.ChangePassworSuccessdActivity"
+            android:name=".UI.activitys.mine.ChangePassworSuccessdActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.mine.VipCardSuccessActivity"
+            android:name=".UI.activitys.mine.VipCardSuccessActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.AllClassActivity"
+            android:name=".UI.activitys.yiYinClassroom.AllClassActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.yiYinClassroom.YiYinClassroomActivity"
+            android:name=".UI.activitys.yiYinClassroom.YiYinClassroomActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activitys.yiYinClassroom.LessonActivity"
+            android:name=".UI.activitys.yiYinClassroom.LessonActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".activitys.yiYinClassroom.TeacherActivity"></activity>
+        <activity android:name=".UI.activitys.yiYinClassroom.TeacherActivity" />
+        <activity android:name=".wxapi.WXEntryActivity"  android:exported="true" />
     </application>
 
 </manifest>

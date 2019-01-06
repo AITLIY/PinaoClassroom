@@ -4,6 +4,9 @@ import android.app.Application;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.lidroid.xutils.util.LogUtils;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.yiyin.aobosh.bean.LessonCategory;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.commons.CommonParameters;
@@ -64,5 +67,17 @@ public class GlobalParameterApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        registToWX();
     }
+
+    public static IWXAPI mWxApi;
+
+    private void registToWX() {
+        LogUtils.d("微信登录 : registToWX()");
+        //AppConst.WEIXIN.APP_ID是指你应用在微信开放平台上的AppID，记得替换。
+        mWxApi = WXAPIFactory.createWXAPI(this, "wx3f889385b49ca1b8", false);
+        // 将该app注册到微信
+        mWxApi.registerApp("wx3f889385b49ca1b8");
+    }
+
 }

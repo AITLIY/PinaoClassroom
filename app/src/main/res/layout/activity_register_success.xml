@@ -6,7 +6,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:background="@drawable/icon_bg_login"
-    tools:context="com.yiyin.aobosh.activitys.login.RegisterSuccessActivity">
+    tools:context="com.yiyin.aobosh.UI.activitys.login.RegisterSuccessActivity">
 
     <!--标题栏-->
     <LinearLayout

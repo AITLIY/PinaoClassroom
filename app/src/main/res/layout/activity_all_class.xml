@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="com.yiyin.aobosh.activitys.AllClassActivity">
+    tools:context="com.yiyin.aobosh.UI.activitys.yiYinClassroom.AllClassActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

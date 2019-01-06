@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/app_bg"
-    tools:context="com.yiyin.aobosh.activitys.mine.CouponActivity">
+    tools:context="com.yiyin.aobosh.UI.activitys.mine.CouponActivity">
 
     <!--标题栏-->
     <RelativeLayout

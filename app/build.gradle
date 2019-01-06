@@ -7,8 +7,6 @@ android {
         applicationId "com.yiyin.aobosh"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -17,10 +15,51 @@ android {
         exclude 'META-INF/DEPENDENCIES'
     }
 
+    signingConfigs {
+        debug {
+            storeFile file('android.jks')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+        release {
+            storeFile file('aobosh.jks')
+            storePassword 'yiyinpwd'
+            keyAlias 'yiyinClassroom'
+            keyPassword 'yiyinkey'
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            def fileName
+            if (outputFileName != null && outputFileName.contains('.apk')) {
+                if (variant.buildType.name.equals('release')) {
+                    fileName = "yiyinClassroom-${variant.versionName}-release.apk"
+                }else if (variant.buildType.name.equals('debug')) {
+                    fileName = "yiyinClassroom-${variant.versionName}-debug.apk"
+                }
+                outputFileName = fileName
+            }
+        }
+    }
+    productFlavors {
+    }
+
     buildTypes {
+
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.cfg'
+            debuggable true
+            signingConfig signingConfigs.debug
+        }
+
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.cfg'
+            signingConfig signingConfigs.release
+            debuggable false
         }
     }
 }
@@ -34,20 +73,19 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support:support-v4:26.1.0'
     implementation 'com.android.support:appcompat-v7:26.1.0'
-
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'com.squareup.okhttp3:okhttp:3.12.0'
     implementation 'com.google.code.gson:gson:2.8.1'
     implementation 'com.githang:status-bar-compat:latest.integration'
-    compile 'cn.yc:YCVideoPlayerLib:2.6.0'                            //播放器
-
+    compile 'cn.yc:YCVideoPlayerLib:2.6.0'
+    //播放器
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2'
+    //微信
     implementation files('libs/xUtils-2.6.2.jar')
     implementation files('libs/volley.jar')
     implementation project(':PullToRefresh')
     implementation files('libs/httpclient-4.3.5.jar')
     implementation files('libs/httpcore-4.3.2.jar')
     implementation files('libs/httpmime-4.3.5.jar')
-
-
 }

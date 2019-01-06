@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_bg"
     android:orientation="vertical"
-    tools:context="com.yiyin.aobosh.activitys.mine.VipServiceActivity">
+    tools:context="com.yiyin.aobosh.UI.activitys.mine.VipServiceActivity">
 
     <!--标题栏-->
     <RelativeLayout
