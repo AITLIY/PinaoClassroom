@@ -115,8 +115,16 @@ public class SplashActivity extends Activity {
 
         mContext = this;
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
-
         UserInfo user = GlobalParameterApplication.getInstance().getUserInfo();
+
+
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+//
+//        } else {
+//            if (ContextCompat.checkSelfPermission(mContext, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(SplashActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE}, 0);
+//            }
+//        }
 
         if (user != null) {
 

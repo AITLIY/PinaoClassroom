@@ -67,7 +67,7 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
 
     private ArrayList<TeacherDetailBean> mTeacherDetailBeans;          //课程搜索结果的集合
 
-    private TextView teacher_name,lesson_total,student_num;
+    private TextView teacheer_title,teacher_name,lesson_total,student_num;
     private LinearLayout star_ll;
     private ImageView star_img;
     private CircleImageView teacher_icon;
@@ -192,6 +192,7 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
             }
         });
 
+        teacheer_title = findViewById(R.id.teacheer_title);
         teacher_icon = findViewById(R.id.teacher_icon);
         teacher_name = findViewById(R.id.teacher_name);
         lesson_total = findViewById(R.id.lesson_total);
@@ -219,8 +220,10 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
 
         Glide.with(mContext)
                 .load(mTeacherDetailBeans.get(0).getTeacherphoto())
+                .error(R.drawable.icon_tab_usericon)
                 .into(teacher_icon);
 
+        teacheer_title.setText(mTeacherDetailBeans.get(0).getTeacher());
         teacher_name.setText(mTeacherDetailBeans.get(0).getTeacher());
         lesson_total.setText(mTeacherDetailBeans.get(0).getTotal());
         student_num.setText(mTeacherDetailBeans.get(0).getStudent_num()+"");

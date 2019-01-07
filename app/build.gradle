@@ -36,7 +36,7 @@ android {
             if (outputFileName != null && outputFileName.contains('.apk')) {
                 if (variant.buildType.name.equals('release')) {
                     fileName = "yiyinClassroom-${variant.versionName}-release.apk"
-                }else if (variant.buildType.name.equals('debug')) {
+                } else if (variant.buildType.name.equals('debug')) {
                     fileName = "yiyinClassroom-${variant.versionName}-debug.apk"
                 }
                 outputFileName = fileName
@@ -65,6 +65,7 @@ android {
 }
 
 dependencies {
+
     //    implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
     //noinspection GradleCompatible
@@ -78,10 +79,12 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.12.0'
     implementation 'com.google.code.gson:gson:2.8.1'
     implementation 'com.githang:status-bar-compat:latest.integration'
-    compile 'cn.yc:YCVideoPlayerLib:2.6.0'
-    //播放器
-    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2'
-    //微信
+    implementation 'cn.yc:YCVideoPlayerLib:2.6.0'                                  //播放器
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2'      //微信
+    implementation 'in.srain.cube:ultra-ptr:1.0.11'
+    //android-Ultra-Pull-To-Refresh
+
+
     implementation files('libs/xUtils-2.6.2.jar')
     implementation files('libs/volley.jar')
     implementation project(':PullToRefresh')

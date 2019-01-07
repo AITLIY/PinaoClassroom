@@ -99,26 +99,30 @@ public class HttpURL {
 
 
 
+
     // 1.会员等级列表和用户会员等级
     public static final String VIP_BUY_URL = BASE_URL + "vip/buy";
 
     // 2.会员等级列表和用户会员等级
     public static final String VIP_SHOW_URL = BASE_URL + "vip/show";
 
-    // 3.卡密激活
-    public static final String VIP_CARD_URL = BASE_URL + "vip/card";
-
-    // 4.VIP订单
+    // 3.VIP订单
     public static final String VIP_VIPORDER_URL = BASE_URL + "vip/viporder";
 
-    // 5.购买时生成的订单信息
-    public static final String VIP_BUYVIP_URL = BASE_URL + "vip/buyvip";
+    // 4.卡密激活
+    public static final String VIP_CARD_URL = BASE_URL + "vip/card";
 
-    // 6.我的优惠券
+    // 5.我的优惠券
     public static final String COUPON_COUPON_URL = BASE_URL + "coupon/coupon";
 
-    // 7.课程优惠码转换
+    // 6.课程优惠码转换
     public static final String COUPON_TRANSFOR_URL = BASE_URL + "coupon/transfor";
+
+    // 7.购买会员时生成的订单信息
+    public static final String VIP_BUYVIP_URL = BASE_URL + "vip/buyvip";
+
+    // 8.课程订单信息
+    public static final String LESSONSON_CREATEORDER_URL = BASE_URL + "lessonson/createorder";
 
 
 }

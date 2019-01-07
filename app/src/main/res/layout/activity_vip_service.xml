@@ -137,21 +137,21 @@
             </LinearLayout>
 
             <!--订单列表-->
-            <!--<android.support.v7.widget.RecyclerView-->
-                <!--android:id="@+id/order_list_rv"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="6dp"-->
-                <!--android:background="@color/white">-->
-            <!--</android.support.v7.widget.RecyclerView>-->
-
-            <ListView
+            <android.support.v7.widget.RecyclerView
                 android:id="@+id/order_list_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:background="@color/white">
-            </ListView>
+            </android.support.v7.widget.RecyclerView>
+
+            <!--<ListView-->
+                <!--android:id="@+id/order_list_rv"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="6dp"-->
+                <!--android:background="@color/white">-->
+            <!--</ListView>-->
 
         </LinearLayout>
     </ScrollView>

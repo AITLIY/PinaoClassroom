@@ -113,28 +113,31 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
     @Override
     public void onResp(BaseResp resp) {
         LogUtils.d("微信登录 : onResp()");
-        LogUtils.d(resp.errStr);
-        LogUtils.d("错误码 : " + resp.errCode + "");
+//        LogUtils.d(resp.errStr);
+        LogUtils.d("微信登录 : 错误码 : " + resp.errCode + "");
         switch (resp.errCode) {
 
             case BaseResp.ErrCode.ERR_AUTH_DENIED:
             case BaseResp.ErrCode.ERR_USER_CANCEL:
-                if (RETURN_MSG_TYPE_SHARE == resp.getType()) ToastUtil.show(mContext,"分享失败");
-                else ToastUtil.show(mContext,"登录失败");
+                if (RETURN_MSG_TYPE_SHARE == resp.getType()) {
+                    ToastUtil.show(mContext,"分享失败");
+                } else {
+                    ToastUtil.show(mContext,"登录失败");
+                }
                 break;
             case BaseResp.ErrCode.ERR_OK:
                 switch (resp.getType()) {
                     case RETURN_MSG_TYPE_LOGIN:
                         //拿到了微信返回的code,立马再去请求access_token
                         String code = ((SendAuth.Resp) resp).code;
-                        LogUtils.d("code = " + code);
+                        LogUtils.d("微信登录 : code = " + code);
                         getSession(code);
                         //就在这个地方，用网络库什么的或者自己封的网络api，发请求去咯，注意是get请求
 
                         break;
 
                     case RETURN_MSG_TYPE_SHARE:
-                        ToastUtil.show(mContext,"微信分享成功");
+                        ToastUtil.show(mContext,"分享成功");
                         finish();
                         break;
                 }
@@ -276,8 +279,9 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                     obj.put("sex", wxUserBean.getSex());
                     obj.put("city", wxUserBean.getCity());
                     obj.put("province", wxUserBean.getProvince());
-                    obj.put("headimgurl", wxUserBean.getHeadimgurl());
-                    obj.put("privilege", wxUserBean.getPrivilege());
+                    obj.put("country", wxUserBean.getCountry());
+                    obj.put("avatar", wxUserBean.getHeadimgurl());
+//                    obj.put("privilege", wxUserBean.getPrivilege());
                     obj.put("nickname", wxUserBean.getNickname());
                     obj.put("device", CommonParameters.ANDROID);
 

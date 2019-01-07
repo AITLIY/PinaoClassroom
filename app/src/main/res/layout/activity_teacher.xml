@@ -22,13 +22,14 @@
             android:src="@drawable/icon_btn_back_black" />
 
         <TextView
+            android:id="@+id/teacheer_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="@dimen/title_bar_text"
-            android:text="亿音钢琴课堂"/>
+            android:text="讲师信息"/>
     </RelativeLayout>
 
     <LinearLayout

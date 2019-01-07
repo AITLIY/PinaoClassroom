@@ -4,6 +4,7 @@ package com.yiyin.aobosh.UI.fragments.homes;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
@@ -34,13 +35,14 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
-import com.yiyin.aobosh.UI.activitys.yiYinClassroom.AllClassActivity;
 import com.yiyin.aobosh.UI.activitys.HomepageActivity;
 import com.yiyin.aobosh.UI.activitys.login.LoginActivity;
 import com.yiyin.aobosh.UI.activitys.mine.CouponActivity;
 import com.yiyin.aobosh.UI.activitys.mine.OauthHistoryActivity;
 import com.yiyin.aobosh.UI.activitys.mine.VipServiceActivity;
+import com.yiyin.aobosh.UI.activitys.yiYinClassroom.AllClassActivity;
 import com.yiyin.aobosh.UI.activitys.yiYinClassroom.LessonActivity;
+import com.yiyin.aobosh.UI.activitys.yiYinClassroom.TeacherWebActivity;
 import com.yiyin.aobosh.adapter.LessonCategoryAdapter;
 import com.yiyin.aobosh.adapter.ViewPagerAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
@@ -63,6 +65,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.header.MaterialHeader;
+import in.srain.cube.views.ptr.header.StoreHouseHeader;
+
 /**
  * 主页
  * A simple {@link Fragment} subclass.
@@ -76,6 +84,10 @@ public class HomeFragment extends Fragment {
 
     private LinearLayout more_ll;
     private ImageView user_icon;
+    private PtrFrameLayout ptrFrameLayout;
+    private StoreHouseHeader storeHouseHeader;
+    private MaterialHeader materialHeader;
+    private PtrClassicDefaultHeader ptrClassicDefaultHeader;
 
     private ViewPager mViewPager;
     private ViewPagerAdapter mViewPagerAdapter;
@@ -137,6 +149,7 @@ public class HomeFragment extends Fragment {
                 case LOAD_DATA3_SUCCESS:
 
                     initRecommend();
+                    ptrFrameLayout.refreshComplete();
                     break;
 
                 case LOAD_DATA3_FAILE:
@@ -197,7 +210,70 @@ public class HomeFragment extends Fragment {
         container2_title = mView.findViewById(R.id.container2_title);
         container3_title = mView.findViewById(R.id.container3_title);
 
+        ptrFrameLayout = mView.findViewById(R.id.ptrFrameLayout);
+        initPtrRefresh();
     }
+
+
+    private void initPtrRefresh() {
+
+        initHeaders();
+
+        ptrFrameLayout.setHeaderView(ptrClassicDefaultHeader);
+        ptrFrameLayout.addPtrUIHandler(ptrClassicDefaultHeader);
+
+//        ptrFrameLayout.setHeaderView(storeHouseHeader);
+//        ptrFrameLayout.addPtrUIHandler(storeHouseHeader);
+
+//        ptrFrameLayout.setHeaderView(materialHeader);//类似SwipeRefreshLayout
+//        ptrFrameLayout.addPtrUIHandler(materialHeader);
+
+
+        ptrFrameLayout.setPtrHandler(new PtrHandler() {
+
+            //检查是否可以刷新
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return true;
+            }
+
+            //开始刷新
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                updateData();
+            }
+        });
+    }
+
+
+    private void initHeaders() {
+
+        /**
+         * //第一种头部
+         * StoreHouse风格的头部实现
+         */
+        storeHouseHeader = new StoreHouseHeader(mContext);
+        storeHouseHeader.setBackgroundColor(Color.BLACK);
+        storeHouseHeader.setTextColor(Color.WHITE);
+        storeHouseHeader.setLineWidth(5);
+        storeHouseHeader.initWithString("ENGLISH ONLY HAHA");    //只可英文，中文不可运行(添加时间)
+        //"last update @" + new SimpleDateFormat("yyyy-MM-dd HH：mm:ss").format(new Date())
+
+        /**
+         * //第二种头部
+         * Material Design风格的头部实现
+         */
+        materialHeader = new MaterialHeader(mContext);
+        materialHeader.setColorSchemeColors(new int[]{Color.RED, Color.GREEN, Color.BLUE});//类似SwipeRefreshLayout
+
+
+        /**
+         * //第三种头部
+         * 经典 风格的头部实现
+         */
+        ptrClassicDefaultHeader = new PtrClassicDefaultHeader(mContext);
+    }
+
 
     private void initData() {
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
@@ -226,10 +302,17 @@ public class HomeFragment extends Fragment {
 
         });
 
+        updateData();
+    }
+
+
+    private void updateData() {
+
         getBannerData();
         getCategoryData();
         getRecommendData();
     }
+
 
     private PopupWindow popupWindow;
     public void showMenu() {
@@ -296,7 +379,7 @@ public class HomeFragment extends Fragment {
             iv.setScaleType(ImageView.ScaleType.FIT_XY);
             iv.setId(imgae_ids[i]);                         //给ImageView设置id
             iv.setOnClickListener(new pagerImageOnClick());//设置ImageView点击事件
-            LogUtils.i("HomeFragment: Banner " + mBanners.get(i).getImg());
+//            LogUtils.i("HomeFragment: Banner " + mBanners.get(i).getImg());
 
             Glide.with(mContext)
                     .load(mBanners.get(i).getImg())
@@ -306,9 +389,12 @@ public class HomeFragment extends Fragment {
         }
 
         //添加轮播点
-        LinearLayout container = mView.findViewById(R.id.ll_point_container);
-        Drawable drawable = mContext.getResources().getDrawable(R.drawable.white_poi);
-        mDots = addDots(mImageList.size(), container, drawable);
+        if (mDots==null) {
+
+            LinearLayout container = mView.findViewById(R.id.ll_point_container);
+            Drawable drawable = mContext.getResources().getDrawable(R.drawable.white_poi);
+            mDots = addDots(mImageList.size(), container, drawable);
+        }
 
     }
 
@@ -319,22 +405,33 @@ public class HomeFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.pager_image1:
-                    LogUtils.i("图片1被点击");
+                    LogUtils.i("HomeFragment: Banner " + mBanners.get(0).getLink());
+                    goToTeacherWeb(mBanners.get(0).getLink());
                     break;
                 case R.id.pager_image2:
-                    LogUtils.i("图片2被点击");
+                    LogUtils.i("HomeFragment: Banner " + mBanners.get(0).getLink());
+                    goToTeacherWeb(mBanners.get(0).getLink());
                     break;
                 case R.id.pager_image3:
-                    LogUtils.i("图片3被点击");
+                    LogUtils.i("HomeFragment: Banner " + mBanners.get(0).getLink());
+                    goToTeacherWeb(mBanners.get(0).getLink());
                     break;
                 case R.id.pager_image4:
-                    LogUtils.i("图片4被点击");
+                    LogUtils.i("HomeFragment: Banner " + mBanners.get(0).getLink());
+                    goToTeacherWeb(mBanners.get(0).getLink());
                     break;
                 case R.id.pager_image5:
-                    LogUtils.i("图片5被点击");
+                    LogUtils.i("HomeFragment: Banner " + mBanners.get(0).getLink());
+                    goToTeacherWeb(mBanners.get(0).getLink());
                     break;
             }
         }
+    }
+
+    private void goToTeacherWeb(String url) {
+        Intent intent = new Intent(mContext, TeacherWebActivity.class);
+        intent.putExtra("url",url);
+        startActivity(intent);
     }
 
     //为ViewPager配置Adater

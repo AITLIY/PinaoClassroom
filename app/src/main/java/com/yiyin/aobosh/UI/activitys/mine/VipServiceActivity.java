@@ -11,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -27,7 +26,7 @@ import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.adapter.LevelVipAdapter;
 import com.yiyin.aobosh.adapter.MemberVipAdapter;
-import com.yiyin.aobosh.adapter.VipOrderAdapter2;
+import com.yiyin.aobosh.adapter.VipOrderAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.UserInfo;
 import com.yiyin.aobosh.bean.VipOrderBean;
@@ -56,15 +55,18 @@ public class VipServiceActivity extends Activity {
     private List<VipShow.LevelListBean> mLevelListBeans;            // 会员类别
     private List<VipOrderBean> mVipOrderBeans;                      // 会员订单
 
-    private RecyclerView Member_list_rv,level_list_rv;//,order_list_rv
+    private RecyclerView Member_list_rv,level_list_rv;
     private TextView is_vip,not_vip;
     private LinearLayout have_vip_card;
 
     private MemberVipAdapter mAdapter1;
     private LevelVipAdapter mAdapter2;
-//    private VipOrderAdapter mAdapter3;
-    private VipOrderAdapter2 mAdapter3;
-    private ListView order_list_rv;
+
+    private VipOrderAdapter mAdapter3;
+    private RecyclerView order_list_rv;
+
+    //    private VipOrderAdapter2 mAdapter3;
+    //    private ListView order_list_rv;
 
     private static final int LOAD_DATA_SUCCESS1 = 101;
     private static final int LOAD_DATA_FAILE1 = 102;
@@ -217,8 +219,9 @@ public class VipServiceActivity extends Activity {
 
     private void initVipDataView2() {
 
-        mAdapter3 = new VipOrderAdapter2(mContext,mVipOrderBeans);
-//        order_list_rv.setLayoutManager(new LinearLayoutManager(mContext));
+        mAdapter3 = new VipOrderAdapter(mVipOrderBeans);
+//        mAdapter3 = new VipOrderAdapter2(mContext,mVipOrderBeans);
+        order_list_rv.setLayoutManager(new LinearLayoutManager(mContext));
         order_list_rv.setAdapter(mAdapter3);
 
     }
