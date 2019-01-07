@@ -1,21 +1,18 @@
-package com.yiyin.aobosh.UI.fragments.homes;
-
+package com.yiyin.aobosh.UI.activitys;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
@@ -31,26 +28,27 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.githang.statusbar.StatusBarCompat;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
+import com.yiyin.aobosh.Interface.CateIdSearchInterface;
+import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.UI.activitys.login.LoginActivity;
 import com.yiyin.aobosh.UI.activitys.yiYinClassroom.LessonActivity;
 import com.yiyin.aobosh.adapter.LessonCategoryAdapter2;
 import com.yiyin.aobosh.adapter.LessonListAdapter;
-import com.yiyin.aobosh.Interface.CateIdSearchInterface;
-import com.yiyin.aobosh.R;
+import com.yiyin.aobosh.application.GlobalParameterApplication;
+import com.yiyin.aobosh.bean.LessonCategory;
 import com.yiyin.aobosh.bean.RecommendLesson;
+import com.yiyin.aobosh.commons.CommonParameters;
+import com.yiyin.aobosh.commons.HttpURL;
 import com.yiyin.aobosh.utils.SHA;
 import com.yiyin.aobosh.utils.TimeUtils;
 import com.yiyin.aobosh.utils.ToastUtil;
-import com.yiyin.aobosh.application.GlobalParameterApplication;
-import com.yiyin.aobosh.bean.LessonCategory;
-import com.yiyin.aobosh.commons.CommonParameters;
-import com.yiyin.aobosh.commons.HttpURL;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,10 +58,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class AllClassFragment extends Fragment implements View.OnClickListener, CateIdSearchInterface {
+public class AllClassActivity extends Activity  implements View.OnClickListener, CateIdSearchInterface {
+
 
     private View mView;
     private Context mContext;
@@ -89,10 +85,11 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
     private static final int SEARCH_LESSON_PARAMETER  = 10;        //参数查询
     private static final int SEARCH_LESSON_PULL_UP = 20;           //上拉加载
     private int mSearchType = 10;  // 查询的标志
-    
+
     private String mSort = "";
-    private String mCateId = ""; 
+    private String mCateId = "";
     private String mKeyword = "";
+    private String mPindex = "1";
 
     private static final int LOAD_DATA1_SUCCESS = 101;
     private static final int LOAD_DATA1_FAILE = 102;
@@ -146,21 +143,22 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
     };
 
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_all_class, container, false);
-        mContext = getContext();
-
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_all_class);
+        //设置状态栏颜色
+        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.app_title_bar), true);
+        
+        mContext = this;
         init();
-        return mView;
     }
-
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        
+
     }
 
     private void init() {
@@ -170,26 +168,26 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
     }
 
     private void initView() {
-        search_lesson_et = mView.findViewById(R.id.search_lesson_et);
-        lesson_sort_tv = mView.findViewById(R.id.lesson_sort_tv);
-        lesson_filtrate_tv = mView.findViewById(R.id.lesson_filtrate_tv);
+        search_lesson_et = findViewById(R.id.search_lesson_et);
+        lesson_sort_tv = findViewById(R.id.lesson_sort_tv);
+        lesson_filtrate_tv = findViewById(R.id.lesson_filtrate_tv);
 
-        lesson_sort_ll = mView.findViewById(R.id.lesson_sort_ll);
-        lesson_filtrate_ll = mView.findViewById(R.id.lesson_filtrate_ll);
-        lesson_sort_iv = mView.findViewById(R.id.lesson_sort_iv);
-        lesson_filtrate_iv = mView.findViewById(R.id.lesson_filtrate_iv);
-        sort_bg = mView.findViewById(R.id.sort_bg);
-        sort_container = mView.findViewById(R.id.sort_container);
+        lesson_sort_ll = findViewById(R.id.lesson_sort_ll);
+        lesson_filtrate_ll = findViewById(R.id.lesson_filtrate_ll);
+        lesson_sort_iv = findViewById(R.id.lesson_sort_iv);
+        lesson_filtrate_iv = findViewById(R.id.lesson_filtrate_iv);
+        sort_bg = findViewById(R.id.sort_bg);
+        sort_container = findViewById(R.id.sort_container);
 
-        synthesize_sort = mView.findViewById(R.id.synthesize_sort);
-        free_sort = mView.findViewById(R.id.free_sort);
-        price_sort = mView.findViewById(R.id.price_sort);
-        hot_sort = mView.findViewById(R.id.hot_sort);
-        score_sort = mView.findViewById(R.id.score_sort);
+        synthesize_sort = findViewById(R.id.synthesize_sort);
+        free_sort = findViewById(R.id.free_sort);
+        price_sort = findViewById(R.id.price_sort);
+        hot_sort = findViewById(R.id.hot_sort);
+        score_sort = findViewById(R.id.score_sort);
 
-        filtrate_bg = mView.findViewById(R.id.filtrate_bg);
-        lesson_category_rv = mView.findViewById(R.id.lesson_category_rv);
-        lesson_item_list = mView.findViewById(R.id.lesson_item_list);
+        filtrate_bg = findViewById(R.id.filtrate_bg);
+        lesson_category_rv = findViewById(R.id.lesson_category_rv);
+        lesson_item_list = findViewById(R.id.lesson_item_list);
 
         initPullListView();
     }
@@ -211,12 +209,13 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
                     mCateId = "";
                     mKeyword = search_keyword;
                     page= 1;
+                    mPindex = page + "";
                     mSearchType = SEARCH_LESSON_PARAMETER;
-                    getLessonData(mSort,mCateId,mKeyword, page); // 通过关键字搜索
+                    getLessonData(mSort,mCateId,mKeyword, mPindex); // 通过关键字搜索
 
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     if (imm != null) {
-                        imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
+                        imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
                     }
 
                     return true;
@@ -243,7 +242,20 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
         mShowList = new ArrayList<>();
         adapter = new LessonListAdapter(mContext, mShowList);
         lesson_item_list.setAdapter(adapter);
-        getLessonData(mSort,mCateId,mKeyword, page); // 初始化搜索
+        lesson_item_list.setOnItemClickListener(new ItemClick());
+
+        Intent intent = getIntent();
+        if (intent != null){
+            int id = intent.getIntExtra("ID",0);
+            LogUtils.i("RegisterActivity2: getIntExtra ID " + id);
+
+            if (id==0) {
+                getLessonData(mSort,mCateId,mKeyword, mPindex); // 初始化搜索
+            } else {
+                mCateId = id+"";
+                getLessonData(mSort,mCateId,mKeyword, mPindex); // 通过id搜索
+            }
+        }
     }
 
 
@@ -274,6 +286,28 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
         }
 
     }
+
+    class ItemClick implements AdapterView.OnItemClickListener{
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            if (!GlobalParameterApplication.getInstance().getLoginStatus()) {
+                startActivity(new Intent(mContext, LoginActivity.class));
+                return;
+            } else {
+                RecommendLesson.LessonBean lessonBean = mShowList.get(position-1);
+                LogUtils.i("AllClassFragment: ItemClick position " + position);
+                Intent intent = new Intent(mContext,LessonActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("LessonBean",lessonBean);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+
+        }
+    }
+
 
     private boolean isSort;
     private boolean isfiltrate;
@@ -353,8 +387,9 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
     private void typeForSort(String type) {
         mSort = type;
         page= 1;
+        mPindex = page + "";
         mSearchType = SEARCH_LESSON_PARAMETER;
-        getLessonData(mSort,mCateId,mKeyword, page); // 通过类型排序搜索
+        getLessonData(mSort,mCateId,mKeyword, mPindex); // 通过类型排序搜索
     }
 
     // 初始化列表
@@ -368,9 +403,9 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onPullDownToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page= 1;
-
+                mPindex = page + "";
                 mSearchType = SEARCH_LESSON_PARAMETER;
-                getLessonData(mSort,mCateId,mKeyword, page); // 下拉刷新搜索
+                getLessonData(mSort,mCateId,mKeyword, mPindex); // 下拉刷新搜索
                 setViewForResult(true,"");
                 LogUtils.i("AllClassFragment: onPullDownToRefresh 下拉" + page + "页");
             }
@@ -378,9 +413,9 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
             @Override
             public void onPullUpToRefresh(PullToRefreshBase<ListView> refreshView) {
                 page++;
-
+                mPindex = page + "";
                 mSearchType = SEARCH_LESSON_PULL_UP;
-                getLessonData(mSort,mCateId,mKeyword, page); // 上拉加载搜索
+                getLessonData(mSort,mCateId,mKeyword, mPindex); // 上拉加载搜索
 
                 LogUtils.i("AllClassFragment: onPullUpToRefresh 下拉" + page + "页");
             }
@@ -389,18 +424,7 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
         lesson_item_list.setOnItemClickListener(new AdapterView.OnItemClickListener() { //点击item时
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!GlobalParameterApplication.getInstance().getLoginStatus()) {
-                    startActivity(new Intent(mContext, LoginActivity.class));
-                    return;
-                } else {
-                    RecommendLesson.LessonBean lessonBean = mShowList.get(position-1);
-                    LogUtils.i("AllClassFragment: ItemClick position " + position);
-                    Intent intent = new Intent(mContext,LessonActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("LessonBean",lessonBean);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }
+
             }
         });
 
@@ -468,11 +492,10 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
 
         mCateId = sonlistBean.getId()+"";
         mKeyword = "";
-        mSort = "";
         page= 1;
-
+        mPindex = page + "";
         mSearchType = SEARCH_LESSON_PARAMETER;
-        getLessonData(mSort,mCateId,mKeyword, page); // 通过id搜索
+        getLessonData(mSort,mCateId,mKeyword, mPindex); // 通过id搜索
     }
 
     static class  NewStaggeredGridLayoutManager extends StaggeredGridLayoutManager {
@@ -484,17 +507,18 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
         public NewStaggeredGridLayoutManager(int spanCount, int orientation) {
             super(spanCount, orientation);
         }
+
     }
 
     // 根据获取结果显示view
     private void setViewForResult(boolean isSuccess,String msg) {
 
         if (isSuccess) {
-            mView.findViewById(R.id.not_data).setVisibility(View.GONE);
+            findViewById(R.id.not_data).setVisibility(View.GONE);
 
         } else {
-            mView.findViewById(R.id.not_data).setVisibility(View.VISIBLE);
-            ((TextView) mView.findViewById(R.id.not_data_tv)).setText(msg);
+            findViewById(R.id.not_data).setVisibility(View.VISIBLE);
+            ((TextView) findViewById(R.id.not_data_tv)).setText(msg);
         }
     }
 
@@ -521,8 +545,8 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
 
             case SEARCH_LESSON_PULL_UP:
 
-                mShowList.addAll(mLessonSearches);
 //                adapter.addLast(mLessonSearches);
+                mShowList.addAll(mLessonSearches);
                 LogUtils.i("AllClassFragment: SEARCH_LESSON_PULL_UP " + mShowList.size());
 
                 adapter.notifyDataSetChanged();
@@ -542,7 +566,7 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
     //--------------------------------------请求服务器数据-------------------------------------------
 
     // 获取课程数据列表
-    private void getLessonData(final String sort, final String cateId, final String keyword, final int pindex) {
+    private void getLessonData(final String sort, final String cateId, final String keyword, final String pindex) {
         mLessonSearches= new ArrayList();
         String url = HttpURL.LESSONSON_SEARCH_URL;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST,url,new Response.Listener<String>() {
@@ -591,7 +615,7 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
                     String token = "Lessonsonsearch" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
                     LogUtils.i("AllClassFragment: token " + token);
                     String sha_token = SHA.encryptToSHA(token);
-                    
+
                     obj.put("access_token", sha_token);
                     obj.put("sort", sort);
                     obj.put("cate_id", cateId);
@@ -614,3 +638,4 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
     }
 
 }
+

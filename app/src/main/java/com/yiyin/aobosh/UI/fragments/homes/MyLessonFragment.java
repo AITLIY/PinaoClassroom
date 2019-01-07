@@ -30,6 +30,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.Interface.SubmitCommentInterface;
 import com.yiyin.aobosh.R;
+import com.yiyin.aobosh.UI.activitys.pay.PayOrderActivity;
 import com.yiyin.aobosh.UI.activitys.yiYinClassroom.LessonActivity;
 import com.yiyin.aobosh.adapter.LessonOrderAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
@@ -55,7 +56,7 @@ import java.util.Map;
  */
 
 
-public class MyLessonFragment extends Fragment implements View.OnClickListener,SubmitCommentInterface {
+public class MyLessonFragment extends Fragment implements View.OnClickListener,SubmitCommentInterface{
 
     private View mView;
     private Context mContext;
@@ -137,6 +138,12 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener,S
         return mView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
+    }
+
     private void init() {
 
         initView();
@@ -174,6 +181,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener,S
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
         getLessonData(mUserInfo.getUid(), CommonParameters.ALL);
     }
+
 
     @Override
     public void onSubmit(LessonOrder order) {
@@ -230,7 +238,10 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener,S
         lesson_item_list.setOnItemClickListener(new AdapterView.OnItemClickListener() { //点击item时
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                LogUtils.i("SonlistFragment: onItemClick " + mShowList.get(position-1).getId());
+                Intent intent = new Intent(mContext,PayOrderActivity.class);
+                intent.putExtra("lessonid",mShowList.get(position-1).getLessonid());
+                startActivity(intent);
             }
         });
 

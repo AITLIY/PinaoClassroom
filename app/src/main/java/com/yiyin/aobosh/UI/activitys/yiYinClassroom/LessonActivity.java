@@ -60,7 +60,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LessonActivity extends AppCompatActivity implements View.OnClickListener,AdapterView.OnItemClickListener {
+public class LessonActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Context mContext;
     private RecommendLesson.LessonBean mLessonBean;
@@ -111,6 +111,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
     private int lessonID;
     private int mCurrentItemId = -1;
+    private boolean isCanPlay;
 
     private static final int LOAD_DATA_SUCCESS01 = 1001;
     private static final int LOAD_DATA_SUCCESS02 = 2001;
@@ -351,7 +352,6 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initData() {
-
         mContext = this;
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
@@ -375,14 +375,13 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
             mCurrentItemId = sonlist_ll.getId();
         }
 
-        getlessonsonDesc(mUserInfo.getUid(), mLessonBean.getId());
+        getLessonDesc(mUserInfo.getUid(), mLessonBean.getId());
 
         lesson_title.setText(mLessonBean.getBookname());
 
         mShowList = new ArrayList<>();
         adapter = new VideoBeanAdapter(mContext, mShowList);
         lesson_item_list.setAdapter(adapter);
-        lesson_item_list.setOnItemClickListener(this);
         getLessonsonFindson(mUserInfo.getUid(), lessonID, Suffix_type, page);
 
         mShowList2 = new ArrayList<>();
@@ -455,6 +454,12 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     public void playAudio() {
+
+        if (!isCanPlay) {
+            ToastUtil.show(mContext, "你还未开通会员或购买此课程");
+            return;
+        }
+
         videoPlayer.start();
     }
 
@@ -550,7 +555,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
             switch (mCurrentItemId) {
                 case R.id.desc_ll:
-//                    getlessonsonDesc(mUserInfo.getUid(), mLessonBean.getId());
+//                    getLessonDesc(mUserInfo.getUid(), mLessonBean.getId());
                     break;
 
                 case R.id.sonlist_ll:
@@ -597,16 +602,6 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
     //-------------------------------------------课程列表--------------------------------------------
 
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        adapter.setID(mShowList.get(position-1).getId());
-        adapter.notifyDataSetChanged();
-        LogUtils.i("SonlistFragment: onItemClick " + mShowList.get(position-1).getVideourl());
-        setAudio(mShowList.get(position-1));
-        playAudio();
-    }
-
     // 初始化列表
     private void initPullListView() {
 
@@ -640,6 +635,12 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                adapter.setID(mShowList.get(position-1).getId());
+                adapter.notifyDataSetChanged();
+                LogUtils.i("SonlistFragment: onItemClick " + mShowList.get(position-1).getVideourl());
+                setAudio(mShowList.get(position-1));
+                getLessonsonPlay(mUserInfo.getUid(), mLessonBean.getId(),mShowList.get(position-1).getId());
+                playAudio();
             }
         });
 
@@ -895,9 +896,79 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
     
     //--------------------------------------请求服务器数据-------------------------------------------
-    
+
+    // 用户是否有观看权限
+    private void getLessonsonPlay(final int uid, final int lessonid, final int lessonsonid) {
+
+        String url = HttpURL.LESSONSON_PLAY_URL;
+        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                if (!"".equals(s)) {
+                    LogUtils.i("cgetLessonsonPlay: result1 " + s);
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(s);
+                        String code = jsonObject.getString("code");
+
+                        if ("200".equals(code)) {
+
+                            String data = jsonObject.getString("data");
+                            JSONObject play = new JSONObject(data);
+                            String isPlay = play.getString("play");
+                            if ("true".equals(isPlay)) {
+                                isCanPlay = true;
+                            }
+                            LogUtils.i("getLessonsonPlay: isPlay " + isPlay);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtils.e("getLessonsonPlay: volleyError1 " + volleyError.toString());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject obj = new JSONObject();
+
+                try {
+
+                    String token = "Lessonsonplay" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
+                    LogUtils.i("DescFragment: token " + token);
+                    String sha_token = SHA.encryptToSHA(token);
+
+                    obj.put("access_token", sha_token);
+                    obj.put("uid", uid);
+                    obj.put("lessonid", lessonid);
+                    obj.put("lessonsonid", lessonsonid);
+                    obj.put("device", CommonParameters.ANDROID);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                LogUtils.i("getLessonsonPlay json1 " + obj.toString());
+
+                map.put("dt", obj.toString());
+                return map;
+            }
+
+        };
+        requestQueue.add(stringRequest);
+    }
+
+
     // 获取课程详情
-    private void getlessonsonDesc(final int uid, final int lessonid) {
+    private void getLessonDesc(final int uid, final int lessonid) {
 
         String url = HttpURL.LESSONSON_DESC_URL;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, url, new Response.Listener<String>() {

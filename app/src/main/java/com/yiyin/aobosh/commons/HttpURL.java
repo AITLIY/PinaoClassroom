@@ -46,7 +46,7 @@ public class HttpURL {
     // 12.课程详情
     public static final String LESSONSON_DESC_URL = BASE_URL + "lessonson/desc";
 
-    // 13.评价
+    // 13.评价列表
     public static final String LESSONSON_EVALUATE_URL = BASE_URL + "lessonson/evaluate";
 
     // 14.提交课程订单评价
@@ -57,6 +57,9 @@ public class HttpURL {
 
     // 16.讲师课程列表
     public static final String TEACHER_TEACHERLESSON_URL = BASE_URL + "teacher/teacherlesson";
+
+    // 16.讲师课程列表
+    public static final String LESSONSON_PLAY_URL = BASE_URL + "lessonson/play";
 
 
 
@@ -123,6 +126,9 @@ public class HttpURL {
 
     // 8.课程订单信息
     public static final String LESSONSON_CREATEORDER_URL = BASE_URL + "lessonson/createorder";
+
+    // 9.我的课程列表点击后订单信息
+    public static final String LESSONSON_FINDORDER_URL = BASE_URL + "lessonson/findorder";
 
 
 }

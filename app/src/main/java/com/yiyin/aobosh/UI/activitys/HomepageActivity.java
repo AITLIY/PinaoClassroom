@@ -34,8 +34,6 @@ public class HomepageActivity extends AppCompatActivity{
 
     private LinearLayout ll_homepage,ll_all_class,ll_my_class,ll_mine;
 
-    private FrameLayout content_fl;
-
     private HomeFragment mHomeFragment;
     private AllClassFragment mAllClassFragment;
     private MyLessonFragment mMyLessonFragment;
@@ -62,8 +60,6 @@ public class HomepageActivity extends AppCompatActivity{
     }
 
     private void initView() {
-
-        content_fl = findViewById(R.id.content_fl);
 
         ll_homepage = findViewById(R.id.ll_homepage);
         ll_all_class = findViewById(R.id.ll_all_class);

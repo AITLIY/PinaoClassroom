@@ -178,7 +178,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+        mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
     }
 
     @Override

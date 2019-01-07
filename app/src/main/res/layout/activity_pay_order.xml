@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/white"
+    android:background="@color/app_bg"
     tools:context="com.yiyin.aobosh.UI.activitys.pay.PayOrderActivity">
 
     <!--标题栏-->
@@ -35,14 +35,20 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
         android:layout_height="0.5dp"
+        android:background="@color/gray_lite"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="10dp"
         android:background="@color/gray_lite"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:paddingLeft="20dp"
+        android:background="@color/white"
         android:gravity="center_vertical">
 
         <TextView
@@ -57,10 +63,14 @@
             android:layout_weight="1"/>
 
         <TextView
-            android:id="@+id/sfd"
-            android:layout_width="wrap_content"
+            android:id="@+id/bookname_iv"
+            android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
+            android:gravity="end"
+            android:lines="1"
+            android:ellipsize="end"
+            android:textSize="12sp"
             android:text=""/>
     </LinearLayout>
 
@@ -74,6 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:paddingLeft="20dp"
+        android:background="@color/white"
         android:gravity="center_vertical">
 
         <TextView
@@ -88,10 +99,11 @@
             android:layout_weight="1"/>
 
         <TextView
-            android:id="@+id/sfd3"
+            android:id="@+id/ordersn_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
+            android:textSize="12sp"
             android:text=""/>
     </LinearLayout>
 
@@ -105,6 +117,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:paddingLeft="20dp"
+        android:background="@color/white"
         android:gravity="center_vertical">
 
         <TextView
@@ -119,11 +132,12 @@
             android:layout_weight="1"/>
 
         <TextView
-            android:id="@+id/sfd2"
+            android:id="@+id/b_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
-            android:text=""/>
+            android:textSize="12sp"
+            android:text="亿音钢琴课堂"/>
     </LinearLayout>
 
     <View
@@ -136,6 +150,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:paddingLeft="20dp"
+        android:background="@color/white"
         android:gravity="center_vertical">
 
         <TextView
@@ -150,12 +165,12 @@
             android:layout_weight="1"/>
 
         <TextView
-            android:id="@+id/sfd1h"
+            android:id="@+id/marketprice_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/green"
             android:layout_marginRight="15dp"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:text=""/>
     </LinearLayout>
 
@@ -174,6 +189,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:paddingLeft="20dp"
+        android:background="@color/white"
         android:gravity="center_vertical">
 
         <TextView
@@ -188,11 +204,11 @@
             android:layout_weight="1"/>
 
         <TextView
-            android:id="@+id/sfd1"
+            android:id="@+id/price_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textColor="@color/green"
             android:text=""/>
     </LinearLayout>
@@ -204,7 +220,7 @@
 
     <TextView
         android:id="@+id/password_cofirm"
-        android:layout_width="280dp"
+        android:layout_width="320dp"
         android:layout_height="38dp"
         android:layout_marginTop="40dp"
         android:gravity="center"
