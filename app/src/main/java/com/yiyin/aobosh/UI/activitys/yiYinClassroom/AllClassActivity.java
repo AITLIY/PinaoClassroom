@@ -1,4 +1,4 @@
-package com.yiyin.aobosh.UI.activitys.yiYinClassroom;
+package com.yiyin.aobosh.UI.activitys.yiyinClassroom;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -38,7 +38,6 @@ import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.Interface.CateIdSearchInterface;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.UI.activitys.login.LoginActivity;
-import com.yiyin.aobosh.UI.activitys.yiYinClassroom.LessonActivity;
 import com.yiyin.aobosh.adapter.LessonCategoryAdapter2;
 import com.yiyin.aobosh.adapter.LessonListAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;

@@ -1,4 +1,4 @@
-package com.yiyin.aobosh.UI.activitys.yiYinClassroom;
+package com.yiyin.aobosh.UI.activitys.yiyinClassroom;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -91,7 +91,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
     private List<VideoBean.ListBean> mShowList;                 // 章节显示结果的集合
     private PullToRefreshListView lesson_item_list;             // 章节列表容器
     private VideoBeanAdapter adapter;
-    private TextView lesson_title,example_tv,teach_tv,all_tv;
+    private TextView lesson_title,example_tv,teach_tv,all_tv,buy_class,buy_vip;
 
     private static final int SEARCH_LESSON_PARAMETER  = 10;        //参数查询
     private static final int SEARCH_LESSON_PULL_UP = 20;           //上拉加载
@@ -333,6 +333,8 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
         example_tv = findViewById(R.id.example_tv);
         teach_tv = findViewById(R.id.teach_tv);
         all_tv = findViewById(R.id.all_tv);
+        buy_class = findViewById(R.id.buy_class);
+        buy_vip = findViewById(R.id.buy_vip);
         initPullListView();
         //课程评价
         initPullListView2();
@@ -348,6 +350,8 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
         example_tv.setOnClickListener(this);
         teach_tv.setOnClickListener(this);
         all_tv.setOnClickListener(this);
+        buy_class.setOnClickListener(this);
+        buy_vip.setOnClickListener(this);
 
     }
 
@@ -375,6 +379,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
             mCurrentItemId = sonlist_ll.getId();
         }
 
+        getLessonsonPlay(mUserInfo.getUid(), mLessonBean.getId());
         getLessonDesc(mUserInfo.getUid(), mLessonBean.getId());
 
         lesson_title.setText(mLessonBean.getBookname());
@@ -400,6 +405,21 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
         } else {
             btn_menu_ll.setVisibility(View.VISIBLE);
             write_comment_ll.setVisibility(View.GONE);
+        }
+    }
+
+    //显示购买还是学习
+    private void showComment2View(boolean isShow) {
+
+        if (isShow) {
+            start_study.setVisibility(View.GONE);
+            buy_vip.setVisibility(View.VISIBLE);
+            buy_class.setVisibility(View.VISIBLE);
+
+        } else {
+            start_study.setVisibility(View.VISIBLE);
+            buy_vip.setVisibility(View.GONE);
+            buy_class.setVisibility(View.GONE);
         }
     }
 
@@ -453,13 +473,25 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    public void playAudio() {
+    public void playAudio(VideoBean.ListBean listBean) {
 
-        if (!isCanPlay) {
-            ToastUtil.show(mContext, "你还未开通会员或购买此课程");
+        if (listBean==null) {
             return;
         }
 
+        if (isCanPlay) {
+
+            ToastUtil.show(mContext, "你还未购买该课程或开通会员");
+            return;
+
+        } else {
+
+            if (listBean.getIs_free()!=1) {
+                ToastUtil.show(mContext, "你还未购买该课程或开通会员");
+                return;
+            }
+        }
+        LogUtils.d("SonlistFragment playAudio Is_free " + listBean.getIs_free());
         videoPlayer.start();
     }
 
@@ -482,14 +514,14 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
                 play_bg.setVisibility(View.GONE);
                 play_start.setVisibility(View.GONE);
-                playAudio();
+                playAudio(mShowList.get(0));
                 break;
 
             case R.id.start_study:      //开始学习
 
                 play_bg.setVisibility(View.GONE);
                 play_start.setVisibility(View.GONE);
-                playAudio();
+                playAudio(mShowList.get(0));
                 break;
 
             case R.id.submit_comment:       //提交评价
@@ -638,9 +670,9 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
                 adapter.setID(mShowList.get(position-1).getId());
                 adapter.notifyDataSetChanged();
                 LogUtils.i("SonlistFragment: onItemClick " + mShowList.get(position-1).getVideourl());
+
                 setAudio(mShowList.get(position-1));
-                getLessonsonPlay(mUserInfo.getUid(), mLessonBean.getId(),mShowList.get(position-1).getId());
-                playAudio();
+                playAudio(mShowList.get(position-1));
             }
         });
 
@@ -709,6 +741,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
             ((TextView) findViewById(R.id.not_data_tv)).setText(msg);
         }
     }
+
     // 更新课程列表数据
     private void upDataLessonListView() {
 
@@ -898,7 +931,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
     //--------------------------------------请求服务器数据-------------------------------------------
 
     // 用户是否有观看权限
-    private void getLessonsonPlay(final int uid, final int lessonid, final int lessonsonid) {
+    public void getLessonsonPlay(final int uid, final int lessonid) {
 
         String url = HttpURL.LESSONSON_PLAY_URL;
         StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, url, new Response.Listener<String>() {
@@ -919,7 +952,21 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
                             if ("true".equals(isPlay)) {
                                 isCanPlay = true;
                             }
+
+                            runOnUiThread(new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    if (isCanPlay) {
+                                        showComment2View(false);
+                                    } else {
+                                        showComment2View(true);
+                                    }
+                                }
+                            }));
+
                             LogUtils.i("getLessonsonPlay: isPlay " + isPlay);
+
                         }
 
                     } catch (JSONException e) {
@@ -949,7 +996,6 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
                     obj.put("access_token", sha_token);
                     obj.put("uid", uid);
                     obj.put("lessonid", lessonid);
-                    obj.put("lessonsonid", lessonsonid);
                     obj.put("device", CommonParameters.ANDROID);
 
                 } catch (JSONException e) {

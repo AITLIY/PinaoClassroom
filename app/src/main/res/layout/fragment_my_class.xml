@@ -19,7 +19,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="我的课程"
+                android:text="我的课程 - 亿音钢琴课堂"
                 android:textColor="@color/black"
                 android:textSize="@dimen/title_bar_text"
                 android:textStyle="bold"/>

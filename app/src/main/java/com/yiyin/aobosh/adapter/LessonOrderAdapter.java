@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lidroid.xutils.util.LogUtils;
-import com.yiyin.aobosh.Interface.SubmitCommentInterface;
+import com.yiyin.aobosh.Interface.OrderClickInterface;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.bean.LessonOrder;
 
@@ -25,12 +25,12 @@ public class LessonOrderAdapter extends BaseAdapter {
 
     private Context mContext;
     private ArrayList<LessonOrder> mList;
-    private SubmitCommentInterface mSubmit;
+    private OrderClickInterface mOrderClick;
 
-    public LessonOrderAdapter(Context context, ArrayList<LessonOrder> list, SubmitCommentInterface submit) {
+    public LessonOrderAdapter(Context context, ArrayList<LessonOrder> list, OrderClickInterface orderClick) {
         mContext = context;
         mList = list;
-        mSubmit = submit;
+        mOrderClick = orderClick;
     }
 
     public void addLast(ArrayList<LessonOrder> list) {
@@ -68,7 +68,7 @@ public class LessonOrderAdapter extends BaseAdapter {
             holder.spec_day_tv = convertView.findViewById(R.id.spec_day_tv);
             holder.validity_tv = convertView.findViewById(R.id.validity_tv);
             holder.validity_ll = convertView.findViewById(R.id.validity_ll);
-            holder.commit = convertView.findViewById(R.id.commit);
+            holder.evalute_tv = convertView.findViewById(R.id.commit);
 
             convertView.setTag(holder);
         } else {
@@ -89,18 +89,39 @@ public class LessonOrderAdapter extends BaseAdapter {
         if (mList.get(position).getStatus()!=2) {
 
             holder.validity_ll.setVisibility(View.GONE);
-            holder.commit.setVisibility(View.GONE);
+            holder.evalute_tv.setVisibility(View.GONE);
         } else {
             holder.validity_ll.setVisibility(View.VISIBLE);
             holder.validity_tv.setText(mList.get(position).getValidity()+"");
-            holder.commit.setVisibility(View.VISIBLE);
+            holder.evalute_tv.setVisibility(View.VISIBLE);
         }
 
-        holder.commit.setOnClickListener(new View.OnClickListener() {
+        if (mList.get(position).getStatus()==-1){
+
+
+        }
+
+        holder.cancel_pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                mSubmit.onSubmit(mList.get(position));
+                mOrderClick.onCancel(mList.get(position));
+            }
+        });
+
+        holder.start_pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mOrderClick.onPay(mList.get(position));
+            }
+        });
+
+        holder.evalute_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mOrderClick.onEvaluate(mList.get(position));
             }
         });
 
@@ -118,7 +139,9 @@ public class LessonOrderAdapter extends BaseAdapter {
         public TextView spec_day_tv;    //课程规格
         public TextView validity_tv;    //有效期
         public LinearLayout validity_ll;    //有效期
-        public TextView commit;         //评价课程
+        public TextView cancel_pay;         //评价课程
+        public TextView start_pay;         //评价课程
+        public TextView evalute_tv;         //评价课程
 
     }
 

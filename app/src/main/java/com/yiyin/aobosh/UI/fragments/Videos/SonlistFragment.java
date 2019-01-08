@@ -27,7 +27,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 
-import com.yiyin.aobosh.UI.activitys.yiYinClassroom.LessonActivity;
+import com.yiyin.aobosh.UI.activitys.yiyinClassroom.LessonActivity;
 import com.yiyin.aobosh.adapter.VideoBeanAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.RecommendLesson;
@@ -176,7 +176,7 @@ public class SonlistFragment extends Fragment implements AdapterView.OnClickList
         adapter.notifyDataSetChanged();
         LogUtils.i("SonlistFragment: onItemClick " + mShowList.get(position-1).getVideourl());
         ((LessonActivity)getActivity()).setAudio(mListBeans.get(position-1));
-        ((LessonActivity)getActivity()).playAudio();
+//        ((LessonActivity)getActivity()).playAudio();
     }
 
     // 初始化列表

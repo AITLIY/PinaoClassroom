@@ -16,6 +16,7 @@
     <color name="gray_lite">#c5c5c5</color>
     <color name="title_bar">#ECECEC</color>
     <color name="home_menu">#3C4A55</color>
+    <color name="gray_large">#565656</color>
 
     <color name="lesson_free">#1828B3</color>
     <color name="lesson_recommend">#7820D0</color>

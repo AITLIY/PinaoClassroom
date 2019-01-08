@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_bg"
     android:orientation="vertical"
-    tools:context="com.yiyin.aobosh.UI.activitys.yiYinClassroom.TeacherActivity">
+    tools:context="com.yiyin.aobosh.UI.activitys.yiyinClassroom.TeacherActivity">
 
     <!--标题栏-->
     <RelativeLayout
@@ -29,7 +29,7 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="@dimen/title_bar_text"
-            android:text="讲师信息"/>
+            android:text="讲师信息 - 亿音钢琴课堂"/>
     </RelativeLayout>
 
     <LinearLayout

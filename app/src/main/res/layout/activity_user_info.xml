@@ -30,7 +30,7 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="@dimen/title_bar_text"
-            android:text="修改个人资料"/>
+            android:text="修改个人资料 - 亿音钢琴课堂"/>
     </RelativeLayout>
 
     <LinearLayout

@@ -27,7 +27,7 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="@dimen/title_bar_text"
-            android:text="我的足迹"/>
+            android:text="我的足迹 - 亿音钢琴课堂"/>
     </RelativeLayout>
 
     <RelativeLayout

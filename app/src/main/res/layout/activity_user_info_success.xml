@@ -5,8 +5,7 @@
               android:layout_height="match_parent"
               android:gravity="center_horizontal"
               android:orientation="vertical"
-              android:background="@color/white"
-              tools:context="com.yiyin.aobosh.activitys.login.UserInfoSuccessActivity">
+              android:background="@color/white">
 
     <!--标题栏-->
     <RelativeLayout
@@ -29,7 +28,7 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="@dimen/title_bar_text"
-            android:text="修改个人资料"/>
+            android:text="修改个人资料 - 亿音钢琴课堂"/>
     </RelativeLayout>
 
     <ImageView

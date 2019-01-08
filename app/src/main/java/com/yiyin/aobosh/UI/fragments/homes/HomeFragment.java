@@ -23,6 +23,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -40,9 +41,9 @@ import com.yiyin.aobosh.UI.activitys.login.LoginActivity;
 import com.yiyin.aobosh.UI.activitys.mine.CouponActivity;
 import com.yiyin.aobosh.UI.activitys.mine.OauthHistoryActivity;
 import com.yiyin.aobosh.UI.activitys.mine.VipServiceActivity;
-import com.yiyin.aobosh.UI.activitys.yiYinClassroom.AllClassActivity;
-import com.yiyin.aobosh.UI.activitys.yiYinClassroom.LessonActivity;
-import com.yiyin.aobosh.UI.activitys.yiYinClassroom.TeacherWebActivity;
+import com.yiyin.aobosh.UI.activitys.yiyinClassroom.AllClassActivity;
+import com.yiyin.aobosh.UI.activitys.yiyinClassroom.LessonActivity;
+import com.yiyin.aobosh.UI.activitys.yiyinClassroom.TeacherWebActivity;
 import com.yiyin.aobosh.adapter.LessonCategoryAdapter;
 import com.yiyin.aobosh.adapter.ViewPagerAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
@@ -66,8 +67,8 @@ import java.util.List;
 import java.util.Map;
 
 import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
-import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.MaterialHeader;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
 
@@ -85,6 +86,7 @@ public class HomeFragment extends Fragment {
     private LinearLayout more_ll;
     private ImageView user_icon;
     private PtrFrameLayout ptrFrameLayout;
+    private ScrollView scrollView;
     private StoreHouseHeader storeHouseHeader;
     private MaterialHeader materialHeader;
     private PtrClassicDefaultHeader ptrClassicDefaultHeader;
@@ -211,6 +213,7 @@ public class HomeFragment extends Fragment {
         container3_title = mView.findViewById(R.id.container3_title);
 
         ptrFrameLayout = mView.findViewById(R.id.ptrFrameLayout);
+        scrollView = mView.findViewById(R.id.scrollView);
         initPtrRefresh();
     }
 
@@ -228,22 +231,23 @@ public class HomeFragment extends Fragment {
 //        ptrFrameLayout.setHeaderView(materialHeader);//类似SwipeRefreshLayout
 //        ptrFrameLayout.addPtrUIHandler(materialHeader);
 
-
-        ptrFrameLayout.setPtrHandler(new PtrHandler() {
-
-            //检查是否可以刷新
-            @Override
-            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return true;
-            }
-
-            //开始刷新
-            @Override
-            public void onRefreshBegin(PtrFrameLayout frame) {
-                updateData();
-            }
-        });
+        ptrFrameLayout.setPtrHandler(defaultHandler);
     }
+
+    private PtrDefaultHandler defaultHandler = new PtrDefaultHandler() {
+
+        @Override
+        public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+
+            return !canChildScrollUp(scrollView);
+        }
+
+        @Override
+        public void onRefreshBegin(PtrFrameLayout frame) {
+            // 做刷新的操作
+            updateData();
+        }
+    };
 
 
     private void initHeaders() {

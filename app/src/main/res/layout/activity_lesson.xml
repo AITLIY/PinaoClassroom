@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/app_bg"
     android:orientation="vertical"
-    tools:context="com.yiyin.aobosh.UI.activitys.yiYinClassroom.LessonActivity">
+    tools:context="com.yiyin.aobosh.UI.activitys.yiyinClassroom.LessonActivity">
 
     <!--标题栏-->
     <RelativeLayout
@@ -359,6 +359,18 @@
                         android:textColor="@color/white"
                         android:textSize="14dp"
                         android:text="全部"/>
+
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/buy_class"
+                        android:layout_width="72dp"
+                        android:layout_height="24dp"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center"
+                        android:background="@drawable/shape_red_solid"
+                        android:textColor="@color/white"
+                        android:textSize="14dp"
+                        android:text="购买课本"/>
                 </LinearLayout>
 
                 <com.handmark.pulltorefresh.library.PullToRefreshListView
@@ -489,6 +501,17 @@
             android:background="@color/btn_selected"
             android:gravity="center"
             android:text="开始学习"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/buy_vip"
+            android:layout_width="171dp"
+            android:layout_height="match_parent"
+            android:background="@color/price_bg"
+            android:gravity="center"
+            android:text="购买会员"
             android:textColor="@color/white"
             android:textSize="18sp" />
     </LinearLayout>

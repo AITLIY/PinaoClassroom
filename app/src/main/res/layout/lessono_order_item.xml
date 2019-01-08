@@ -146,7 +146,29 @@
             android:layout_weight="1"/>
 
         <TextView
-            android:id="@+id/commit"
+            android:id="@+id/cancel_pay"
+            android:layout_width="82dp"
+            android:layout_height="25dp"
+            android:layout_marginRight="8dp"
+            android:gravity="center"
+            android:background="@drawable/shape_gray2_solid"
+            android:textColor="@color/white"
+            android:textSize="12dp"
+            android:text="取消订单"/>
+
+        <TextView
+            android:id="@+id/start_pay"
+            android:layout_width="82dp"
+            android:layout_height="25dp"
+            android:layout_marginRight="8dp"
+            android:gravity="center"
+            android:background="@drawable/shape_red_solid"
+            android:textColor="@color/white"
+            android:textSize="12dp"
+            android:text="立即支付"/>
+
+        <TextView
+            android:id="@+id/evalute_tv"
             android:layout_width="82dp"
             android:layout_height="25dp"
             android:layout_marginRight="8dp"

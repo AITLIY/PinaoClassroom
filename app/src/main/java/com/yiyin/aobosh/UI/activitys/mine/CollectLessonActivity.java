@@ -28,7 +28,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.UI.activitys.login.LoginActivity;
-import com.yiyin.aobosh.UI.activitys.yiYinClassroom.LessonActivity;
+import com.yiyin.aobosh.UI.activitys.yiyinClassroom.LessonActivity;
 import com.yiyin.aobosh.adapter.LessonListAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.RecommendLesson;

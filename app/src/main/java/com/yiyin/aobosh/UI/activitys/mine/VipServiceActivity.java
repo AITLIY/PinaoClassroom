@@ -86,12 +86,12 @@ public class VipServiceActivity extends Activity {
 
                 case LOAD_DATA_SUCCESS1:
 
-                    showVipUI(true);
+
                     break;
 
                 case LOAD_DATA_FAILE1:
 
-                    showVipUI(false);
+
                     break;
 
                 case LOAD_DATA_SUCCESS2:
@@ -188,7 +188,7 @@ public class VipServiceActivity extends Activity {
         mLevelListBeans = new ArrayList<>();
         mVipOrderBeans = new ArrayList<>();
 
-        getVipBuy(mUserInfo.getUid());
+//        getVipBuy(mUserInfo.getUid());
         getVipShow(mUserInfo.getUid());
         getVipOrder(mUserInfo.getUid());
     }
@@ -215,6 +215,13 @@ public class VipServiceActivity extends Activity {
         mAdapter2 = new LevelVipAdapter(mLevelListBeans);
         level_list_rv.setLayoutManager(new LinearLayoutManager(mContext));
         level_list_rv.setAdapter(mAdapter2);
+
+        if (mMemberVipListBeans.size()<1) {
+            showVipUI(true);
+        } else {
+            showVipUI(false);
+        }
+
     }
 
     private void initVipDataView2() {

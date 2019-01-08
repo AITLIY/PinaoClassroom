@@ -59,7 +59,6 @@
 
         </LinearLayout>
 
-
         <in.srain.cube.views.ptr.PtrFrameLayout
             android:id="@+id/ptrFrameLayout"
             android:layout_width="match_parent"
@@ -70,6 +69,7 @@
             app:ptr_resistance="1.7">
 
         <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="none">
@@ -82,7 +82,7 @@
                 <!--轮播图-->
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="200dp">
+                    android:layout_height="192dp">
 
                     <!--存放图片的ViewPager-->
                     <android.support.v4.view.ViewPager

@@ -101,18 +101,30 @@
             android:name=".UI.activitys.mine.VipCardSuccessActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".UI.activitys.yiYinClassroom.AllClassActivity"
+            android:name=".UI.activitys.yiyinClassroom.AllClassActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".UI.activitys.yiYinClassroom.YiYinClassroomActivity"
+            android:name=".UI.activitys.yiyinClassroom.YiYinClassroomActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".UI.activitys.yiYinClassroom.LessonActivity"
+            android:name=".UI.activitys.yiyinClassroom.LessonActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
-        <activity android:name=".UI.activitys.yiYinClassroom.TeacherActivity"/>
+        <activity
+            android:name=".UI.activitys.yiyinClassroom.TeacherActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".UI.activitys.yiyinClassroom.TeacherWebActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".UI.activitys.pay.PlaceOrderActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".wxapi.WXEntryActivity"
-            android:exported="true"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -122,12 +134,7 @@
                 <data android:scheme="42"/>
             </intent-filter>
         </activity>
-        <activity
-            android:name=".UI.activitys.yiYinClassroom.TeacherWebActivity"
-            android:screenOrientation="portrait"/>
         <activity android:name=".UI.activitys.pay.PayOrderActivity">
-        </activity>
-        <activity android:name=".wxapi.WXPayEntryActivity">
         </activity>
     </application>
 

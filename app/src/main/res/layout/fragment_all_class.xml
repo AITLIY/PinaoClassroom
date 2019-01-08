@@ -22,7 +22,7 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="@dimen/title_bar_text"
-                android:text="课程列表"/>
+                android:text="课程列表 - 亿音钢琴课堂"/>
         </RelativeLayout>
 
         <LinearLayout

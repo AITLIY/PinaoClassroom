@@ -1,4 +1,4 @@
-package com.yiyin.aobosh.UI.activitys.yiYinClassroom;
+package com.yiyin.aobosh.UI.activitys.yiyinClassroom;
 
 import android.app.Activity;
 import android.content.Intent;

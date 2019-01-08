@@ -103,7 +103,7 @@ public class HttpURL {
 
 
 
-    // 1.会员等级列表和用户会员等级
+    // 1.购买会员订单支付状态
     public static final String VIP_BUY_URL = BASE_URL + "vip/buy";
 
     // 2.会员等级列表和用户会员等级
@@ -129,6 +129,11 @@ public class HttpURL {
 
     // 9.我的课程列表点击后订单信息
     public static final String LESSONSON_FINDORDER_URL = BASE_URL + "lessonson/findorder";
+
+    // 10.我的课程列表点击后订单信息
+    public static final String LESSONSON_CANSLEORDER_URL = BASE_URL + "lessonson/cansleorder";
+
+
 
 
 }

@@ -1,4 +1,4 @@
-package com.yiyin.aobosh.UI.activitys.yiYinClassroom;
+package com.yiyin.aobosh.UI.activitys.yiyinClassroom;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -13,14 +13,8 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;

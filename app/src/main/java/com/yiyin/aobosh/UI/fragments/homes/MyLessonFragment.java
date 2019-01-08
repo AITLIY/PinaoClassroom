@@ -28,10 +28,10 @@ import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
-import com.yiyin.aobosh.Interface.SubmitCommentInterface;
+import com.yiyin.aobosh.Interface.OrderClickInterface;
 import com.yiyin.aobosh.R;
-import com.yiyin.aobosh.UI.activitys.pay.PayOrderActivity;
-import com.yiyin.aobosh.UI.activitys.yiYinClassroom.LessonActivity;
+import com.yiyin.aobosh.UI.activitys.pay.PlaceOrderActivity;
+import com.yiyin.aobosh.UI.activitys.yiyinClassroom.LessonActivity;
 import com.yiyin.aobosh.adapter.LessonOrderAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.LessonOrder;
@@ -56,7 +56,7 @@ import java.util.Map;
  */
 
 
-public class MyLessonFragment extends Fragment implements View.OnClickListener,SubmitCommentInterface{
+public class MyLessonFragment extends Fragment implements View.OnClickListener {
 
     private View mView;
     private Context mContext;
@@ -176,28 +176,40 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener,S
         mContext = getContext();
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
         mShowList = new ArrayList<>();
-        adapter = new LessonOrderAdapter(mContext, mShowList,this);
+        adapter = new LessonOrderAdapter(mContext, mShowList,new OrderClick());
         lesson_item_list.setAdapter(adapter);
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
         getLessonData(mUserInfo.getUid(), CommonParameters.ALL);
     }
 
 
-    @Override
-    public void onSubmit(LessonOrder order) {
+    class OrderClick implements OrderClickInterface {
 
-        GlobalParameterApplication.isShowComment = true;
-        Intent intent = new Intent(mContext, LessonActivity.class);
+        @Override
+        public void onCancel(LessonOrder order) {
 
-        RecommendLesson.LessonBean lessonBean = new RecommendLesson.LessonBean();
-        lessonBean.setId(order.getLessonid());
-        lessonBean.setBookname(order.getBookname());
-        lessonBean.setOrdersn(order.getOrdersn());
+        }
 
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("LessonBean",lessonBean);
-        intent.putExtras(bundle);
-        getActivity().startActivity(intent);
+        @Override
+        public void onPay(LessonOrder order) {
+
+        }
+
+        @Override
+        public void onEvaluate(LessonOrder order) {
+            GlobalParameterApplication.isShowComment = true;
+            Intent intent = new Intent(mContext, LessonActivity.class);
+
+            RecommendLesson.LessonBean lessonBean = new RecommendLesson.LessonBean();
+            lessonBean.setId(order.getLessonid());
+            lessonBean.setBookname(order.getBookname());
+            lessonBean.setOrdersn(order.getOrdersn());
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("LessonBean", lessonBean);
+            intent.putExtras(bundle);
+            getActivity().startActivity(intent);
+        }
     }
 
     // 初始化列表
@@ -239,7 +251,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener,S
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 LogUtils.i("SonlistFragment: onItemClick " + mShowList.get(position-1).getId());
-                Intent intent = new Intent(mContext,PayOrderActivity.class);
+                Intent intent = new Intent(mContext,PlaceOrderActivity.class);
                 intent.putExtra("lessonid",mShowList.get(position-1).getLessonid());
                 startActivity(intent);
             }
