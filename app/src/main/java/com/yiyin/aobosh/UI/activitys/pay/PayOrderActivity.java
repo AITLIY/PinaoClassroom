@@ -64,7 +64,7 @@ public class PayOrderActivity extends Activity {
 //        Intent intent = getIntent();
 //        if (intent != null) {
 //            lessonID = intent.getIntExtra("lessonid",0);
-//            LogUtils.i("PlaceOrderActivity: PlaceOrderActivity " + lessonID);
+//            LogUtils.i("CeatOrderActivity: CeatOrderActivity " + lessonID);
 //        }
 //        getFindOrder(mUserInfo.getUid(), lessonID);
 

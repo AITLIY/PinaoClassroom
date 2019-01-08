@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
+    android:background="@color/app_bg"
     android:orientation="vertical"
     tools:context="com.yiyin.aobosh.UI.activitys.mine.VipCardActivity">
 
@@ -31,6 +32,11 @@
             android:textSize="@dimen/title_bar_text"
             android:text="VIP服务卡开通服务"/>
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray_lite"/>
 
     <!--会员类别-->
     <android.support.v7.widget.RecyclerView

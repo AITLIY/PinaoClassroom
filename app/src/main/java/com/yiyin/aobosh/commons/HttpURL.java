@@ -130,8 +130,9 @@ public class HttpURL {
     // 9.我的课程列表点击后订单信息
     public static final String LESSONSON_FINDORDER_URL = BASE_URL + "lessonson/findorder";
 
-    // 10.我的课程列表点击后订单信息
+    // 10.取消订单
     public static final String LESSONSON_CANSLEORDER_URL = BASE_URL + "lessonson/cansleorder";
+
 
 
 

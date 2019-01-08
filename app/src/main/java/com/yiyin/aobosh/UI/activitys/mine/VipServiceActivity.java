@@ -23,7 +23,9 @@ import com.githang.statusbar.StatusBarCompat;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lidroid.xutils.util.LogUtils;
+import com.yiyin.aobosh.Interface.JoinVipInterface;
 import com.yiyin.aobosh.R;
+import com.yiyin.aobosh.UI.activitys.pay.CeatOrderActivity;
 import com.yiyin.aobosh.adapter.LevelVipAdapter;
 import com.yiyin.aobosh.adapter.MemberVipAdapter;
 import com.yiyin.aobosh.adapter.VipOrderAdapter;
@@ -212,7 +214,14 @@ public class VipServiceActivity extends Activity {
         Member_list_rv.setLayoutManager(new LinearLayoutManager(mContext));
         Member_list_rv.setAdapter(mAdapter1);
 
-        mAdapter2 = new LevelVipAdapter(mLevelListBeans);
+        mAdapter2 = new LevelVipAdapter(mLevelListBeans, new JoinVipInterface() {
+            @Override
+            public void onPayVip() {
+                Intent intent1 = new Intent(mContext,CeatOrderActivity.class);
+                intent1.putExtra("lessonid",122);
+                startActivity(intent1);
+            }
+        });
         level_list_rv.setLayoutManager(new LinearLayoutManager(mContext));
         level_list_rv.setAdapter(mAdapter2);
 

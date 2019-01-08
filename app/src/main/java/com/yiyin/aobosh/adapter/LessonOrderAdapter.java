@@ -68,7 +68,9 @@ public class LessonOrderAdapter extends BaseAdapter {
             holder.spec_day_tv = convertView.findViewById(R.id.spec_day_tv);
             holder.validity_tv = convertView.findViewById(R.id.validity_tv);
             holder.validity_ll = convertView.findViewById(R.id.validity_ll);
-            holder.evalute_tv = convertView.findViewById(R.id.commit);
+            holder.cancel_pay = convertView.findViewById(R.id.cancel_pay);
+            holder.start_pay = convertView.findViewById(R.id.start_pay);
+            holder.evalute_tv = convertView.findViewById(R.id.evalute_tv);
 
             convertView.setTag(holder);
         } else {
@@ -83,28 +85,52 @@ public class LessonOrderAdapter extends BaseAdapter {
         holder.ordersn_tv.setText("订单编号：2"+mList.get(position).getOrdersn());
         holder.statusname_tv.setText(mList.get(position).getStatusname());
         holder.addtime_tv.setText("下单时间："+mList.get(position).getAddtime());
-        holder.spec_day_tv.setText("规格："+mList.get(position).getSpec_day());
+        holder.spec_day_tv.setText("规格："+mList.get(position).getSpec_day()+"天");
 
         LogUtils.d("订单status：" + mList.get(position).getStatus());
-        if (mList.get(position).getStatus()!=2) {
+        int status = mList.get(position).getStatus();
 
-            holder.validity_ll.setVisibility(View.GONE);
-            holder.evalute_tv.setVisibility(View.GONE);
-        } else {
-            holder.validity_ll.setVisibility(View.VISIBLE);
-            holder.validity_tv.setText(mList.get(position).getValidity()+"");
-            holder.evalute_tv.setVisibility(View.VISIBLE);
-        }
+        switch (status) {
 
-        if (mList.get(position).getStatus()==-1){
+            case -1:                                //已取消
 
+                holder.validity_ll.setVisibility(View.INVISIBLE);
+                holder.cancel_pay.setVisibility(View.GONE);
+                holder.start_pay.setVisibility(View.GONE);
+                holder.evalute_tv.setVisibility(View.GONE);
+                break;
+
+            case 0:                                //待付款
+
+                holder.validity_ll.setVisibility(View.INVISIBLE);
+                holder.cancel_pay.setVisibility(View.VISIBLE);
+                holder.start_pay.setVisibility(View.VISIBLE);
+                holder.evalute_tv.setVisibility(View.GONE);
+                break;
+
+            case 1:                                //已付款
+
+                holder.validity_ll.setVisibility(View.VISIBLE);
+                holder.validity_tv.setText(mList.get(position).getValidity()+"");
+                holder.cancel_pay.setVisibility(View.GONE);
+                holder.start_pay.setVisibility(View.GONE);
+                holder.evalute_tv.setVisibility(View.VISIBLE);
+                break;
+
+            case 2:                                //已评价
+
+                holder.validity_ll.setVisibility(View.VISIBLE);
+                holder.validity_tv.setText(mList.get(position).getValidity()+"");
+                holder.cancel_pay.setVisibility(View.GONE);
+                holder.start_pay.setVisibility(View.GONE);
+                holder.evalute_tv.setVisibility(View.GONE);
+                break;
 
         }
 
         holder.cancel_pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 mOrderClick.onCancel(mList.get(position));
             }
         });
@@ -112,7 +138,6 @@ public class LessonOrderAdapter extends BaseAdapter {
         holder.start_pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 mOrderClick.onPay(mList.get(position));
             }
         });
@@ -120,7 +145,6 @@ public class LessonOrderAdapter extends BaseAdapter {
         holder.evalute_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 mOrderClick.onEvaluate(mList.get(position));
             }
         });
@@ -139,8 +163,8 @@ public class LessonOrderAdapter extends BaseAdapter {
         public TextView spec_day_tv;    //课程规格
         public TextView validity_tv;    //有效期
         public LinearLayout validity_ll;    //有效期
-        public TextView cancel_pay;         //评价课程
-        public TextView start_pay;         //评价课程
+        public TextView cancel_pay;         //取消订单
+        public TextView start_pay;          //立即支付
         public TextView evalute_tv;         //评价课程
 
     }

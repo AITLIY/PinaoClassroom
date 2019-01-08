@@ -22,7 +22,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.githang.statusbar.StatusBarCompat;
 import com.google.gson.Gson;
 import com.lidroid.xutils.util.LogUtils;
+import com.yiyin.aobosh.Interface.JoinVipInterface;
 import com.yiyin.aobosh.R;
+import com.yiyin.aobosh.UI.activitys.pay.CeatOrderActivity;
 import com.yiyin.aobosh.adapter.LevelVipAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.UserInfo;
@@ -172,7 +174,14 @@ public class VipCardActivity extends Activity {
 
     private void initVipDataView() {
         
-        mAdapter2 = new LevelVipAdapter(mLevelListBeans);
+        mAdapter2 = new LevelVipAdapter(mLevelListBeans, new JoinVipInterface() {
+            @Override
+            public void onPayVip() {
+                Intent intent1 = new Intent(mContext,CeatOrderActivity.class);
+                intent1.putExtra("lessonid",123);
+                startActivity(intent1);
+            }
+        });
         level_item_rv.setLayoutManager(new LinearLayoutManager(mContext));
         level_item_rv.setAdapter(mAdapter2);
     }

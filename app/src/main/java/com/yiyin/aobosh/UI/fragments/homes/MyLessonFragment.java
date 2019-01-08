@@ -30,7 +30,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.Interface.OrderClickInterface;
 import com.yiyin.aobosh.R;
-import com.yiyin.aobosh.UI.activitys.pay.PlaceOrderActivity;
+import com.yiyin.aobosh.UI.activitys.pay.CeatOrderActivity;
+
 import com.yiyin.aobosh.UI.activitys.yiyinClassroom.LessonActivity;
 import com.yiyin.aobosh.adapter.LessonOrderAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
@@ -64,7 +65,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
     private UserInfo mUserInfo;
 
     private PullToRefreshListView lesson_item_list;          // 课程列表容器
-    private ArrayList<LessonOrder> mLessonSearches;          // 课程搜索结果的集合
+    private ArrayList<LessonOrder> mLessonOrder;          // 课程搜索结果的集合
     private ArrayList<LessonOrder> mShowList;                // 课程显示结果的集合
     private LessonOrderAdapter adapter;
 
@@ -79,7 +80,9 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
     private String Current_type = CommonParameters.ALL;            // 当前类型
 
     private static final int LOAD_DATA1_SUCCESS = 101;
-    private static final int LOAD_DATA1_FAILE = 102;
+    private static final int LOAD_DATA1_FAILE = 102;    
+    private static final int LOAD_DATA_SUCCESS2 = 201;
+    private static final int LOAD_DATA_FAILE2 = 202;
     private static final int NET_ERROR = 404;
 
     @SuppressLint("HandlerLeak")
@@ -94,11 +97,11 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
 
                     if (mSearchType==SEARCH_LESSON_PARAMETER) {
 
-                        if (mLessonSearches.size()>0){
+                        if (mLessonOrder.size()>0){
                             setViewForResult(true,"");
 
                         } else {
-                            setViewForResult(false,"您没有任何课程信息~");
+                            setViewForResult(false,"没有任何课程信息~");
                         }
                     }
                     break;
@@ -112,6 +115,17 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
                             setViewForResult(false,"查询数据失败~");
                         }
                     }, 1000);
+                    break;
+
+
+                case LOAD_DATA_SUCCESS2:
+                    
+                    ToastUtil.show(mContext,"操作成功");
+                    break;
+
+                case LOAD_DATA_FAILE2:
+
+                    ToastUtil.show(mContext,"操作失败");
                     break;
 
                 case NET_ERROR:
@@ -187,12 +201,15 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onCancel(LessonOrder order) {
-
+            lessonCancelOrder(mUserInfo.getUid(), order.getLessonid());
         }
 
         @Override
         public void onPay(LessonOrder order) {
 
+            Intent intent = new Intent(mContext,CeatOrderActivity.class);
+            intent.putExtra("lessonid",order.getLessonid());
+            startActivity(intent);
         }
 
         @Override
@@ -250,10 +267,19 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
         lesson_item_list.setOnItemClickListener(new AdapterView.OnItemClickListener() { //点击item时
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                LogUtils.i("SonlistFragment: onItemClick " + mShowList.get(position-1).getId());
-                Intent intent = new Intent(mContext,PlaceOrderActivity.class);
-                intent.putExtra("lessonid",mShowList.get(position-1).getLessonid());
-                startActivity(intent);
+                LogUtils.i("MyLessonFragment: onItemClick " + mShowList.get(position-1).getId());
+
+                Intent intent = new Intent(mContext, LessonActivity.class);
+
+                RecommendLesson.LessonBean lessonBean = new RecommendLesson.LessonBean();
+                lessonBean.setId(mShowList.get(position-1).getLessonid());
+                lessonBean.setBookname(mShowList.get(position-1).getBookname());
+                lessonBean.setOrdersn(mShowList.get(position-1).getOrdersn());
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("LessonBean", lessonBean);
+                intent.putExtras(bundle);
+                getActivity().startActivity(intent);
             }
         });
 
@@ -366,7 +392,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
             case SEARCH_LESSON_PARAMETER:
 
                 mShowList.clear();
-                mShowList.addAll(mLessonSearches);
+                mShowList.addAll(mLessonOrder);
                 LogUtils.i("MyLessonFragment: SEARCH_LESSON_FOR_PARAMETER "  + mShowList.size());
 
                 adapter.notifyDataSetChanged();
@@ -381,7 +407,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
 
             case SEARCH_LESSON_PULL_UP:
 
-                adapter.addLast(mLessonSearches);
+                adapter.addLast(mLessonOrder);
                 LogUtils.i("MyLessonFragment: SEARCH_LESSON_PULL_UP " + mShowList.size());
 
                 adapter.notifyDataSetChanged();
@@ -389,7 +415,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void run() {
                         lesson_item_list.onRefreshComplete();
-                        if (mLessonSearches.size()==0){
+                        if (mLessonOrder.size()==0){
                             ToastUtil.show(mContext,"没有更多结果");
                         }
                     }
@@ -418,8 +444,8 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
                         if ("200".equals(code)) {
 
                             String data = jsonObject.getString("data");
-                            mLessonSearches = new Gson().fromJson(data, new TypeToken<List<LessonOrder>>(){}.getType());
-                            LogUtils.i("MyLessonFragment: mLessonSearches.size " + mLessonSearches.size());
+                            mLessonOrder = new Gson().fromJson(data, new TypeToken<List<LessonOrder>>(){}.getType());
+                            LogUtils.i("MyLessonFragment: mLessonOrder.size " + mLessonOrder.size());
 
                             mHandler.sendEmptyMessage(LOAD_DATA1_SUCCESS);
                             return;
@@ -471,4 +497,74 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
         requestQueue.add(stringRequest);
     }
 
+    // 获取我的的课程
+    private void lessonCancelOrder(final int uid, final int lessonid) {
+
+        String url = HttpURL.LESSONSON_CANSLEORDER_URL;
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,url,new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                if (!"".equals(s)) {
+                    LogUtils.i("lessonCancelOrder: result1 " + s);
+
+                    try {
+                        JSONObject jsonObject = new JSONObject(s);
+                        String code = jsonObject.getString("code");
+
+                        if ("200".equals(code)) {
+
+                            String data = jsonObject.getString("data");
+                            mLessonOrder = new Gson().fromJson(data, new TypeToken<List<LessonOrder>>(){}.getType());
+                            LogUtils.i("lessonCancelOrder: mLessonOrder.size " + mLessonOrder.size());
+
+                            mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS2);
+                            return;
+                        }
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE2);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE2);
+                    }
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                LogUtils.e("lessonCancelOrder: volleyError1 " + volleyError.toString());
+                mHandler.sendEmptyMessage(LOAD_DATA_FAILE2);
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> map = new HashMap<String, String>();
+                JSONObject obj = new JSONObject();
+
+                try {
+
+                    String token = "Lessonsoncansleorder" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
+                    LogUtils.i("lessonCancelOrder: token " + token);
+                    String sha_token = SHA.encryptToSHA(token);
+
+                    obj.put("access_token", sha_token);
+                    obj.put("uid", uid);
+                    obj.put("lessonid", lessonid);
+                    obj.put("device", CommonParameters.ANDROID);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                LogUtils.i("lessonCancelOrder json1 " + obj.toString());
+
+                map.put("dt", obj.toString());
+                return map;
+            }
+
+        };
+        requestQueue.add(stringRequest);
+    }
+    
 }

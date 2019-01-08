@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.yiyin.aobosh.Interface.JoinVipInterface;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.bean.VipShow;
 
@@ -19,8 +20,10 @@ public class LevelVipAdapter extends RecyclerView.Adapter<LevelVipAdapter.ViewHo
 
     // ① 创建Adapter
     private List<VipShow.LevelListBean> mDatas;
-    public LevelVipAdapter(List<VipShow.LevelListBean> data) {
-        this.mDatas = data;
+    private JoinVipInterface mJoinVip;
+    public LevelVipAdapter(List<VipShow.LevelListBean> data, JoinVipInterface joinVip) {
+        mDatas = data;
+        mJoinVip = joinVip;
     }
 
     //② 创建ViewHolder
@@ -53,6 +56,7 @@ public class LevelVipAdapter extends RecyclerView.Adapter<LevelVipAdapter.ViewHo
             @Override
             public void onClick(View v) {
 
+                mJoinVip.onPayVip();
             }
         });
         holder.itemView.setOnClickListener(new View.OnClickListener() {

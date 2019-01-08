@@ -34,7 +34,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlaceOrderActivity extends Activity {
+public class CeatOrderActivity extends Activity {
 
     private Context mContext;
     private RequestQueue requestQueue;
@@ -127,7 +127,7 @@ public class PlaceOrderActivity extends Activity {
         Intent intent = getIntent();
         if (intent != null) {
             lessonID = intent.getIntExtra("lessonid",0);
-            LogUtils.i("PlaceOrderActivity: PlaceOrderActivity " + lessonID);
+            LogUtils.i("CeatOrderActivity: CeatOrderActivity " + lessonID);
         }
         getFindOrder(mUserInfo.getUid(), lessonID);
 
@@ -154,7 +154,7 @@ public class PlaceOrderActivity extends Activity {
             @Override
             public void onResponse(String s) {
                 if (!"".equals(s)) {
-                    LogUtils.i("PlaceOrderActivity: result1 " + s);
+                    LogUtils.i("CeatOrderActivity: result1 " + s);
 
                     try {
                         JSONObject jsonObject = new JSONObject(s);
@@ -182,7 +182,7 @@ public class PlaceOrderActivity extends Activity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtils.e("PlaceOrderActivity: volleyError1 " + volleyError.toString());
+                LogUtils.e("CeatOrderActivity: volleyError1 " + volleyError.toString());
                 mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
@@ -207,7 +207,7 @@ public class PlaceOrderActivity extends Activity {
                     e.printStackTrace();
                 }
 
-                LogUtils.i("PlaceOrderActivity json1 " + obj.toString());
+                LogUtils.i("CeatOrderActivity json1 " + obj.toString());
 
                 map.put("dt", obj.toString());
                 return map;

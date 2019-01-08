@@ -181,6 +181,14 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
+
+        if (mUserInfo!=null) {
+            LogUtils.i("HomeFragment: mUserInfo " + mUserInfo);
+            Glide.with(mContext)
+                    .load(mUserInfo.getAvatar())
+                    .error(R.drawable.icon_tab_usericon)
+                    .into(user_icon);
+        }
     }
 
     @Override
@@ -282,14 +290,6 @@ public class HomeFragment extends Fragment {
     private void initData() {
         requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
-
-        if (mUserInfo!=null) {
-            LogUtils.i("HomeFragment: mUserInfo " + mUserInfo);
-            Glide.with(mContext)
-                    .load(mUserInfo.getAvatar())
-                    .error(R.drawable.icon_tab_usericon)
-                    .into(user_icon);
-        }
 
         more_ll.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -117,7 +117,7 @@
             android:name=".UI.activitys.yiyinClassroom.TeacherWebActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".UI.activitys.pay.PlaceOrderActivity"
+            android:name=".UI.activitys.pay.CeatOrderActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".wxapi.WXEntryActivity"
