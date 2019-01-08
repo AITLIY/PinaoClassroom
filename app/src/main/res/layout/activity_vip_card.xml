@@ -28,7 +28,6 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="@color/black"
-            android:textStyle="bold"
             android:textSize="@dimen/title_bar_text"
             android:text="VIP服务卡开通服务"/>
     </RelativeLayout>

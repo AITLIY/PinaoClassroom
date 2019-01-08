@@ -29,7 +29,7 @@
                 android:layout_marginLeft="3dp"
                 android:text="亿音钢琴课堂"
                 android:textColor="@color/black"
-                android:textSize="@dimen/title_bar_text"
+                android:textSize="18sp"
                 android:textStyle="bold"/>
 
             <View
@@ -58,6 +58,11 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray_lite"/>
 
         <in.srain.cube.views.ptr.PtrFrameLayout
             android:id="@+id/ptrFrameLayout"

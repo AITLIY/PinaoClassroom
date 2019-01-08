@@ -26,10 +26,14 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="@color/black"
-            android:textStyle="bold"
             android:textSize="@dimen/title_bar_text"
             android:text="修改个人资料 - 亿音钢琴课堂"/>
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray_lite"/>
 
     <ImageView
         android:layout_width="100dp"
