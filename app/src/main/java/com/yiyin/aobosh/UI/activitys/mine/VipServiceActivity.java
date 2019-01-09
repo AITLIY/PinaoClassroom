@@ -225,7 +225,7 @@ public class VipServiceActivity extends Activity {
         level_list_rv.setLayoutManager(new LinearLayoutManager(mContext));
         level_list_rv.setAdapter(mAdapter2);
 
-        if (mMemberVipListBeans.size()<1) {
+        if (mMemberVipListBeans.size()>0) {
             showVipUI(true);
         } else {
             showVipUI(false);

@@ -37,20 +37,20 @@ import com.handmark.pulltorefresh.library.ILoadingLayout;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
+import com.yiyin.aobosh.Interface.CateIdSearchInterface;
+import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.UI.activitys.login.LoginActivity;
 import com.yiyin.aobosh.UI.activitys.yiyinClassroom.LessonActivity;
 import com.yiyin.aobosh.adapter.LessonCategoryAdapter2;
 import com.yiyin.aobosh.adapter.LessonListAdapter;
-import com.yiyin.aobosh.Interface.CateIdSearchInterface;
-import com.yiyin.aobosh.R;
+import com.yiyin.aobosh.application.GlobalParameterApplication;
+import com.yiyin.aobosh.bean.LessonCategory;
 import com.yiyin.aobosh.bean.RecommendLesson;
+import com.yiyin.aobosh.commons.CommonParameters;
+import com.yiyin.aobosh.commons.HttpURL;
 import com.yiyin.aobosh.utils.SHA;
 import com.yiyin.aobosh.utils.TimeUtils;
 import com.yiyin.aobosh.utils.ToastUtil;
-import com.yiyin.aobosh.application.GlobalParameterApplication;
-import com.yiyin.aobosh.bean.LessonCategory;
-import com.yiyin.aobosh.commons.CommonParameters;
-import com.yiyin.aobosh.commons.HttpURL;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,7 +73,7 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
     private TextView lesson_sort_tv,lesson_filtrate_tv;                             // 排序 筛选TextView
     private LinearLayout lesson_sort_ll,lesson_filtrate_ll;                         // 排序和筛选点击
     private ImageView lesson_sort_iv,lesson_filtrate_iv;                            // 排序和筛选箭头
-    private LinearLayout sort_bg,sort_container;                                    // 排序列表背景和容器
+    private LinearLayout sort_bg;                                                   // 排序列表背景
     private LinearLayout synthesize_sort,free_sort,price_sort,hot_sort,score_sort;  // 综合 免费 价格 人气 好评排序
     private LinearLayout filtrate_bg;                                               // 筛选列表背景
     private RecyclerView lesson_category_rv;                                        // 筛选列表容器
@@ -179,7 +179,6 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
         lesson_sort_iv = mView.findViewById(R.id.lesson_sort_iv);
         lesson_filtrate_iv = mView.findViewById(R.id.lesson_filtrate_iv);
         sort_bg = mView.findViewById(R.id.sort_bg);
-        sort_container = mView.findViewById(R.id.sort_container);
 
         synthesize_sort = mView.findViewById(R.id.synthesize_sort);
         free_sort = mView.findViewById(R.id.free_sort);
@@ -227,7 +226,7 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
 
         lesson_sort_ll.setOnClickListener(this);
         lesson_filtrate_ll.setOnClickListener(this);
-        lesson_sort_ll.setOnClickListener(this);
+        sort_bg.setOnClickListener(this);
         synthesize_sort.setOnClickListener(this);
         free_sort.setOnClickListener(this);
         price_sort.setOnClickListener(this);
@@ -310,6 +309,11 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
                         initLessonCategoryList(GlobalParameterApplication.lessonCategory);
                 }
 
+                break;
+
+            case R.id.sort_bg:
+
+                isShowlessonSort(false);
                 break;
 
             case R.id.synthesize_sort:

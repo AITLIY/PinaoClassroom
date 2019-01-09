@@ -103,9 +103,9 @@
         <activity
             android:name=".UI.activitys.yiyinClassroom.AllClassActivity"
             android:screenOrientation="portrait"/>
-        <activity
-            android:name=".UI.activitys.yiyinClassroom.YiYinClassroomActivity"
-            android:screenOrientation="portrait"/>
+        <!--<activity-->
+            <!--android:name=".UI.activitys.yiyinClassroom.VideoActivity"-->
+            <!--android:screenOrientation="portrait"/>-->
         <activity
             android:name=".UI.activitys.yiyinClassroom.LessonActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -120,22 +120,26 @@
             android:name=".UI.activitys.pay.CeatOrderActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".UI.activitys.pay.PayOrderActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name=".wxapi.WXEntryActivity"
             android:exported="true">
         </activity>
+
         <activity
             android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
             android:launchMode="singleTop">
+
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
-
                 <data android:scheme="42"/>
             </intent-filter>
         </activity>
-        <activity android:name=".UI.activitys.pay.PayOrderActivity">
-        </activity>
+
     </application>
 
 </manifest>

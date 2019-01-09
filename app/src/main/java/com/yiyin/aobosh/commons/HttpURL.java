@@ -131,7 +131,7 @@ public class HttpURL {
     public static final String LESSONSON_FINDORDER_URL = BASE_URL + "lessonson/findorder";
 
     // 10.取消订单
-    public static final String LESSONSON_CANSLEORDER_URL = BASE_URL + "lessonson/cansleorder";
+    public static final String LESSONSON_CANCLEORDER_URL = BASE_URL + "lessonson/cancleorder";
 
 
 

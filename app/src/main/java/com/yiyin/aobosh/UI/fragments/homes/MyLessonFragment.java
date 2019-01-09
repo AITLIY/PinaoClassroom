@@ -104,6 +104,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
                             setViewForResult(false,"没有任何课程信息~");
                         }
                     }
+                    upDataLessonListView();
                     break;
 
                 case LOAD_DATA1_FAILE:
@@ -115,12 +116,14 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
                             setViewForResult(false,"查询数据失败~");
                         }
                     }, 1000);
+                    upDataLessonListView();
                     break;
 
 
                 case LOAD_DATA_SUCCESS2:
                     
                     ToastUtil.show(mContext,"操作成功");
+                    getLessonData(mUserInfo.getUid(),Current_type);
                     break;
 
                 case LOAD_DATA_FAILE2:
@@ -137,9 +140,10 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
                             setViewForResult(false,"网络异常,请稍后重试~");
                         }
                     }, 1000);
+                    upDataLessonListView();
                     break;
             }
-            upDataLessonListView();
+
         }
     };
 
@@ -201,7 +205,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onCancel(LessonOrder order) {
-            lessonCancelOrder(mUserInfo.getUid(), order.getLessonid());
+            lessonCancelOrder(mUserInfo.getUid(), order.getId());
         }
 
         @Override
@@ -497,10 +501,10 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
         requestQueue.add(stringRequest);
     }
 
-    // 获取我的的课程
-    private void lessonCancelOrder(final int uid, final int lessonid) {
+    // 取消我的的课程
+    private void lessonCancelOrder(final int uid, final int orderid) {
 
-        String url = HttpURL.LESSONSON_CANSLEORDER_URL;
+        String url = HttpURL.LESSONSON_CANCLEORDER_URL;
         StringRequest stringRequest = new StringRequest(Request.Method.POST,url,new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
@@ -544,13 +548,13 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
 
                 try {
 
-                    String token = "Lessonsoncansleorder" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
+                    String token = "Lessonsoncancleorder" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
                     LogUtils.i("lessonCancelOrder: token " + token);
                     String sha_token = SHA.encryptToSHA(token);
 
                     obj.put("access_token", sha_token);
                     obj.put("uid", uid);
-                    obj.put("lessonid", lessonid);
+                    obj.put("orderid", orderid);
                     obj.put("device", CommonParameters.ANDROID);
 
                 } catch (JSONException e) {

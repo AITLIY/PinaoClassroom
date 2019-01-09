@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -68,7 +69,7 @@ public class AllClassActivity extends Activity  implements View.OnClickListener,
     private TextView lesson_sort_tv,lesson_filtrate_tv;                             // 排序 筛选TextView
     private LinearLayout lesson_sort_ll,lesson_filtrate_ll;                         // 排序和筛选点击
     private ImageView lesson_sort_iv,lesson_filtrate_iv;                            // 排序和筛选箭头
-    private LinearLayout sort_bg,sort_container;                                    // 排序列表背景和容器
+    private LinearLayout sort_bg;                                                   // 排序列表背景和容器
     private LinearLayout synthesize_sort,free_sort,price_sort,hot_sort,score_sort;  // 综合 免费 价格 人气 好评排序
     private LinearLayout filtrate_bg;                                               // 筛选列表背景
     private RecyclerView lesson_category_rv;                                        // 筛选列表容器
@@ -176,7 +177,12 @@ public class AllClassActivity extends Activity  implements View.OnClickListener,
         lesson_sort_iv = findViewById(R.id.lesson_sort_iv);
         lesson_filtrate_iv = findViewById(R.id.lesson_filtrate_iv);
         sort_bg = findViewById(R.id.sort_bg);
-        sort_container = findViewById(R.id.sort_container);
+        sort_bg.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;//防止点击事件穿透到下层
+            }
+        });
 
         synthesize_sort = findViewById(R.id.synthesize_sort);
         free_sort = findViewById(R.id.free_sort);

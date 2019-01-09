@@ -83,6 +83,7 @@
                         android:id="@+id/lesson_sort_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:text="综合排序" />
 
                     <ImageView
@@ -105,6 +106,7 @@
                         android:id="@+id/lesson_filtrate_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:text="全部分类" />
 
                     <ImageView
@@ -174,7 +176,6 @@
                 android:visibility="gone">
 
                 <LinearLayout
-                    android:id="@+id/sort_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -191,6 +192,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
+                            android:textColor="@color/black"
                             android:text="@string/synthesize_sort" />
                     </LinearLayout>
 
@@ -205,6 +207,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
+                            android:textColor="@color/black"
                             android:text="@string/free_sort" />
                     </LinearLayout>
 
@@ -219,6 +222,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
+                            android:textColor="@color/black"
                             android:text="@string/price_sort" />
                     </LinearLayout>
 
@@ -233,6 +237,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
+                            android:textColor="@color/black"
                             android:text="@string/hot_sort" />
                     </LinearLayout>
 
@@ -247,6 +252,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
+                            android:textColor="@color/black"
                             android:text="@string/score_sort" />
                     </LinearLayout>
                 </LinearLayout>

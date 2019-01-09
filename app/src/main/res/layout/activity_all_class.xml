@@ -86,6 +86,7 @@
                         android:id="@+id/lesson_sort_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:text="综合排序" />
 
                     <ImageView
@@ -108,6 +109,7 @@
                         android:id="@+id/lesson_filtrate_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:text="全部分类" />
 
                     <ImageView
@@ -177,7 +179,6 @@
                 android:visibility="gone">
 
                 <LinearLayout
-                    android:id="@+id/sort_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"

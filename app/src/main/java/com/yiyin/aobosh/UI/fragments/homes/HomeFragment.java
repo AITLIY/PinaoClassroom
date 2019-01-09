@@ -309,14 +309,12 @@ public class HomeFragment extends Fragment {
         updateData();
     }
 
-
     private void updateData() {
 
         getBannerData();
         getCategoryData();
         getRecommendData();
     }
-
 
     private PopupWindow popupWindow;
     public void showMenu() {
