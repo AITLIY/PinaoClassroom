@@ -66,6 +66,7 @@ public class VipServiceActivity extends Activity {
 
     private VipOrderAdapter mAdapter3;
     private RecyclerView order_list_rv;
+    private boolean isVip;
 
     //    private VipOrderAdapter2 mAdapter3;
     //    private ListView order_list_rv;
@@ -216,21 +217,29 @@ public class VipServiceActivity extends Activity {
 
         mAdapter2 = new LevelVipAdapter(mLevelListBeans, new JoinVipInterface() {
             @Override
-            public void onPayVip() {
-                Intent intent1 = new Intent(mContext,CeatOrderActivity.class);
-                intent1.putExtra("lessonid",122);
-                startActivity(intent1);
+            public void onPayVip(VipShow.LevelListBean levelListBean) {
+
+                if (isVip) {
+
+                    ToastUtil.show(mContext,"您已是VIP会员");
+                } else {
+                    GlobalParameterApplication.attach = CommonParameters.VIP_ORDER;
+                    Intent intent1 = new Intent(mContext,CeatOrderActivity.class);
+                    intent1.putExtra("levelid",levelListBean.getId());
+                    startActivity(intent1);
+                }
+
             }
         });
         level_list_rv.setLayoutManager(new LinearLayoutManager(mContext));
         level_list_rv.setAdapter(mAdapter2);
 
         if (mMemberVipListBeans.size()>0) {
-            showVipUI(true);
+            isVip = true;
         } else {
-            showVipUI(false);
+            isVip = false;
         }
-
+        showVipUI(isVip);
     }
 
     private void initVipDataView2() {
@@ -239,82 +248,11 @@ public class VipServiceActivity extends Activity {
 //        mAdapter3 = new VipOrderAdapter2(mContext,mVipOrderBeans);
         order_list_rv.setLayoutManager(new LinearLayoutManager(mContext));
         order_list_rv.setAdapter(mAdapter3);
+        order_list_rv.setAdapter(mAdapter3);
 
     }
 
     //--------------------------------------请求服务器数据-------------------------------------------
-
-    // 购买会员订单支付状态
-    private void getVipBuy(final int uid) {
-
-        String url = HttpURL.VIP_BUY_URL;
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,url,new Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {
-                if (!"".equals(s)) {
-                    LogUtils.i("VipServiceActivity: result1 " + s);
-
-                    try {
-                        JSONObject jsonObject = new JSONObject(s);
-                        String code = jsonObject.getString("code");
-
-                        if ("200".equals(code)) {
-
-                            String data = jsonObject.getString("data");
-
-                            mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS1);
-
-                        } else if ("4100".equals(code)){
-
-                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE1);
-                        } else {
-
-                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE1);
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE1);
-                    }
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                LogUtils.e("VipServiceActivity: volleyError1 " + volleyError.getMessage());
-                mHandler.sendEmptyMessage(LOAD_DATA_FAILE1);
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                Map<String, String> map = new HashMap<String, String>();
-                JSONObject obj = new JSONObject();
-
-                try {
-
-                    String token = "Vipbuy" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
-                    LogUtils.i("VipServiceActivity: token " + token);
-                    String sha_token = SHA.encryptToSHA(token);
-
-                    obj.put("access_token", sha_token);
-                    obj.put("uid", uid);
-                    obj.put("device", CommonParameters.ANDROID);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                LogUtils.i("VipServiceActivity json1 " + obj.toString());
-
-                map.put("dt", obj.toString());
-                return map;
-            }
-
-        };
-        requestQueue.add(stringRequest);
-    }
     
     // 获取会员等级列表和用户会员等级
     private void getVipShow(final int uid) {

@@ -124,7 +124,7 @@ public class HttpURL {
     // 7.购买会员时生成的订单信息
     public static final String VIP_BUYVIP_URL = BASE_URL + "vip/buyvip";
 
-    // 8.课程订单信息
+    // 8.创建课程订单信息
     public static final String LESSONSON_CREATEORDER_URL = BASE_URL + "lessonson/createorder";
 
     // 9.我的课程列表点击后订单信息
@@ -132,6 +132,12 @@ public class HttpURL {
 
     // 10.取消订单
     public static final String LESSONSON_CANCLEORDER_URL = BASE_URL + "lessonson/cancleorder";
+
+    // 11.微信支付 统一下单
+    public static final String WXPAY_GETPREPAYORDER_URL = BASE_URL + "Wxpay/getPrePayOrder";
+
+    // 12.微信支付 查询订单
+    public static final String WXPAY_ORDERQUERY_URL = BASE_URL + "Wxpay/orderQuery";
 
 
 

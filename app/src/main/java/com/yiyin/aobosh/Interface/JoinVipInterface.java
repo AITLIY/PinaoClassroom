@@ -1,6 +1,7 @@
 package com.yiyin.aobosh.Interface;
 
 import com.yiyin.aobosh.bean.LessonCategory;
+import com.yiyin.aobosh.bean.VipShow;
 
 /**
  * Created by ALIY on 2019/1/8 0008.
@@ -8,5 +9,5 @@ import com.yiyin.aobosh.bean.LessonCategory;
 
 public interface JoinVipInterface {
 
-    void onPayVip ();
+    void onPayVip (VipShow.LevelListBean levelListBean);
 }

@@ -77,7 +77,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
     private static final int SEARCH_LESSON_PULL_UP = 20;           //上拉加载
     private int mSearchType = 10;  // 查询的标志
     private int page = 1;
-    private String Current_type = CommonParameters.ALL;            // 当前类型
+    private int Current_type = CommonParameters.ALL;            // 当前类型
 
     private static final int LOAD_DATA1_SUCCESS = 101;
     private static final int LOAD_DATA1_FAILE = 102;    
@@ -204,13 +204,31 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
     class OrderClick implements OrderClickInterface {
 
         @Override
+        public void onOrder(LessonOrder order) {
+            LogUtils.i("MyLessonFragment: onItemClick " + order.getId());
+
+            Intent intent = new Intent(mContext, LessonActivity.class);
+
+            RecommendLesson.LessonBean lessonBean = new RecommendLesson.LessonBean();
+            lessonBean.setId(order.getId());
+            lessonBean.setBookname(order.getBookname());
+            lessonBean.setOrdersn(order.getOrdersn());
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("LessonBean", lessonBean);
+            intent.putExtras(bundle);
+            getActivity().startActivity(intent);
+        }
+
+        @Override
         public void onCancel(LessonOrder order) {
             lessonCancelOrder(mUserInfo.getUid(), order.getId());
         }
 
         @Override
         public void onPay(LessonOrder order) {
-
+            GlobalParameterApplication.isHasOrder = true;
+            GlobalParameterApplication.attach = CommonParameters.LESSON_ORDER;
             Intent intent = new Intent(mContext,CeatOrderActivity.class);
             intent.putExtra("lessonid",order.getLessonid());
             startActivity(intent);
@@ -271,19 +289,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
         lesson_item_list.setOnItemClickListener(new AdapterView.OnItemClickListener() { //点击item时
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                LogUtils.i("MyLessonFragment: onItemClick " + mShowList.get(position-1).getId());
 
-                Intent intent = new Intent(mContext, LessonActivity.class);
-
-                RecommendLesson.LessonBean lessonBean = new RecommendLesson.LessonBean();
-                lessonBean.setId(mShowList.get(position-1).getLessonid());
-                lessonBean.setBookname(mShowList.get(position-1).getBookname());
-                lessonBean.setOrdersn(mShowList.get(position-1).getOrdersn());
-
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("LessonBean", lessonBean);
-                intent.putExtras(bundle);
-                getActivity().startActivity(intent);
             }
         });
 
@@ -357,7 +363,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
     }
 
     // 选择订单类型
-    private void typeForSort(String type) {
+    private void typeForSort(int type) {
         page= 1;
         Current_type = type;
         mSearchType = SEARCH_LESSON_PARAMETER;
@@ -432,7 +438,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
     //--------------------------------------请求服务器数据-------------------------------------------
 
     // 获取我的的课程
-    private void getLessonData(final int uid, final String status) {
+    private void getLessonData(final int uid, final int status) {
 
         String url = HttpURL.MYLESSON_MYLESSON_URL;
         StringRequest stringRequest = new StringRequest(Request.Method.POST,url,new Response.Listener<String>() {

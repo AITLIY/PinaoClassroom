@@ -57,6 +57,7 @@ public class VipCardActivity extends Activity {
     private TextView join_commit;
 
     private LevelVipAdapter mAdapter2;
+    private boolean isVip;
 
     private static final int LOAD_DATA_SUCCESS = 101;
     private static final int LOAD_DATA_FAILE = 102;
@@ -176,14 +177,23 @@ public class VipCardActivity extends Activity {
         
         mAdapter2 = new LevelVipAdapter(mLevelListBeans, new JoinVipInterface() {
             @Override
-            public void onPayVip() {
-                Intent intent1 = new Intent(mContext,CeatOrderActivity.class);
-                intent1.putExtra("lessonid",123);
-                startActivity(intent1);
+            public void onPayVip(VipShow.LevelListBean levelListBean) {
+
+                if (isVip) {
+
+                    ToastUtil.show(mContext,"您已是VIP会员");
+                } else {
+                    GlobalParameterApplication.attach = CommonParameters.VIP_ORDER;
+                    Intent intent1 = new Intent(mContext,CeatOrderActivity.class);
+                    intent1.putExtra("levelid",levelListBean.getId());
+                    startActivity(intent1);
+                }
             }
         });
         level_item_rv.setLayoutManager(new LinearLayoutManager(mContext));
         level_item_rv.setAdapter(mAdapter2);
+
+
     }
 
     //--------------------------------------请求服务器数据-------------------------------------------
@@ -208,6 +218,11 @@ public class VipCardActivity extends Activity {
                             VipShow vipShow = new Gson().fromJson(data, VipShow.class);
 
                             mLevelListBeans = vipShow.getLevel_list();
+                            if (vipShow.getMemberVip_list().size()>0) {
+                                isVip = true;
+                            } else {
+                                isVip = false;
+                            }
 
                             mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS);
                             return;

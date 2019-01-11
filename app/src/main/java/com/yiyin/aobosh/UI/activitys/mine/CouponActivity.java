@@ -170,7 +170,7 @@ public class CouponActivity extends Activity implements View.OnClickListener{
         adapter = new CouponAdapter(mContext, mShowList);
         lesson_item_list.setAdapter(adapter);
         mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
-        getLessonData(mUserInfo.getUid(), CommonParameters.ALL);
+        getLessonData(mUserInfo.getUid(), Current_type);
     }
 
 
@@ -358,7 +358,7 @@ public class CouponActivity extends Activity implements View.OnClickListener{
 
     //--------------------------------------请求服务器数据-------------------------------------------
 
-    // 获取我的的课程
+    // 我的优惠券
     private void getLessonData(final int uid, final String status) {
         mLessonSearches= new ArrayList();
         String url = HttpURL.COUPON_COUPON_URL;

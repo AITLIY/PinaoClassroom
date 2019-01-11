@@ -62,6 +62,10 @@ public class GlobalParameterApplication extends Application {
 
     public static List<LessonCategory> lessonCategory;       //课程分类对象的集合
     public static boolean isShowComment;                     //是否显示评论
+    public static boolean isHasOrder;                        //是否已存在订单
+    public static String attach;                             //订单类型
+    public static String body;                               //购买类型
+    public static String out_trade_no;                       //订单号
 
     @Override
     public void onCreate() {
@@ -75,7 +79,7 @@ public class GlobalParameterApplication extends Application {
     private void registToWX() {
         LogUtils.d("微信登录 : registToWX()");
         //AppConst.WEIXIN.APP_ID是指你应用在微信开放平台上的AppID，记得替换。
-        mWxApi = WXAPIFactory.createWXAPI(this, "wx3f889385b49ca1b8", false);
+        mWxApi = WXAPIFactory.createWXAPI(this, CommonParameters.APPID, false);
         // 将该app注册到微信
         mWxApi.registerApp("wx3f889385b49ca1b8");
     }

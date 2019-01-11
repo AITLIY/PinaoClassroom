@@ -14,6 +14,7 @@ import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.Interface.OrderClickInterface;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.bean.LessonOrder;
+import com.yiyin.aobosh.commons.CommonParameters;
 
 import java.util.ArrayList;
 
@@ -59,6 +60,7 @@ public class LessonOrderAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.lessono_order_item, parent,false);
 
             holder = new ViewHolder();
+            holder.orderItem = convertView.findViewById(R.id.order_item);
             holder.lessonImg = convertView.findViewById(R.id.lesson_img);
             holder.bookname_tv = convertView.findViewById(R.id.bookname_tv);
             holder.price_tv = convertView.findViewById(R.id.price_tv);
@@ -92,7 +94,7 @@ public class LessonOrderAdapter extends BaseAdapter {
 
         switch (status) {
 
-            case -1:                                //已取消
+            case CommonParameters.CANCEL:                                //已取消
 
                 holder.validity_ll.setVisibility(View.INVISIBLE);
                 holder.cancel_pay.setVisibility(View.GONE);
@@ -100,7 +102,7 @@ public class LessonOrderAdapter extends BaseAdapter {
                 holder.evalute_tv.setVisibility(View.GONE);
                 break;
 
-            case 0:                                //待付款
+            case CommonParameters.NOT_PAID:                               //待付款
 
                 holder.validity_ll.setVisibility(View.INVISIBLE);
                 holder.cancel_pay.setVisibility(View.VISIBLE);
@@ -108,7 +110,7 @@ public class LessonOrderAdapter extends BaseAdapter {
                 holder.evalute_tv.setVisibility(View.GONE);
                 break;
 
-            case 1:                                //已付款
+            case CommonParameters.PAID:                                //已付款
 
                 holder.validity_ll.setVisibility(View.VISIBLE);
                 holder.validity_tv.setText(mList.get(position).getValidity()+"");
@@ -117,7 +119,7 @@ public class LessonOrderAdapter extends BaseAdapter {
                 holder.evalute_tv.setVisibility(View.VISIBLE);
                 break;
 
-            case 2:                                //已评价
+            case CommonParameters.EVALUATE:                                //已评价
 
                 holder.validity_ll.setVisibility(View.VISIBLE);
                 holder.validity_tv.setText(mList.get(position).getValidity()+"");
@@ -127,6 +129,13 @@ public class LessonOrderAdapter extends BaseAdapter {
                 break;
 
         }
+
+        holder.orderItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOrderClick.onOrder(mList.get(position));
+            }
+        });
 
         holder.cancel_pay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,6 +163,7 @@ public class LessonOrderAdapter extends BaseAdapter {
 
     private class ViewHolder {
 
+        public LinearLayout orderItem; //订单
         public ImageView lessonImg;     //图标
         public TextView bookname_tv;    //课程名称
         public TextView price_tv;       //课程价格

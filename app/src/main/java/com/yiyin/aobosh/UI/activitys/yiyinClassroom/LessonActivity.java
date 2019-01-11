@@ -33,6 +33,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
+import com.yiyin.aobosh.UI.activitys.mine.VipServiceActivity;
 import com.yiyin.aobosh.UI.activitys.pay.CeatOrderActivity;
 import com.yiyin.aobosh.adapter.EvaluateBeanAdapter;
 import com.yiyin.aobosh.adapter.VideoBeanAdapter;
@@ -555,11 +556,13 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
             case R.id.all_tv:
 
-                typeForSort(CommonParameters.ALL);
+                typeForSort(CommonParameters.ALL2);
                 break;
 
             case R.id.buy_class:
 
+                GlobalParameterApplication.isHasOrder = false;
+                GlobalParameterApplication.attach = CommonParameters.LESSON_ORDER;
                 Intent intent1 = new Intent(mContext,CeatOrderActivity.class);
                 intent1.putExtra("lessonid",mLessonBean.getId());
                 startActivity(intent1);
@@ -567,9 +570,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
             case R.id.buy_vip:
 
-                Intent intent2 = new Intent(mContext,CeatOrderActivity.class);
-                intent2.putExtra("lessonid",mLessonBean.getId());
-                startActivity(intent2);
+                startActivity(new Intent(mContext,VipServiceActivity.class));
                 break;
         }
 

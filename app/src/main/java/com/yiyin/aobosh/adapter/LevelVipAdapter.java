@@ -49,20 +49,14 @@ public class LevelVipAdapter extends RecyclerView.Adapter<LevelVipAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.level_name.setText(mDatas.get(position).getLevel_name()+"["+mDatas.get(position).getLevel_validity()+"天]");
         holder.level_price.setText(mDatas.get(position).getLevel_price()+"元");
         holder.join_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                mJoinVip.onPayVip();
-            }
-        });
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //item 点击事件
+                mJoinVip.onPayVip(mDatas.get(position));
             }
         });
     }

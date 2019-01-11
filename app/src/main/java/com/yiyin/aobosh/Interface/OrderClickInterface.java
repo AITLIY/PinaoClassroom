@@ -8,6 +8,7 @@ import com.yiyin.aobosh.bean.LessonOrder;
 
 public interface OrderClickInterface {
 
+    void onOrder(LessonOrder order);
     void onCancel(LessonOrder order);
     void onPay(LessonOrder order);
     void onEvaluate(LessonOrder order);

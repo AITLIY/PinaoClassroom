@@ -278,7 +278,7 @@ public class SonlistFragment extends Fragment implements AdapterView.OnClickList
 
             case R.id.all_tv:
 
-                typeForSort(CommonParameters.ALL);
+                typeForSort(CommonParameters.ALL2);
                 break;
         }
 
