@@ -144,6 +144,7 @@ public class PayOrderActivity extends Activity {
         req.packageValue = "Sign=WXPay";//固定值Sign=WXPay
         req.sign = mWxPayBean.getSign();//签名
         GlobalParameterApplication.mWxApi.sendReq(req);
+        finish();
     }
 
     // 购买会员订单支付状态

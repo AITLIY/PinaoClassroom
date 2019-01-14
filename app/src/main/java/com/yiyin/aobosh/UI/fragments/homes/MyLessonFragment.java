@@ -210,7 +210,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
             Intent intent = new Intent(mContext, LessonActivity.class);
 
             RecommendLesson.LessonBean lessonBean = new RecommendLesson.LessonBean();
-            lessonBean.setId(order.getId());
+            lessonBean.setId(order.getLessonid());
             lessonBean.setBookname(order.getBookname());
             lessonBean.setOrdersn(order.getOrdersn());
 

@@ -154,6 +154,7 @@ public class CeatOrderActivity extends Activity {
                 intent1.putExtra("out_trade_no",mOutTradeNO);
                 intent1.putExtra("total_fee",mTotalFee);
                 startActivity(intent1);
+                finish();
             }
         });
     }
@@ -169,7 +170,7 @@ public class CeatOrderActivity extends Activity {
             return;
         }
 
-        if (GlobalParameterApplication.attach==CommonParameters.LESSON_ORDER){
+        if (GlobalParameterApplication.attach.equals(CommonParameters.LESSON_ORDER)){
             GlobalParameterApplication.body = CommonParameters.BUY_LESSON;
             lessonID = intent.getIntExtra("lessonid",0);
             if (!GlobalParameterApplication.isHasOrder) {
@@ -181,7 +182,7 @@ public class CeatOrderActivity extends Activity {
                 getFindOrder(mUserInfo.getUid(), lessonID);
             }
 
-        } else if (GlobalParameterApplication.attach==CommonParameters.VIP_ORDER){
+        } else if (GlobalParameterApplication.attach.equals(CommonParameters.VIP_ORDER)){
             GlobalParameterApplication.body = CommonParameters.BUY_VIP;
             LogUtils.i("CeatOrderActivity: buyVip " + vipID);
             vipID = intent.getIntExtra("levelid",0);

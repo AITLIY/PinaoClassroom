@@ -22,6 +22,7 @@ import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.UI.activitys.HomepageActivity;
+import com.yiyin.aobosh.UI.activitys.mine.VipServiceActivity;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.FindOrderBean;
 import com.yiyin.aobosh.commons.CommonParameters;
@@ -57,7 +58,12 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
                 case LOAD_DATA_SUCCESS:
 
                     ToastUtil.show(mContext, "支付成功");
-                    startActivity(new Intent(mContext, HomepageActivity.class));
+                    if (GlobalParameterApplication.attach.equals(CommonParameters.LESSON_ORDER)) {
+                        startActivity(new Intent(mContext, HomepageActivity.class));
+                    } else if (GlobalParameterApplication.attach.equals(CommonParameters.VIP_ORDER)) {
+                        startActivity(new Intent(mContext, VipServiceActivity.class));
+                    }
+
                     finish();
                     break;
 
@@ -99,7 +105,16 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
             int errCord = baseResp.errCode;
             if (errCord == 0) {
                 LogUtils.d("微信支付 支付成功！");
-                WxpPayOrderQuery(GlobalParameterApplication.out_trade_no,GlobalParameterApplication.attach);
+                if (GlobalParameterApplication.attach.equals(CommonParameters.LESSON_ORDER)) {
+                    LogUtils.i("CeatOrderActivity: WxpPayOrderQuery " + GlobalParameterApplication.attach + " " + GlobalParameterApplication.out_trade_no);
+                    WxpPayOrderQuery(GlobalParameterApplication.out_trade_no,GlobalParameterApplication.attach);
+
+                } else if (GlobalParameterApplication.attach.equals(CommonParameters.VIP_ORDER)){
+                    LogUtils.i("CeatOrderActivity: WxpPayOrderQuery " + GlobalParameterApplication.attach + " " + GlobalParameterApplication.out_trade_no);
+                    WxpPayOrderQuery(GlobalParameterApplication.out_trade_no,GlobalParameterApplication.attach);
+
+                }
+
             } else {
                 LogUtils.d("微信支付 支付失败");
                 mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
@@ -119,7 +134,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
 
     //--------------------------------------请求服务器数据-------------------------------------------
 
-    // 创建课程订单信息
+    // 查询订单
     private void WxpPayOrderQuery(final String out_trade_no,final String attach) {
 
         String url = HttpURL.WXPAY_ORDERQUERY_URL;

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="cn.yc:YCVideoPlayerLib-2.6.0">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/YCVideoPlayerLib-2.6.0.aar/272e866714aa610ca861ae1072a56630/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/YCVideoPlayerLib-2.6.0.aar/272e866714aa610ca861ae1072a56630/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/cn.yc/YCVideoPlayerLib/2.6.0/e4d910e5c4fe4e14735522feb1bb3a1263eccc01/YCVideoPlayerLib-2.6.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

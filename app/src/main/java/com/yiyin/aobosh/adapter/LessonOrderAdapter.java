@@ -84,7 +84,7 @@ public class LessonOrderAdapter extends BaseAdapter {
                 .into(holder.lessonImg);
         holder.bookname_tv.setText(mList.get(position).getBookname());
         holder.price_tv.setText("¥"+mList.get(position).getPrice());
-        holder.ordersn_tv.setText("订单编号：2"+mList.get(position).getOrdersn());
+        holder.ordersn_tv.setText("订单编号："+mList.get(position).getOrdersn());
         holder.statusname_tv.setText(mList.get(position).getStatusname());
         holder.addtime_tv.setText("下单时间："+mList.get(position).getAddtime());
         holder.spec_day_tv.setText("规格："+mList.get(position).getSpec_day()+"天");

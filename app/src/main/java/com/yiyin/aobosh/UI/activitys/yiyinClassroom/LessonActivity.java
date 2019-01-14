@@ -481,19 +481,16 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
             return;
         }
 
-        if (isCanPlay) {
-
-            ToastUtil.show(mContext, "你还未购买该课程或开通会员");
-            return;
-
-        } else {
-
+        if (!isCanPlay) {
             if (listBean.getIs_free()!=1) {
                 ToastUtil.show(mContext, "你还未购买该课程或开通会员");
                 return;
             }
         }
+
         LogUtils.d("SonlistFragment playAudio Is_free " + listBean.getIs_free());
+        play_bg.setVisibility(View.GONE);
+        play_start.setVisibility(View.GONE);
         videoPlayer.start();
     }
 
@@ -503,7 +500,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
         switch (view.getId()) {
 
-            case R.id.advisory_ll:
+            case R.id.advisory_ll:      //咨询
 
                 joinQQ();
                 break;
@@ -514,15 +511,12 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
             case R.id.play_start:       //开始播放
 
-                play_bg.setVisibility(View.GONE);
-                play_start.setVisibility(View.GONE);
+
                 playAudio(mShowList.get(0));
                 break;
 
             case R.id.start_study:      //开始学习
 
-                play_bg.setVisibility(View.GONE);
-                play_start.setVisibility(View.GONE);
                 playAudio(mShowList.get(0));
                 break;
 
@@ -566,6 +560,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
                 Intent intent1 = new Intent(mContext,CeatOrderActivity.class);
                 intent1.putExtra("lessonid",mLessonBean.getId());
                 startActivity(intent1);
+                finish();
                 break;
 
             case R.id.buy_vip:
@@ -954,7 +949,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onResponse(String s) {
                 if (!"".equals(s)) {
-                    LogUtils.i("cgetLessonsonPlay: result1 " + s);
+                    LogUtils.i("getLessonsonPlay: result1 " + s);
 
                     try {
                         JSONObject jsonObject = new JSONObject(s);
@@ -965,8 +960,11 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
                             String data = jsonObject.getString("data");
                             JSONObject play = new JSONObject(data);
                             String isPlay = play.getString("play");
+                            LogUtils.i("getLessonsonPlay: data " + data);
+                            LogUtils.i("getLessonsonPlay: isPlay " + isPlay);
                             if ("true".equals(isPlay)) {
                                 isCanPlay = true;
+                                LogUtils.i("getLessonsonPlay: isPlay " + isPlay);
                             }
 
                             runOnUiThread(new Thread(new Runnable() {

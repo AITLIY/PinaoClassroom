@@ -412,25 +412,31 @@ public class HomeFragment extends Fragment {
                     break;
                 case R.id.pager_image2:
                     LogUtils.i("HomeFragment: Banner " + mBanners.get(0).getLink());
-                    goToTeacherWeb(mBanners.get(0).getLink());
+                    goToTeacherWeb(mBanners.get(1).getLink());
                     break;
                 case R.id.pager_image3:
                     LogUtils.i("HomeFragment: Banner " + mBanners.get(0).getLink());
-                    goToTeacherWeb(mBanners.get(0).getLink());
+                    goToTeacherWeb(mBanners.get(2).getLink());
                     break;
                 case R.id.pager_image4:
                     LogUtils.i("HomeFragment: Banner " + mBanners.get(0).getLink());
-                    goToTeacherWeb(mBanners.get(0).getLink());
+                    goToTeacherWeb(mBanners.get(3).getLink());
                     break;
                 case R.id.pager_image5:
                     LogUtils.i("HomeFragment: Banner " + mBanners.get(0).getLink());
-                    goToTeacherWeb(mBanners.get(0).getLink());
+                    goToTeacherWeb(mBanners.get(4).getLink());
                     break;
             }
         }
     }
 
     private void goToTeacherWeb(String url) {
+
+        if ("".equals(url)) {
+            ToastUtil.show(mContext,"链接为空");
+            return;
+        }
+
         Intent intent = new Intent(mContext, TeacherWebActivity.class);
         intent.putExtra("url",url);
         startActivity(intent);

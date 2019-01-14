@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.githang.statusbar.StatusBarCompat;
 import com.yiyin.aobosh.R;
+import com.yiyin.aobosh.application.GlobalParameterApplication;
 
 public class TeacherWebActivity extends Activity {
 
@@ -35,6 +36,7 @@ public class TeacherWebActivity extends Activity {
         }
 
     }
+
 
     private void init(String url){
         webView = findViewById(R.id.webView);
