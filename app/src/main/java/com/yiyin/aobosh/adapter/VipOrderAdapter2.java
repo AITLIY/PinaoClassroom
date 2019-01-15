@@ -5,12 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.yiyin.aobosh.R;
-import com.yiyin.aobosh.bean.LessonCategory;
 import com.yiyin.aobosh.bean.VipOrderBean;
 
 import java.util.List;
@@ -19,7 +16,7 @@ import java.util.List;
  * Created by ALIY on 2019/1/5 0005.
  */
 
-public class VipOrderAdapter2  extends BaseAdapter {
+public class VipOrderAdapter2 extends BaseAdapter {
 
     private Context mContext;
     private List<VipOrderBean> mDatas;

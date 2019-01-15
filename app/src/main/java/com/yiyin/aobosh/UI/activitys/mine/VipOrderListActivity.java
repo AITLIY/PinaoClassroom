@@ -3,7 +3,6 @@ package com.yiyin.aobosh.UI.activitys.mine;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,12 +26,10 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.lidroid.xutils.util.LogUtils;
 import com.yiyin.aobosh.R;
-import com.yiyin.aobosh.UI.activitys.login.LoginActivity;
-import com.yiyin.aobosh.UI.activitys.yiyinClassroom.LessonActivity;
-import com.yiyin.aobosh.adapter.LessonListAdapter;
+import com.yiyin.aobosh.adapter.VipOrderAdapter2;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
-import com.yiyin.aobosh.bean.RecommendLesson;
 import com.yiyin.aobosh.bean.UserInfo;
+import com.yiyin.aobosh.bean.VipOrderBean;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
 import com.yiyin.aobosh.utils.SHA;
@@ -47,26 +44,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CollectLessonActivity extends Activity {
+public class VipOrderListActivity extends Activity {
 
     private Context mContext;
     private RequestQueue requestQueue;
     private UserInfo mUserInfo;
-    
-    private PullToRefreshListView lesson_item_list;            // 课程列表容器
-    private ArrayList<RecommendLesson.LessonBean> mLessonSearches;          //课程搜索结果的集合
-    private ArrayList<RecommendLesson.LessonBean> mShowList;                //课程显示结果的集合
-    private LessonListAdapter adapter;
-    
+
+    private PullToRefreshListView lesson_item_list;                 // 课程列表容器
+    private List<VipOrderBean> mVipOrderBeans;                      // 会员订单
+    private ArrayList<VipOrderBean> mShowList;                      // 显示结果的集合
+    private VipOrderAdapter2 adapter;
+
     private static final int SEARCH_LESSON_PARAMETER  = 10;        //参数查询
     private static final int SEARCH_LESSON_PULL_UP = 20;           //上拉加载
-    private int mSearchType = 10;  // 查询的标志
+    private int mSearchType = 10;                                  // 查询的标志
     private int page = 1;
 
-    private static final int LOAD_DATA1_SUCCESS = 101;
-    private static final int LOAD_DATA1_FAILE = 102;
+    private static final int LOAD_DATA_SUCCESS = 101;
+    private static final int LOAD_DATA_FAILE = 102;
     private static final int NET_ERROR = 404;
-    
+
     @SuppressLint("HandlerLeak")
     Handler mHandler = new Handler() {
         @Override
@@ -75,19 +72,20 @@ public class CollectLessonActivity extends Activity {
 
             switch (msg.what) {
 
-                case LOAD_DATA1_SUCCESS:
+                case LOAD_DATA_SUCCESS:
 
                     if (mSearchType==SEARCH_LESSON_PARAMETER) {
 
-                        if (mLessonSearches.size()>0){
+                        if (mVipOrderBeans.size()>0){
                             setViewForResult(true,"");
+
                         } else {
-                            setViewForResult(false,"您还没有收藏任何课程信息~");
+                            setViewForResult(false,"您还没有任何订单~");
                         }
                     }
                     break;
 
-                case LOAD_DATA1_FAILE:
+                case LOAD_DATA_FAILE:
 
                     lesson_item_list.postDelayed(new Runnable() {
                         @Override
@@ -97,6 +95,7 @@ public class CollectLessonActivity extends Activity {
                         }
                     }, 1000);
                     break;
+
 
                 case NET_ERROR:
 
@@ -112,11 +111,11 @@ public class CollectLessonActivity extends Activity {
             upDataLessonListView();
         }
     };
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_collect_lesson);
+        setContentView(R.layout.activity_vip_order_list);
         //设置状态栏颜色
         StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.app_title_bar), true);
 
@@ -124,44 +123,12 @@ public class CollectLessonActivity extends Activity {
     }
 
     private void init() {
-        initPullListView();
+
+        initView();
         initData();
     }
 
-    private void initData() {
-
-        mContext = this;
-        requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
-        mShowList = new ArrayList<>();
-        adapter = new LessonListAdapter(mContext, mShowList);
-        lesson_item_list.setAdapter(adapter);
-        lesson_item_list.setOnItemClickListener(new ItemClick());
-        mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
-        getLessonData(mUserInfo.getUid(),CommonParameters.UNIACID);
-    }
-
-    class ItemClick implements AdapterView.OnItemClickListener{
-
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            if (!GlobalParameterApplication.getInstance().getLoginStatus()) {
-                startActivity(new Intent(mContext, LoginActivity.class));
-                return;
-            } else {
-                RecommendLesson.LessonBean lessonBean = mShowList.get(position-1);
-                Intent intent = new Intent(mContext,LessonActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("LessonBean",lessonBean);
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-
-        }
-    }
-
-    // 初始化列表
-    private void initPullListView() {
+    private void initView() {
 
         findViewById(R.id.iv_back).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,7 +136,27 @@ public class CollectLessonActivity extends Activity {
                 finish();
             }
         });
-        lesson_item_list = findViewById(R.id.lesson_item_list);
+
+        initPullListView();
+    }
+
+    private void initData() {
+
+        mContext = this;
+        requestQueue = GlobalParameterApplication.getInstance().getRequestQueue();
+        mUserInfo = GlobalParameterApplication.getInstance().getUserInfo();
+
+        mShowList = new ArrayList<>();
+        adapter = new VipOrderAdapter2(mContext, mShowList);
+        lesson_item_list.setAdapter(adapter);
+
+        getVipOrder(mUserInfo.getUid());
+    }
+
+    // 初始化列表
+    private void initPullListView() {
+
+        lesson_item_list = findViewById(R.id.order_list_rv);
         setListView();
 
         lesson_item_list.setMode(PullToRefreshBase.Mode.BOTH);
@@ -179,9 +166,8 @@ public class CollectLessonActivity extends Activity {
                 page= 1;
 
                 mSearchType = SEARCH_LESSON_PARAMETER;
-                getLessonData(mUserInfo.getUid(),CommonParameters.UNIACID); // 下拉刷新搜索
-                setViewForResult(true,"");
-                LogUtils.i("CollectLessonActivity: onPullDownToRefresh 下拉" + page + "页");
+                getVipOrder(mUserInfo.getUid()); // 下拉刷新搜索
+                LogUtils.i("VipOrderListActivity: onPullDownToRefresh 下拉" + page + "页");
             }
 
             @Override
@@ -189,7 +175,7 @@ public class CollectLessonActivity extends Activity {
                 page++;
 
                 mSearchType = SEARCH_LESSON_PULL_UP;
-//                getLessonData(mUserInfo.getUid(),CommonParameters.UNIACID); // 上拉加载搜索
+
                 lesson_item_list.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -197,7 +183,7 @@ public class CollectLessonActivity extends Activity {
                         ToastUtil.show(mContext,"没有更多结果");
                     }
                 }, 1000);
-                LogUtils.i("CollectLessonActivity: onPullUpToRefresh 上拉" + page + "页");
+                LogUtils.i("VipOrderListActivity: onPullUpToRefresh 上拉" + page + "页");
             }
         });
 
@@ -236,7 +222,7 @@ public class CollectLessonActivity extends Activity {
         //        });
 
     }
-    
+
     //初始化列表控件上下拉的状态
     private void setListView() {
 
@@ -274,8 +260,8 @@ public class CollectLessonActivity extends Activity {
             case SEARCH_LESSON_PARAMETER:
 
                 mShowList.clear();
-                mShowList.addAll(mLessonSearches);
-                LogUtils.i("CollectLessonActivity: SEARCH_LESSON_FOR_PARAMETER "  + mShowList.size());
+                mShowList.addAll(mVipOrderBeans);
+                LogUtils.i("VipOrderListActivity: SEARCH_LESSON_FOR_PARAMETER "  + mShowList.size());
 
                 adapter.notifyDataSetChanged();
                 lesson_item_list.getRefreshableView().smoothScrollToPosition(0);//移动到首部
@@ -289,29 +275,32 @@ public class CollectLessonActivity extends Activity {
 
             case SEARCH_LESSON_PULL_UP:
 
-                adapter.addLast(mLessonSearches);
-                LogUtils.i("CollectLessonActivity: SEARCH_LESSON_PULL_UP " + mShowList.size());
+                mShowList.addAll(mVipOrderBeans);
+                LogUtils.i("VipOrderListActivity: SEARCH_LESSON_PULL_UP " + mShowList.size());
 
                 adapter.notifyDataSetChanged();
-                lesson_item_list.onRefreshComplete();
-                if (mLessonSearches.size()==0) {
-                    ToastUtil.show(mContext,"没有更多结果");
-                }
+                lesson_item_list.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        lesson_item_list.onRefreshComplete();
+                        ToastUtil.show(mContext,"没有更多结果");
+                    }
+                }, 1000);
                 break;
         }
     }
 
     //--------------------------------------请求服务器数据-------------------------------------------
 
-    // 获取收藏的课程
-    private void getLessonData(final int uid, final int uniacid) {
-        mLessonSearches= new ArrayList();
-        String url = HttpURL.COLLECT_LESSON_URL;
+    // VIP订单
+    private void getVipOrder(final int uid) {
+        mVipOrderBeans= new ArrayList();
+        String url = HttpURL.VIP_VIPORDER_URL;
         StringRequest stringRequest = new StringRequest(Request.Method.POST,url,new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 if (!"".equals(s)) {
-                    LogUtils.i("CollectLessonActivity: result1 " + s);
+                    LogUtils.i("VipOrderListActivity: result3 " + s);
 
                     try {
                         JSONObject jsonObject = new JSONObject(s);
@@ -320,17 +309,17 @@ public class CollectLessonActivity extends Activity {
                         if ("200".equals(code)) {
 
                             String data = jsonObject.getString("data");
-                            mLessonSearches = new Gson().fromJson(data, new TypeToken<List<RecommendLesson.LessonBean>>(){}.getType());
-                            LogUtils.i("CollectLessonActivity: mLessonSearches.size " + mLessonSearches.size());
+                            mVipOrderBeans = new Gson().fromJson(data, new TypeToken<List<VipOrderBean>>() {}.getType());
 
-                            mHandler.sendEmptyMessage(LOAD_DATA1_SUCCESS);
+                            mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS);
                             return;
                         }
-                        mHandler.sendEmptyMessage(LOAD_DATA1_FAILE);
+
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        mHandler.sendEmptyMessage(LOAD_DATA1_FAILE);
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
                     }
                 }
             }
@@ -338,7 +327,7 @@ public class CollectLessonActivity extends Activity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtils.e("CollectLessonActivity: volleyError1 " + volleyError.toString());
+                LogUtils.e("VipOrderListActivity: volleyError3 " + volleyError.toString());
                 mHandler.sendEmptyMessage(NET_ERROR);
             }
         }) {
@@ -349,21 +338,19 @@ public class CollectLessonActivity extends Activity {
                 JSONObject obj = new JSONObject();
 
                 try {
-
-                    String token = "Collectclesson" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
-                    LogUtils.i("CollectLessonActivity: token " + token);
+                    String token = "Vipviporder" + TimeUtils.getCurrentTime("yyyy-MM-dd") + CommonParameters.SECRET_KEY;
+                    LogUtils.i("VipOrderListActivity: token " + token);
                     String sha_token = SHA.encryptToSHA(token);
 
                     obj.put("access_token", sha_token);
                     obj.put("uid", uid);
-                    obj.put("uniacid", uniacid);
                     obj.put("device", CommonParameters.ANDROID);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                LogUtils.i("CollectLessonActivity json1 " + obj.toString());
+                LogUtils.i("VipOrderListActivity json3 " + obj.toString());
 
                 map.put("dt", obj.toString());
                 return map;
@@ -372,4 +359,5 @@ public class CollectLessonActivity extends Activity {
         };
         requestQueue.add(stringRequest);
     }
+
 }

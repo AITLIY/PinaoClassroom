@@ -204,7 +204,7 @@ public class SonlistFragment extends Fragment implements AdapterView.OnClickList
                 mSearchType = SEARCH_LESSON_PULL_UP;
                 getLessonsonFindson(mUserInfo.getUid(), lessonID, Suffix_type, page);  // 上拉加载搜索
 
-                LogUtils.i("SonlistFragment: onPullUpToRefresh 下拉" + page + "页");
+                LogUtils.i("SonlistFragment: onPullUpToRefresh 上拉" + page + "页");
             }
         });
 

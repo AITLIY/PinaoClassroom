@@ -193,7 +193,7 @@ public class OauthHistoryActivity extends Activity {
                 mSearchType = SEARCH_LESSON_PULL_UP;
                 getHistory(mUserInfo.getUid(),page); // 上拉加载搜索
 
-                LogUtils.i("OauthHistoryActivity: onPullUpToRefresh 下拉" + page + "页");
+                LogUtils.i("OauthHistoryActivity: onPullUpToRefresh 上拉" + page + "页");
             }
         });
 

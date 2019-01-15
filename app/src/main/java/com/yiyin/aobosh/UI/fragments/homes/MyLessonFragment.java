@@ -212,7 +212,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
             RecommendLesson.LessonBean lessonBean = new RecommendLesson.LessonBean();
             lessonBean.setId(order.getLessonid());
             lessonBean.setBookname(order.getBookname());
-            lessonBean.setOrdersn(order.getOrdersn());
+            lessonBean.setOrder(order.getId()+"");
 
             Bundle bundle = new Bundle();
             bundle.putSerializable("LessonBean", lessonBean);
@@ -242,7 +242,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
             RecommendLesson.LessonBean lessonBean = new RecommendLesson.LessonBean();
             lessonBean.setId(order.getLessonid());
             lessonBean.setBookname(order.getBookname());
-            lessonBean.setOrdersn(order.getOrdersn());
+            lessonBean.setOrder(order.getId()+"");
 
             Bundle bundle = new Bundle();
             bundle.putSerializable("LessonBean", lessonBean);
@@ -282,7 +282,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
                         ToastUtil.show(mContext,"没有更多结果");
                     }
                 }, 1000);
-                LogUtils.i("MyLessonFragment: onPullUpToRefresh 下拉" + page + "页");
+                LogUtils.i("MyLessonFragment: onPullUpToRefresh 上拉" + page + "页");
             }
         });
 

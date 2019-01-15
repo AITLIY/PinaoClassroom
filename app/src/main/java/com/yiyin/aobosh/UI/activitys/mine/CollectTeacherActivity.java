@@ -197,7 +197,7 @@ public class CollectTeacherActivity extends Activity {
                         ToastUtil.show(mContext,"没有更多结果");
                     }
                 }, 1000);
-                LogUtils.i("CollectTeacherActivity: onPullUpToRefresh 下拉" + page + "页");
+                LogUtils.i("CollectTeacherActivity: onPullUpToRefresh 上拉" + page + "页");
             }
         });
 

@@ -7,14 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
 import com.lidroid.xutils.util.LogUtils;
 import com.tencent.mm.opensdk.constants.ConstantsAPI;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
@@ -24,7 +22,6 @@ import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.UI.activitys.HomepageActivity;
 import com.yiyin.aobosh.UI.activitys.mine.VipServiceActivity;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
-import com.yiyin.aobosh.bean.FindOrderBean;
 import com.yiyin.aobosh.commons.CommonParameters;
 import com.yiyin.aobosh.commons.HttpURL;
 import com.yiyin.aobosh.utils.SHA;
@@ -45,6 +42,7 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
 
     private static final int LOAD_DATA_SUCCESS = 201;
     private static final int LOAD_DATA_FAILE = 202;
+    private static final int LOAD_DATA_FAILE2 = 203;
     private static final int NET_ERROR = 404;
 
     @SuppressLint("HandlerLeak")
@@ -70,6 +68,11 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
                 case LOAD_DATA_FAILE:
 
                     ToastUtil.show(mContext, "支付失败");
+                    break;
+
+                case LOAD_DATA_FAILE2:
+
+                    ToastUtil.show(mContext, "用户取消");
                     break;
 
                 case NET_ERROR:
@@ -115,9 +118,13 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
 
                 }
 
-            } else {
+            } else if (errCord == -1) {
                 LogUtils.d("微信支付 支付失败");
                 mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+                finish();
+            } else if (errCord == -2) {
+                LogUtils.d("微信支付 用户取消");
+                mHandler.sendEmptyMessage(LOAD_DATA_FAILE2);
                 finish();
             }
             //这里接收到了返回的状态码可以进行相应的操作，如果不想在这个页面操作可以把状态码存在本地然后finish掉这个页面，这样就回到了你调起支付的那个页面

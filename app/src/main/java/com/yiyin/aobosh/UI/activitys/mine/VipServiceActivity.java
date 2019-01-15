@@ -66,6 +66,7 @@ public class VipServiceActivity extends Activity {
 
     private VipOrderAdapter mAdapter3;
     private RecyclerView order_list_rv;
+    private LinearLayout more_order;
     private boolean isVip;
 
     //    private VipOrderAdapter2 mAdapter3;
@@ -156,12 +157,20 @@ public class VipServiceActivity extends Activity {
         Member_list_rv = findViewById(R.id.Member_list_rv);
         level_list_rv = findViewById(R.id.level_list_rv);
         order_list_rv = findViewById(R.id.order_list_rv);
+        more_order = findViewById(R.id.more_order);
 
         have_vip_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(mContext,VipCardActivity.class));
                 finish();
+            }
+        });
+
+        more_order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(mContext,VipOrderListActivity.class));
             }
         });
 
@@ -191,7 +200,6 @@ public class VipServiceActivity extends Activity {
         mLevelListBeans = new ArrayList<>();
         mVipOrderBeans = new ArrayList<>();
 
-//        getVipBuy(mUserInfo.getUid());
         getVipShow(mUserInfo.getUid());
         getVipOrder(mUserInfo.getUid());
     }
@@ -244,10 +252,13 @@ public class VipServiceActivity extends Activity {
 
     private void initVipDataView2() {
 
+        if (mVipOrderBeans.size()>0) {
+            more_order.setVisibility(View.VISIBLE);
+        }
+
         mAdapter3 = new VipOrderAdapter(mVipOrderBeans);
 //        mAdapter3 = new VipOrderAdapter2(mContext,mVipOrderBeans);
         order_list_rv.setLayoutManager(new LinearLayoutManager(mContext));
-        order_list_rv.setAdapter(mAdapter3);
         order_list_rv.setAdapter(mAdapter3);
 
     }
@@ -343,6 +354,12 @@ public class VipServiceActivity extends Activity {
 
                             String data = jsonObject.getString("data");
                             mVipOrderBeans = new Gson().fromJson(data, new TypeToken<List<VipOrderBean>>() {}.getType());
+
+                            if (mVipOrderBeans.size()>0) {
+                                VipOrderBean vipOrderBean = mVipOrderBeans.get(mVipOrderBeans.size()-1);
+                                mVipOrderBeans.clear();
+                                mVipOrderBeans.add(vipOrderBean);
+                            }
 
                             mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS3);
                             return;

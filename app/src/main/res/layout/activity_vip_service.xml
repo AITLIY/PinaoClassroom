@@ -150,12 +150,27 @@
             </android.support.v7.widget.RecyclerView>
 
             <!--<ListView-->
-                <!--android:id="@+id/order_list_rv"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginTop="6dp"-->
-                <!--android:background="@color/white">-->
+            <!--android:id="@+id/order_list_rv"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="6dp"-->
+            <!--android:background="@color/white">-->
             <!--</ListView>-->
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/more_order"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/lesson_free"
+                    android:text="查看更多"/>
+            </LinearLayout>
+
 
         </LinearLayout>
     </ScrollView>

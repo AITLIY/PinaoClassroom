@@ -427,11 +427,14 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
     public void setPlayBg(String url) {
 
-        Glide.with(mContext)
-                .load(url)
-                .placeholder(R.drawable.icon_img_error)//图片加载出来前，显示的图片
-                .error(R.drawable.icon_img_error)//图片加载失败后，显示的图片
-                .into(play_bg);
+        if (!this.isDestroyed()) {
+
+            Glide.with(mContext)
+                    .load(url)
+                    .placeholder(R.drawable.icon_img_error)//图片加载出来前，显示的图片
+                    .error(R.drawable.icon_img_error)//图片加载失败后，显示的图片
+                    .into(play_bg);
+        }
     }
 
     public void initAudio() {
@@ -529,7 +532,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
                     return;
                 }
 
-                subEvaluate(mUserInfo.getUid(),mLessonBean.getOrdersn(),comment);
+                subEvaluate(mUserInfo.getUid(),mLessonBean.getOrder(),comment);
                 break;
 
             case R.id.teacher_detail:
@@ -670,7 +673,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
                 mSearchType = SEARCH_LESSON_PULL_UP;
                 getLessonsonFindson(mUserInfo.getUid(), lessonID, Suffix_type, page);  // 上拉加载搜索
 
-                LogUtils.i("SonlistFragment: onPullUpToRefresh 下拉" + page + "页");
+                LogUtils.i("SonlistFragment: onPullUpToRefresh 上拉" + page + "页");
             }
         });
 
@@ -828,7 +831,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
                 mSearchType2 = SEARCH_LESSON_PULL_UP2;
                 getLessonsonEvaluate(mUserInfo.getUid(), lessonID, page2);  // 上拉加载搜索
 
-                LogUtils.i("EvaluateFragment: onPullUpToRefresh 下拉" + page2 + "页");
+                LogUtils.i("EvaluateFragment: onPullUpToRefresh 上拉" + page2 + "页");
             }
         });
 

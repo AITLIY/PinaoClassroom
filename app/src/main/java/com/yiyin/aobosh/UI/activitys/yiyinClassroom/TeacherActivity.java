@@ -299,7 +299,7 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
                 mSearchType = SEARCH_LESSON_PULL_UP;
                 getLessonData(teacherID,mUserInfo.getUid(),page); // 上拉加载搜索
 
-                LogUtils.i("TeacherActivity: onPullUpToRefresh 下拉" + page + "页");
+                LogUtils.i("TeacherActivity: onPullUpToRefresh 上拉" + page + "页");
             }
         });
 

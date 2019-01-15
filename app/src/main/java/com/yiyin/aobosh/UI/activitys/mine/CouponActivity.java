@@ -204,7 +204,7 @@ public class CouponActivity extends Activity implements View.OnClickListener{
                         ToastUtil.show(mContext,"没有更多结果");
                     }
                 }, 1000);
-                LogUtils.i("CouponActivity: onPullUpToRefresh 下拉" + page + "页");
+                LogUtils.i("CouponActivity: onPullUpToRefresh 上拉" + page + "页");
             }
         });
 

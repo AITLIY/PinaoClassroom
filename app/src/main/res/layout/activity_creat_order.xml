@@ -29,7 +29,7 @@
             android:layout_centerInParent="true"
             android:textColor="@color/black"
             android:textSize="@dimen/title_bar_text"
-            android:text="奥博学习系统 - 亿音钢琴课堂"/>
+            android:text="亿音钢琴课堂"/>
     </RelativeLayout>
 
     <View

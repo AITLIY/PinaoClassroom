@@ -302,8 +302,8 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
                     isShowlessonfiltrate(false);
 
                 } else {
-                    isShowlessonfiltrate(true);
                     isShowlessonSort(false);
+                    isShowlessonfiltrate(true);
 
                     if (GlobalParameterApplication.lessonCategory!=null)
                         initLessonCategoryList(GlobalParameterApplication.lessonCategory);
@@ -386,7 +386,7 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
                 mSearchType = SEARCH_LESSON_PULL_UP;
                 getLessonData(mSort,mCateId,mKeyword, page); // 上拉加载搜索
 
-                LogUtils.i("AllClassFragment: onPullUpToRefresh 下拉" + page + "页");
+                LogUtils.i("AllClassFragment: onPullUpToRefresh 上拉" + page + "页");
             }
         });
 

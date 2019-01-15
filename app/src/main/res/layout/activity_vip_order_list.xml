@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/app_bg"
+              android:orientation="vertical"
+              tools:context="com.yiyin.aobosh.UI.activitys.mine.VipOrderListActivity">
+
+    <!--标题栏-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/app_title_bar">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="11dp"
+            android:layout_height="22dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="21dp"
+            android:src="@drawable/icon_btn_back_black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="VIP订单 - 亿音钢琴课堂"
+            android:textColor="@color/black"
+            android:textSize="@dimen/title_bar_text"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray_lite"/>
+
+    <!--订单列表-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="6dp">
+
+        <!--订单列表-->
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+            android:background="@color/white"
+            android:id="@+id/order_list_rv"
+            android:divider="@null"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+        <!--获取为空或者失败-->
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/not_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="66dp"
+                android:layout_height="58dp"
+                android:src="@drawable/icon_bg_not_data"/>
+            <TextView
+                android:id="@+id/not_data_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="您没有任何课程信息~"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

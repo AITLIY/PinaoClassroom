@@ -12,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -177,12 +176,12 @@ public class AllClassActivity extends Activity  implements View.OnClickListener,
         lesson_sort_iv = findViewById(R.id.lesson_sort_iv);
         lesson_filtrate_iv = findViewById(R.id.lesson_filtrate_iv);
         sort_bg = findViewById(R.id.sort_bg);
-        sort_bg.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;//防止点击事件穿透到下层
-            }
-        });
+//        sort_bg.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                return true;//防止点击事件穿透到下层
+//            }
+//        });
 
         synthesize_sort = findViewById(R.id.synthesize_sort);
         free_sort = findViewById(R.id.free_sort);
@@ -231,7 +230,7 @@ public class AllClassActivity extends Activity  implements View.OnClickListener,
 
         lesson_sort_ll.setOnClickListener(this);
         lesson_filtrate_ll.setOnClickListener(this);
-        lesson_sort_ll.setOnClickListener(this);
+        sort_bg.setOnClickListener(this);
         synthesize_sort.setOnClickListener(this);
         free_sort.setOnClickListener(this);
         price_sort.setOnClickListener(this);
@@ -348,7 +347,11 @@ public class AllClassActivity extends Activity  implements View.OnClickListener,
                     if (GlobalParameterApplication.lessonCategory!=null)
                         initLessonCategoryList(GlobalParameterApplication.lessonCategory);
                 }
+                break;
 
+            case R.id.sort_bg:
+
+                isShowlessonSort(false);
                 break;
 
             case R.id.synthesize_sort:
@@ -422,7 +425,7 @@ public class AllClassActivity extends Activity  implements View.OnClickListener,
                 mSearchType = SEARCH_LESSON_PULL_UP;
                 getLessonData(mSort,mCateId,mKeyword, mPindex); // 上拉加载搜索
 
-                LogUtils.i("AllClassFragment: onPullUpToRefresh 下拉" + page + "页");
+                LogUtils.i("AllClassFragment: onPullUpToRefresh 上拉" + page + "页");
             }
         });
 

@@ -179,7 +179,7 @@ public class EvaluateFragment extends Fragment{
                 mSearchType2 = SEARCH_LESSON_PULL_UP2;
                 getLessonsonEvaluate(mUserInfo.getUid(), lessonID, page2);  // 上拉加载搜索
 
-                LogUtils.i("EvaluateFragment: onPullUpToRefresh 下拉" + page2 + "页");
+                LogUtils.i("EvaluateFragment: onPullUpToRefresh 上拉" + page2 + "页");
             }
         });
 
