@@ -372,21 +372,50 @@
                         android:text="购买课本"/>
                 </LinearLayout>
 
-                <com.handmark.pulltorefresh.library.PullToRefreshListView
-                    android:id="@+id/lesson_item_list"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white">
-                </com.handmark.pulltorefresh.library.PullToRefreshListView>
+                    android:layout_height="match_parent">
+
+                    <com.handmark.pulltorefresh.library.PullToRefreshListView
+                        android:id="@+id/lesson_item_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white">
+                    </com.handmark.pulltorefresh.library.PullToRefreshListView>
+
+                    <!--获取为空或者失败-->
+                    <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/not_data"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="66dp"
+                            android:layout_height="58dp"
+                            android:src="@drawable/icon_bg_not_data" />
+
+                        <TextView
+                            android:id="@+id/not_data_tv"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:gravity="center"
+                            android:text="您没有任何课程信息~" />
+                    </LinearLayout>
+                </RelativeLayout>
+
             </LinearLayout>
 
             <!--课程评价-->
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/lesson_evaluate_ll"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/white"
-                android:orientation="vertical"
                 android:visibility="gone">
 
                 <com.handmark.pulltorefresh.library.PullToRefreshListView
@@ -395,21 +424,14 @@
                     android:layout_height="match_parent"
                     android:background="@color/white">
                 </com.handmark.pulltorefresh.library.PullToRefreshListView>
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/not_data"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:visibility="gone">
 
                 <!--获取为空或者失败-->
                 <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/not_data2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_centerInParent="true"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -419,14 +441,14 @@
                         android:src="@drawable/icon_bg_not_data" />
 
                     <TextView
-                        android:id="@+id/not_data_tv"
+                        android:id="@+id/not_data_tv2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:gravity="center"
                         android:text="您没有任何课程信息~" />
                 </LinearLayout>
-            </LinearLayout>
+            </RelativeLayout>
 
         </LinearLayout>
     </ScrollView>

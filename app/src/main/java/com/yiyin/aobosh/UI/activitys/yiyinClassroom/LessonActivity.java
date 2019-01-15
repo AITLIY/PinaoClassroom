@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -73,7 +74,8 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
     private VideoPlayerController controller;
 
     private ImageView play_bg, play_start;              //播放
-    private LinearLayout lesson_detail_ll,lesson_list_ll,lesson_evaluate_ll;
+    private LinearLayout lesson_detail_ll,lesson_list_ll;
+    private RelativeLayout lesson_evaluate_ll;
     private LinearLayout desc_ll,sonlist_ll,evaluate_ll,btn_menu_ll,write_comment_ll,submit_comment;
     private TextView sonlist_tv, desc_tv, evaluate_tv,start_study;
     private View sonlist_v, desc_v, evaluate_v;
@@ -118,7 +120,8 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
     private static final int LOAD_DATA_SUCCESS01 = 1001;
     private static final int LOAD_DATA_SUCCESS02 = 2001;
     private static final int LOAD_DATA_SUCCESS03 = 3001;
-    private static final int LOAD_DATA_FAILE = 1002;
+    private static final int LOAD_DATA_FAILE02 = 2002;
+    private static final int LOAD_DATA_FAILE03 = 3002;
 
     private static final int LOAD_DATA_SUCCESS1 = 101;
     private static final int LOAD_DATA_FAILE1 = 102;
@@ -154,6 +157,17 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
                     LogUtils.i("EvaluateFragment: sonlist_ll " );
                     break;
 
+                case LOAD_DATA_FAILE02:
+
+                    lesson_item_list2.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            lesson_item_list2.onRefreshComplete();
+                            setViewForResult(false,"查询数据失败~");
+                        }
+                    }, 1000);
+                    break;
+
                 case LOAD_DATA_SUCCESS03:
 
                     if (mSearchType2==SEARCH_LESSON_PARAMETER2) {
@@ -162,13 +176,13 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
                             setViewForResult2(true,"");
 
                         } else {
-                            setViewForResult2(false,"还没有人评论信息~");
+                            setViewForResult2(false,"没有评论信息~");
                         }
                     }
                     upDataLessonListView2();
                     break;
 
-                case LOAD_DATA_FAILE:
+                case LOAD_DATA_FAILE03:
 
                     lesson_item_list2.postDelayed(new Runnable() {
                         @Override
@@ -466,15 +480,17 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
             return;
         }
 
-        videoPlayer.release();
         String videoTitle = listBean.getTitle();
         String urls = listBean.getVideourl();
-
         LogUtils.d("SonlistFragment 视频链接" + urls);
 
-        //设置视频地址和请求头部
-        videoPlayer.setUp(urls, null);
-        controller.setTitle(videoTitle);
+        if (isCanPlay||listBean.getIs_free()==1) {
+
+            videoPlayer.release();
+            //设置视频地址和请求头部
+            videoPlayer.setUp(urls, null);
+            controller.setTitle(videoTitle);
+        }
 
     }
 
@@ -749,7 +765,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
         if (isSuccess) {
             findViewById(R.id.not_data).setVisibility(View.GONE);
-            star_img.setImageResource(mVideoBean.getIscollect()==1  ? R.drawable.icon_tab_collect1: R.drawable.icon_tab_collect0);
+
         } else {
             findViewById(R.id.not_data).setVisibility(View.VISIBLE);
             ((TextView) findViewById(R.id.not_data_tv)).setText(msg);
@@ -892,11 +908,11 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
     private void setViewForResult2(boolean isSuccess,String msg) {
 
         if (isSuccess) {
-            findViewById(R.id.not_data).setVisibility(View.GONE);
+            findViewById(R.id.not_data2).setVisibility(View.GONE);
 
         } else {
-            findViewById(R.id.not_data).setVisibility(View.VISIBLE);
-            ((TextView) findViewById(R.id.not_data_tv)).setText(msg);
+            findViewById(R.id.not_data2).setVisibility(View.VISIBLE);
+            ((TextView) findViewById(R.id.not_data_tv2)).setText(msg);
         }
     }
 
@@ -1057,12 +1073,12 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
                         } else {
 
-                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+//                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
                         }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+//                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
                     }
                 }
             }
@@ -1132,12 +1148,12 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
                         } else {
 
-                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE02);
                         }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE02);
                     }
                 }
             }
@@ -1200,21 +1216,19 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
                             String data = jsonObject.getString("data");
                             LogUtils.i("EvaluateFragment: data " + data);
-                            if (!"[]".equals(data)) {
-                                mListBeans2 = new Gson().fromJson(data, new TypeToken<List<EvaluateBean>>() {
-                                }.getType());
-                            }
+
+                            mListBeans2 = new Gson().fromJson(data, new TypeToken<List<EvaluateBean>>() {}.getType());
 
                             mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS03);
 
                         } else {
 
-                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+                            mHandler.sendEmptyMessage(LOAD_DATA_FAILE03);
                         }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
+                        mHandler.sendEmptyMessage(LOAD_DATA_FAILE03);
                     }
                 }
             }
