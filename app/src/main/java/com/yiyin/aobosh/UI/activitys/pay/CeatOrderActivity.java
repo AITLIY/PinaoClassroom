@@ -229,17 +229,9 @@ public class CeatOrderActivity extends Activity {
 
                             mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS);
 
-                        } else if ("4004".equals(code)){
+                        } else if ("4009".equals(code)){
 
-                            final String msg = jsonObject.getString("msg");
-
-                            runOnUiThread(new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    ToastUtil.show(mContext, msg);
-                                }
-                            }));
+                            getFindOrder(mUserInfo.getUid(), lessonID);
 
                         }else {
 
