@@ -19,11 +19,11 @@ public class CommonParameters {
     public static final String SCORE = "score";
 
     //我的课程状态
-    public static final int ALL = 3;
-    public static final int CANCEL = -1;
-    public static final int NOT_PAID = 0;
-    public static final int PAID = 1;
-    public static final int EVALUATE = 2;
+    public static final int ALL = 4;         //全部
+    public static final int CANCEL = -1;     //已取消
+    public static final int NOT_PAID = 0;    //待付款
+    public static final int PAID = 1;        //已付款
+    public static final int EVALUATE = 2;    //已评价
 
     //我的优惠券状态
     public static final String VALID = "0";

@@ -10,6 +10,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -206,8 +207,13 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
                     break;
 
                 case LOAD_DATA_SUCCESS2:
-
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                    }
+                    comment_et.setText("");
                     ToastUtil.show(mContext, "评价成功");
+                    getLessonsonEvaluate(mUserInfo.getUid(), lessonID, page2);
                     break;
 
                 case LOAD_DATA_FAILE2:
@@ -530,8 +536,16 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
             case R.id.play_start:       //开始播放
 
+                if (mShowList.size()>0) {
 
-                playAudio(mShowList.get(0));
+                    adapter.setID(mShowList.get(0).getId());
+                    adapter.notifyDataSetChanged();
+                    playAudio(mShowList.get(0));
+                    lesson_item_list.getRefreshableView().smoothScrollToPosition(0);
+                } else {
+
+                    ToastUtil.show(mContext,"网络数据获取错误");
+                }
                 break;
 
             case R.id.start_study:      //开始学习
@@ -551,7 +565,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
                 subEvaluate(mUserInfo.getUid(),mLessonBean.getOrder(),comment);
                 break;
 
-            case R.id.teacher_detail:
+            case R.id.teacher_detail: // 讲师详情
 
                 Intent intent = new Intent(mContext,TeacherActivity.class);
                 intent.putExtra("teacherid",mLessonDetail.getTeacherid());
@@ -572,7 +586,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
                 typeForSort(CommonParameters.ALL2);
                 break;
 
-            case R.id.buy_class:
+            case R.id.buy_class:    // 购买课程
 
                 GlobalParameterApplication.isHasOrder = false;
                 GlobalParameterApplication.attach = CommonParameters.LESSON_ORDER;
@@ -582,7 +596,7 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
                 finish();
                 break;
 
-            case R.id.buy_vip:
+            case R.id.buy_vip:   // 购买会员
 
                 startActivity(new Intent(mContext,VipServiceActivity.class));
                 break;

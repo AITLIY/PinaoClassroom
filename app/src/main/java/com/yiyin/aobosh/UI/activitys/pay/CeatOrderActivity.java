@@ -76,8 +76,6 @@ public class CeatOrderActivity extends Activity {
                 case LOAD_DATA_FAILE:
 
                     ToastUtil.show(mContext, "查询数据失败");
-
-
                     break;
 
                 case LOAD_DATA_SUCCESS2:
@@ -88,8 +86,6 @@ public class CeatOrderActivity extends Activity {
                 case LOAD_DATA_FAILE2:
 
                     ToastUtil.show(mContext, "查询数据失败");
-
-
                     break;
 
                 case LOAD_DATA_SUCCESS3:
@@ -100,14 +96,11 @@ public class CeatOrderActivity extends Activity {
                 case LOAD_DATA_FAILE3:
 
                     ToastUtil.show(mContext, "查询数据失败");
-
-
                     break;
 
                 case NET_ERROR:
 
                     ToastUtil.show(mContext, "网络异常,请稍后重试");
-
                     break;
             }
 
@@ -236,7 +229,19 @@ public class CeatOrderActivity extends Activity {
 
                             mHandler.sendEmptyMessage(LOAD_DATA_SUCCESS);
 
-                        } else {
+                        } else if ("4004".equals(code)){
+
+                            final String msg = jsonObject.getString("msg");
+
+                            runOnUiThread(new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    ToastUtil.show(mContext, msg);
+                                }
+                            }));
+
+                        }else {
 
                             mHandler.sendEmptyMessage(LOAD_DATA_FAILE);
                         }

@@ -433,7 +433,7 @@ public class HomeFragment extends Fragment {
     private void goToTeacherWeb(String url) {
 
         if ("".equals(url)) {
-            ToastUtil.show(mContext,"链接为空");
+//            ToastUtil.show(mContext,"链接为空");
             return;
         }
 

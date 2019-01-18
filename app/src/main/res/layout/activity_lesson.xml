@@ -369,7 +369,7 @@
                         android:background="@drawable/shape_red_solid"
                         android:textColor="@color/white"
                         android:textSize="14dp"
-                        android:text="购买课本"/>
+                        android:text="购买本课"/>
                 </LinearLayout>
 
                 <RelativeLayout
