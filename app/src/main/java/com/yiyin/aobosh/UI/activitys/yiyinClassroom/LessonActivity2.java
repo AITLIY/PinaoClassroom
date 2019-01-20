@@ -64,15 +64,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LessonActivity extends AppCompatActivity implements View.OnClickListener{
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
+
+public class LessonActivity2 extends AppCompatActivity implements View.OnClickListener{
 
     private Context mContext;
     private RecommendLesson.LessonBean mLessonBean;
     private RequestQueue requestQueue;
     private UserInfo mUserInfo;
 
-    private VideoPlayer videoPlayer;
-    private VideoPlayerController controller;
+    private JCVideoPlayerStandard playerStandard;
+//    private VideoPlayer videoPlayer;
+//    private VideoPlayerController controller;
 
     private ImageView play_bg, play_start;              //播放
     private LinearLayout lesson_detail_ll,lesson_list_ll;
@@ -245,29 +248,30 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (controller != null && controller.getLock()) {
-                //如果锁屏，那就屏蔽返回键
-                return true;
-            }
-        }
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//            if (controller != null && controller.getLock()) {
+//                //如果锁屏，那就屏蔽返回键
+//                return true;
+//            }
+//        }
         return super.onKeyDown(keyCode, event);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        playerStandard.onCompletion();
 
-        if (controller != null) {
-            controller.onPlayStateChanged(7);
-        }
+//        if (controller != null) {
+//            controller.onPlayStateChanged(7);
+//        }
         GlobalParameterApplication.isShowComment = false;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lesson);
+        setContentView(R.layout.activity_lesson2);
         // 隐藏标题栏
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -292,7 +296,8 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        videoPlayer = findViewById(R.id.video_player);
+//        videoPlayer = findViewById(R.id.video_player);
+        playerStandard = findViewById(R.id.playerstandard);
         play_bg = findViewById(R.id.play_bg);
         play_start = findViewById(R.id.play_start);
 
@@ -459,44 +464,53 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
 
     public void initAudio() {
 
-        //设置播放类型
-        videoPlayer.setPlayerType(ConstantKeys.IjkPlayerType.TYPE_IJK);
-
-        //创建视频控制器
-        controller = new VideoPlayerController(this);
-        controller.setLoadingType(ConstantKeys.Loading.LOADING_QQ);
-        controller.imageView().setBackgroundResource(R.color.black);
-        controller.setOnVideoBackListener(new OnVideoBackListener() {
-            @Override
-            public void onBackClick() {
-                onBackPressed();
-            }
-        });
-        //设置视频控制器
-        videoPlayer.setController(controller);
-        //是否从上一次的位置继续播放
-        videoPlayer.continueFromLastPosition(true);
-        //设置播放速度
-        videoPlayer.setSpeed(1.0f);
+//        //设置播放类型
+//        videoPlayer.setPlayerType(ConstantKeys.IjkPlayerType.TYPE_IJK);
+//
+//        //创建视频控制器
+//        controller = new VideoPlayerController(this);
+//        controller.setLoadingType(ConstantKeys.Loading.LOADING_QQ);
+//        controller.imageView().setBackgroundResource(R.color.black);
+//        controller.setOnVideoBackListener(new OnVideoBackListener() {
+//            @Override
+//            public void onBackClick() {
+//                onBackPressed();
+//            }
+//        });
+//        //设置视频控制器
+//        videoPlayer.setController(controller);
+//        //是否从上一次的位置继续播放
+//        videoPlayer.continueFromLastPosition(true);
+//        //设置播放速度
+//        videoPlayer.setSpeed(1.0f);
     }
 
     public void setAudio(VideoBean.ListBean listBean) {
 
-        if (videoPlayer == null || listBean == null) {
+        if (listBean == null) {
             return;
         }
-
+        String videoUrl = listBean.getVideourl();
         String videoTitle = listBean.getTitle();
-        String urls = listBean.getVideourl();
-        LogUtils.d("SonlistFragment 视频链接" + urls);
 
-        if (isCanPlay||listBean.getIs_free()==1) {
+        playerStandard.setUp(videoUrl,JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL,videoTitle);
 
-            videoPlayer.release();
-            //设置视频地址和请求头部
-            videoPlayer.setUp(urls, null);
-            controller.setTitle(videoTitle);
-        }
+
+//        if (videoPlayer == null || listBean == null) {
+//            return;
+//        }
+//
+//        String videoTitle = listBean.getTitle();
+//        String urls = listBean.getVideourl();
+//        LogUtils.d("SonlistFragment 视频链接" + urls);
+//
+//        if (isCanPlay||listBean.getIs_free()==1) {
+//
+//            videoPlayer.release();
+//            //设置视频地址和请求头部
+//            videoPlayer.setUp(urls, null);
+//            controller.setTitle(videoTitle);
+//        }
 
     }
 
@@ -512,11 +526,25 @@ public class LessonActivity extends AppCompatActivity implements View.OnClickLis
                 return;
             }
         }
-
-        LogUtils.d("SonlistFragment playAudio Is_free " + listBean.getIs_free());
         play_bg.setVisibility(View.GONE);
         play_start.setVisibility(View.GONE);
-        videoPlayer.start();
+        playerStandard.startVideo();
+
+//        if (listBean==null) {
+//            return;
+//        }
+//
+//        if (!isCanPlay) {
+//            if (listBean.getIs_free()!=1) {
+//                ToastUtil.show(mContext, "你还未购买该课程或开通会员");
+//                return;
+//            }
+//        }
+//
+//        LogUtils.d("SonlistFragment playAudio Is_free " + listBean.getIs_free());
+//        play_bg.setVisibility(View.GONE);
+//        play_start.setVisibility(View.GONE);
+//        videoPlayer.start();
     }
 
 

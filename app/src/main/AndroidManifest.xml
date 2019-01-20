@@ -106,11 +106,15 @@
         <activity
             android:name=".UI.activitys.yiyinClassroom.AllClassActivity"
             android:screenOrientation="portrait"/>
-        <!-- <activity -->
-        <!-- android:name=".UI.activitys.yiyinClassroom.VideoActivity" -->
-        <!-- android:screenOrientation="portrait"/> -->
+         <activity
+         android:name=".UI.activitys.yiyinClassroom.VideoActivity"
+         android:screenOrientation="portrait"/>
         <activity
             android:name=".UI.activitys.yiyinClassroom.LessonActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".UI.activitys.yiyinClassroom.LessonActivity2"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"/>
         <activity

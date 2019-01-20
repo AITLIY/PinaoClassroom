@@ -33,6 +33,7 @@ import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.UI.activitys.pay.CeatOrderActivity;
 
 import com.yiyin.aobosh.UI.activitys.yiyinClassroom.LessonActivity;
+import com.yiyin.aobosh.UI.activitys.yiyinClassroom.LessonActivity2;
 import com.yiyin.aobosh.adapter.LessonOrderAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
 import com.yiyin.aobosh.bean.LessonOrder;
@@ -207,7 +208,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
         public void onOrder(LessonOrder order) {
             LogUtils.i("MyLessonFragment: onItemClick " + order.getId());
 
-            Intent intent = new Intent(mContext, LessonActivity.class);
+            Intent intent = new Intent(mContext, LessonActivity2.class);
 
             RecommendLesson.LessonBean lessonBean = new RecommendLesson.LessonBean();
             lessonBean.setId(order.getLessonid());
@@ -237,7 +238,7 @@ public class MyLessonFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onEvaluate(LessonOrder order) {
             GlobalParameterApplication.isShowComment = true;
-            Intent intent = new Intent(mContext, LessonActivity.class);
+            Intent intent = new Intent(mContext, LessonActivity2.class);
 
             RecommendLesson.LessonBean lessonBean = new RecommendLesson.LessonBean();
             lessonBean.setId(order.getLessonid());

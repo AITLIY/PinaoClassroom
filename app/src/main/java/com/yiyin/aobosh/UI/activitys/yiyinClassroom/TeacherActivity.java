@@ -263,7 +263,7 @@ public class TeacherActivity extends Activity implements View.OnClickListener {
                 return;
             } else {
                 RecommendLesson.LessonBean lessonBean = mShowList.get(position-1);
-                Intent intent = new Intent(mContext,LessonActivity.class);
+                Intent intent = new Intent(mContext,LessonActivity2.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("LessonBean",lessonBean);
                 intent.putExtras(bundle);

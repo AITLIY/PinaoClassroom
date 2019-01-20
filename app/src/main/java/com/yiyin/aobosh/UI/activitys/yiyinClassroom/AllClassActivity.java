@@ -302,7 +302,7 @@ public class AllClassActivity extends Activity  implements View.OnClickListener,
             } else {
                 RecommendLesson.LessonBean lessonBean = mShowList.get(position-1);
                 LogUtils.i("AllClassFragment: ItemClick position " + position);
-                Intent intent = new Intent(mContext,LessonActivity.class);
+                Intent intent = new Intent(mContext,LessonActivity2.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("LessonBean",lessonBean);
                 intent.putExtras(bundle);

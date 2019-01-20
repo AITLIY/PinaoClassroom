@@ -43,7 +43,9 @@ import com.yiyin.aobosh.UI.activitys.mine.OauthHistoryActivity;
 import com.yiyin.aobosh.UI.activitys.mine.VipServiceActivity;
 import com.yiyin.aobosh.UI.activitys.yiyinClassroom.AllClassActivity;
 import com.yiyin.aobosh.UI.activitys.yiyinClassroom.LessonActivity;
+import com.yiyin.aobosh.UI.activitys.yiyinClassroom.LessonActivity2;
 import com.yiyin.aobosh.UI.activitys.yiyinClassroom.TeacherWebActivity;
+import com.yiyin.aobosh.UI.activitys.yiyinClassroom.VideoActivity;
 import com.yiyin.aobosh.adapter.LessonCategoryAdapter;
 import com.yiyin.aobosh.adapter.ViewPagerAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
@@ -773,14 +775,12 @@ public class HomeFragment extends Fragment {
     }
 
     private void goToAudioSetBean(RecommendLesson.LessonBean lesssonBean) {
-
-
-
+        
         if (!GlobalParameterApplication.getInstance().getLoginStatus()) {
             startActivity(new Intent(mContext, LoginActivity.class));
             return;
         } else {
-            Intent intent = new Intent(mContext,LessonActivity.class);
+            Intent intent = new Intent(mContext,LessonActivity2.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("LessonBean",lesssonBean);
             intent.putExtras(bundle);

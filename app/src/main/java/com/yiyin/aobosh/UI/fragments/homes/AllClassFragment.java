@@ -41,6 +41,7 @@ import com.yiyin.aobosh.Interface.CateIdSearchInterface;
 import com.yiyin.aobosh.R;
 import com.yiyin.aobosh.UI.activitys.login.LoginActivity;
 import com.yiyin.aobosh.UI.activitys.yiyinClassroom.LessonActivity;
+import com.yiyin.aobosh.UI.activitys.yiyinClassroom.LessonActivity2;
 import com.yiyin.aobosh.adapter.LessonCategoryAdapter2;
 import com.yiyin.aobosh.adapter.LessonListAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
@@ -399,7 +400,7 @@ public class AllClassFragment extends Fragment implements View.OnClickListener, 
                 } else {
                     RecommendLesson.LessonBean lessonBean = mShowList.get(position-1);
                     LogUtils.i("AllClassFragment: ItemClick position " + position);
-                    Intent intent = new Intent(mContext,LessonActivity.class);
+                    Intent intent = new Intent(mContext,LessonActivity2.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("LessonBean",lessonBean);
                     intent.putExtras(bundle);
