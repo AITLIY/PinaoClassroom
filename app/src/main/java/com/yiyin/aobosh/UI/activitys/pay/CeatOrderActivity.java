@@ -357,7 +357,7 @@ public class CeatOrderActivity extends Activity {
         requestQueue.add(stringRequest);
     }
 
-    // 购买时生成的订单信息
+    // 购买会员时生成的订单信息
     private void buyVip(final int uid,final int levelid) {
 
         String url = HttpURL.VIP_BUYVIP_URL;

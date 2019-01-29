@@ -119,7 +119,7 @@ public class PayOrderActivity extends Activity {
 
                     LogUtils.i("PayOrderActivity: out_trade_no " + out_trade_no);
                     LogUtils.i("PayOrderActivity: total_fee " + total_fee);
-                    getPrePayOrder(GlobalParameterApplication.body,out_trade_no,"1",GlobalParameterApplication.attach);
+                    getPrePayOrder(GlobalParameterApplication.body,out_trade_no,total_fee,GlobalParameterApplication.attach);
                 }
             }
         });
