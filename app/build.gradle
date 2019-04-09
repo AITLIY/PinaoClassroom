@@ -83,8 +83,6 @@ dependencies {
     implementation 'fm.jiecao:jiecaovideoplayer:5.5.4'                             //播放器
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2'      //微信
     implementation 'in.srain.cube:ultra-ptr:1.0.11'
-    //android-Ultra-Pull-To-Refresh
-
 
     implementation files('libs/xUtils-2.6.2.jar')
     implementation files('libs/volley.jar')

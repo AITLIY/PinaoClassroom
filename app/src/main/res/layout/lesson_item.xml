@@ -44,6 +44,7 @@
             android:text="钢琴基础教程"/>
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/lesson_price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

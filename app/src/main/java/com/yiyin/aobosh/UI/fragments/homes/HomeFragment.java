@@ -42,10 +42,8 @@ import com.yiyin.aobosh.UI.activitys.mine.CouponActivity;
 import com.yiyin.aobosh.UI.activitys.mine.OauthHistoryActivity;
 import com.yiyin.aobosh.UI.activitys.mine.VipServiceActivity;
 import com.yiyin.aobosh.UI.activitys.yiyinClassroom.AllClassActivity;
-import com.yiyin.aobosh.UI.activitys.yiyinClassroom.LessonActivity;
 import com.yiyin.aobosh.UI.activitys.yiyinClassroom.LessonActivity2;
 import com.yiyin.aobosh.UI.activitys.yiyinClassroom.TeacherWebActivity;
-import com.yiyin.aobosh.UI.activitys.yiyinClassroom.VideoActivity;
 import com.yiyin.aobosh.adapter.LessonCategoryAdapter;
 import com.yiyin.aobosh.adapter.ViewPagerAdapter;
 import com.yiyin.aobosh.application.GlobalParameterApplication;
@@ -323,7 +321,8 @@ public class HomeFragment extends Fragment {
 
         View view = LayoutInflater.from(mContext).inflate(R.layout.pw_user_menu, null);
 
-        popupWindow = new PopupWindow(view, PxUtils.dip2px(mContext,135), PxUtils.dip2px(mContext,160));
+//        popupWindow = new PopupWindow(view, PxUtils.dip2px(mContext,135), PxUtils.dip2px(mContext,160));
+        popupWindow = new PopupWindow(view, PxUtils.dip2px(mContext,135), PxUtils.dip2px(mContext,120));
         popupWindow.setFocusable(true);
         popupWindow.setBackgroundDrawable(new PaintDrawable(00000));
         popupWindow.showAtLocation(getActivity().getWindow().getDecorView(), Gravity.TOP|Gravity.START, PxUtils.dip2px(mContext,216), PxUtils.dip2px(mContext,76));

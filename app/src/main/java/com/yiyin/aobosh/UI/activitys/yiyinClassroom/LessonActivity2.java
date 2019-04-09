@@ -53,11 +53,7 @@ import com.yiyin.aobosh.utils.ToastUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.yczbj.ycvideoplayerlib.constant.ConstantKeys;
-import org.yczbj.ycvideoplayerlib.controller.VideoPlayerController;
-import org.yczbj.ycvideoplayerlib.inter.listener.OnVideoBackListener;
 import org.yczbj.ycvideoplayerlib.manager.VideoPlayerManager;
-import org.yczbj.ycvideoplayerlib.player.VideoPlayer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -441,7 +437,7 @@ public class LessonActivity2 extends AppCompatActivity implements View.OnClickLi
         if (isShow) {
             start_study.setVisibility(View.GONE);
             buy_vip.setVisibility(View.VISIBLE);
-            buy_class.setVisibility(View.VISIBLE);
+//            buy_class.setVisibility(View.VISIBLE);
 
         } else {
             start_study.setVisibility(View.VISIBLE);
@@ -488,29 +484,16 @@ public class LessonActivity2 extends AppCompatActivity implements View.OnClickLi
     public void setAudio(VideoBean.ListBean listBean) {
 
         if (listBean == null) {
+            ToastUtil.show(mContext, "视频错误");
             return;
         }
         String videoUrl = listBean.getVideourl();
         String videoTitle = listBean.getTitle();
 
-        playerStandard.setUp(videoUrl,JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL,videoTitle);
-
-
-//        if (videoPlayer == null || listBean == null) {
-//            return;
-//        }
-//
-//        String videoTitle = listBean.getTitle();
-//        String urls = listBean.getVideourl();
-//        LogUtils.d("SonlistFragment 视频链接" + urls);
-//
-//        if (isCanPlay||listBean.getIs_free()==1) {
-//
-//            videoPlayer.release();
-//            //设置视频地址和请求头部
-//            videoPlayer.setUp(urls, null);
-//            controller.setTitle(videoTitle);
-//        }
+        if (listBean.getIs_free()==1) {
+            //设置视频地址和请求头部
+            playerStandard.setUp(videoUrl,JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL,videoTitle);
+        }
 
     }
 
@@ -522,7 +505,8 @@ public class LessonActivity2 extends AppCompatActivity implements View.OnClickLi
 
         if (!isCanPlay) {
             if (listBean.getIs_free()!=1) {
-                ToastUtil.show(mContext, "你还未购买该课程或开通会员");
+                //                ToastUtil.show(mContext, "你还未购买该课程或开通会员");
+                ToastUtil.show(mContext, "该课程需要开通会员");
                 return;
             }
         }
@@ -530,21 +514,6 @@ public class LessonActivity2 extends AppCompatActivity implements View.OnClickLi
         play_start.setVisibility(View.GONE);
         playerStandard.startVideo();
 
-//        if (listBean==null) {
-//            return;
-//        }
-//
-//        if (!isCanPlay) {
-//            if (listBean.getIs_free()!=1) {
-//                ToastUtil.show(mContext, "你还未购买该课程或开通会员");
-//                return;
-//            }
-//        }
-//
-//        LogUtils.d("SonlistFragment playAudio Is_free " + listBean.getIs_free());
-//        play_bg.setVisibility(View.GONE);
-//        play_start.setVisibility(View.GONE);
-//        videoPlayer.start();
     }
 
 
@@ -825,8 +794,8 @@ public class LessonActivity2 extends AppCompatActivity implements View.OnClickLi
                 mShowList.addAll(mListBeans);
 
                 if (mShowList.size()>0) {
-                    setAudio(mShowList.get(0));
                     setPlayBg(mVideoBean.getPoster());
+                    setAudio(mShowList.get(0));
                     adapter.setID(mShowList.get(0).getId());
                 }
 
