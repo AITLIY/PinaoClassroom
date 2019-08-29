@@ -1,0 +1,26 @@
+#Android.gitignore
+# Built application files
+*.apk
+*.ap_
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+gen/
+out/
+
+# Gradle files
+.gradle/
+build/
+/*/build/
+
+# Log Files
+*.log
+
+# Local configuration file (sdk path, etc)
+local.properties
+
