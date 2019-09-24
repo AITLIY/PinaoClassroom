@@ -75,6 +75,7 @@ dependencies {
     implementation 'com.android.support:support-v4:26.1.0'
     implementation 'com.android.support:appcompat-v7:26.1.0'
 
+    implementation 'com.github.userswlwork:pull-to-refresh:1.0.0'       // pull-to-refresh
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'com.squareup.okhttp3:okhttp:3.12.0'
@@ -87,7 +88,7 @@ dependencies {
 
     implementation files('libs/xUtils-2.6.2.jar')
     implementation files('libs/volley.jar')
-    implementation project(':PullToRefresh')
+//    implementation project(':PullToRefresh')
     implementation files('libs/httpclient-4.3.5.jar')
     implementation files('libs/httpcore-4.3.2.jar')
     implementation files('libs/httpmime-4.3.5.jar')
