@@ -96,6 +96,13 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        GlobalParameterApplication.mWxApi.handleIntent(intent, this);
+    }
+
+    @Override
     public void onReq(BaseReq baseReq) {
 
     }
@@ -130,13 +137,6 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
             //这里接收到了返回的状态码可以进行相应的操作，如果不想在这个页面操作可以把状态码存在本地然后finish掉这个页面，这样就回到了你调起支付的那个页面
             //获取到你刚刚存到本地的状态码进行相应的操作就可以了
         }
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-        GlobalParameterApplication.mWxApi.handleIntent(intent, this);
     }
 
     //--------------------------------------请求服务器数据-------------------------------------------

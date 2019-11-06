@@ -103,6 +103,13 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
         GlobalParameterApplication.mWxApi.handleIntent(getIntent(), this);
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        GlobalParameterApplication.mWxApi.handleIntent(intent, this);
+    }
+
     // 微信发送请求到第三方应用时，会回调到该方法
     @Override
     public void onReq(BaseReq req) {
